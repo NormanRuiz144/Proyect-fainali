@@ -64,6 +64,21 @@ export class DetallereporteSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class InstitucioneSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'idMunicipio', 'nombreInstitucion', 'updatedAt'] as const
+  $columns = InstitucioneSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare idMunicipio: number | null
+  @column()
+  declare nombreInstitucion: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class MunicipioSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'idDepartamento', 'nomMunicipio', 'updatedAt'] as const
   $columns = MunicipioSchema.$columns
@@ -75,6 +90,19 @@ export class MunicipioSchema extends BaseModel {
   declare idDepartamento: number | null
   @column()
   declare nomMunicipio: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class ProblematicaSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'problema', 'updatedAt'] as const
+  $columns = ProblematicaSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare problema: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
