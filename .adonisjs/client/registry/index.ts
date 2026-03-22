@@ -30,6 +30,18 @@ const routes = {
     tokens: [{"old":"/api/v1/account/profile","type":0,"val":"api","end":""},{"old":"/api/v1/account/profile","type":0,"val":"v1","end":""},{"old":"/api/v1/account/profile","type":0,"val":"account","end":""},{"old":"/api/v1/account/profile","type":0,"val":"profile","end":""}],
     types: placeholder as Registry['profile.profile.show']['types'],
   },
+  'departamentos.obtener_departamentos': {
+    methods: ["GET","HEAD"],
+    pattern: '/departamento',
+    tokens: [{"old":"/departamento","type":0,"val":"departamento","end":""}],
+    types: placeholder as Registry['departamentos.obtener_departamentos']['types'],
+  },
+  'departamentos.crear_departamentos': {
+    methods: ["POST"],
+    pattern: '/departamento',
+    tokens: [{"old":"/departamento","type":0,"val":"departamento","end":""}],
+    types: placeholder as Registry['departamentos.crear_departamentos']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

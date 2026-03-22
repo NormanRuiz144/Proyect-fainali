@@ -10,6 +10,7 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
+import DepartamentosController from '#controllers/departamentos_controller'
 
 router.get('/', () => {
   return { hello: 'world' }
@@ -35,3 +36,7 @@ router
       .use(middleware.auth())
   })
   .prefix('/api/v1')
+
+// Rutas de departamentos
+router.get('/departamento', [DepartamentosController, 'obtenerDepartamentos'])
+router.post('/departamento', [DepartamentosController, 'crearDepartamentos'])

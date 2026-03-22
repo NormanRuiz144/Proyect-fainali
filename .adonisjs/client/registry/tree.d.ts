@@ -16,4 +16,8 @@ export interface ApiDefinition {
       show: typeof routes['profile.profile.show']
     }
   }
+  departamentos: {
+    obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']
+    crearDepartamentos: typeof routes['departamentos.crear_departamentos']
+  }
 }
