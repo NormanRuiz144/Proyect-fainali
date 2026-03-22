@@ -40,7 +40,7 @@ export class DepartamentoSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare nomdepartamento: string | null
+  declare nomdepartamento: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -51,15 +51,15 @@ export class DetallereporteSchema extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column()
-  declare descripcion: string | null
+  declare descripcion: string
   @column.date()
   declare fechaSeguimiento: DateTime | null
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idReporte: number | null
+  declare idReporte: number
   @column()
-  declare idUsuario: number | null
+  declare idUsuario: number
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -74,7 +74,7 @@ export class InstitucioneSchema extends BaseModel {
   @column()
   declare idMunicipio: number | null
   @column()
-  declare nombreInstitucion: string | null
+  declare nombreInstitucion: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -87,9 +87,9 @@ export class MunicipioSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idDepartamento: number | null
+  declare idDepartamento: number
   @column()
-  declare nomMunicipio: string | null
+  declare nomMunicipio: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -115,23 +115,23 @@ export class ReporteSchema extends BaseModel {
   @column.date()
   declare fechaFin: DateTime | null
   @column.date()
-  declare fechaGen: DateTime | null
+  declare fechaGen: DateTime
   @column()
-  declare formato: string | null
+  declare formato: string
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number | null
+  declare idInstitucion: number
   @column()
-  declare idProblematica: number | null
+  declare idProblematica: number
   @column()
   declare idSector: number | null
   @column()
-  declare idUsuario: number | null
+  declare idUsuario: number
   @column()
   declare nvlPrioridad: number | null
   @column()
-  declare ubicacion: string | null
+  declare ubicacion: string
 }
 
 export class RoleSchema extends BaseModel {
@@ -142,7 +142,7 @@ export class RoleSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare rol: string | null
+  declare rol: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -155,9 +155,9 @@ export class SectoreSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idmunicipios: number | null
+  declare idmunicipios: number
   @column()
-  declare nombreSector: string | null
+  declare nombreSector: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -166,23 +166,23 @@ export class UsuarioSchema extends BaseModel {
   static $columns = ['apellidos', 'contrasena', 'correo', 'createdAt', 'id', 'idInstitucion', 'idRol', 'idSector', 'nombres', 'numeroCedula', 'sexo', 'updatedAt'] as const
   $columns = UsuarioSchema.$columns
   @column()
-  declare apellidos: string | null
+  declare apellidos: string
   @column()
-  declare contrasena: string | null
+  declare contrasena: string
   @column()
-  declare correo: string | null
+  declare correo: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number | null
+  declare idInstitucion: number
   @column()
-  declare idRol: number | null
+  declare idRol: number
   @column()
-  declare idSector: number | null
+  declare idSector: number
   @column()
-  declare nombres: string | null
+  declare nombres: string
   @column()
   declare numeroCedula: string
   @column()
