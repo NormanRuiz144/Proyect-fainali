@@ -11,6 +11,7 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 import DepartamentosController from '#controllers/departamentos_controller'
+import MunicipiosController from '#controllers/municipios_controller'
 
 router.get('/', () => {
   return { hello: 'world' }
@@ -39,4 +40,10 @@ router
 
 // Rutas de departamentos
 router.get('/departamento', [DepartamentosController, 'obtenerDepartamentos'])
-router.post('/departamento', [DepartamentosController, 'crearDepartamentos'])
+router.post('/departamento', [DepartamentosController, 'crearDepartamento'])
+router.put('/departamento/:id', [DepartamentosController, 'actualizarDepart'])
+
+// Rutas de Municipios
+router.get('/municipios', [MunicipiosController, 'obtenerDepartamentos'])
+router.post('/municipios', [MunicipiosController, 'crearMunicipio'])
+router.get('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])

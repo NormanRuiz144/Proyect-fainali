@@ -36,11 +36,35 @@ const routes = {
     tokens: [{"old":"/departamento","type":0,"val":"departamento","end":""}],
     types: placeholder as Registry['departamentos.obtener_departamentos']['types'],
   },
-  'departamentos.crear_departamentos': {
+  'departamentos.crear_departamento': {
     methods: ["POST"],
     pattern: '/departamento',
     tokens: [{"old":"/departamento","type":0,"val":"departamento","end":""}],
-    types: placeholder as Registry['departamentos.crear_departamentos']['types'],
+    types: placeholder as Registry['departamentos.crear_departamento']['types'],
+  },
+  'departamentos.actualizar_depart': {
+    methods: ["PUT"],
+    pattern: '/departamento/:id',
+    tokens: [{"old":"/departamento/:id","type":0,"val":"departamento","end":""},{"old":"/departamento/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['departamentos.actualizar_depart']['types'],
+  },
+  'municipios.obtener_departamentos': {
+    methods: ["GET","HEAD"],
+    pattern: '/municipios',
+    tokens: [{"old":"/municipios","type":0,"val":"municipios","end":""}],
+    types: placeholder as Registry['municipios.obtener_departamentos']['types'],
+  },
+  'municipios.crear_municipio': {
+    methods: ["POST"],
+    pattern: '/municipios',
+    tokens: [{"old":"/municipios","type":0,"val":"municipios","end":""}],
+    types: placeholder as Registry['municipios.crear_municipio']['types'],
+  },
+  'municipios.actualizar_municipio': {
+    methods: ["GET","HEAD"],
+    pattern: '/municipios/:id',
+    tokens: [{"old":"/municipios/:id","type":0,"val":"municipios","end":""},{"old":"/municipios/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['municipios.actualizar_municipio']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 
