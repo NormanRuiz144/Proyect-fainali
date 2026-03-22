@@ -18,6 +18,12 @@ export interface ApiDefinition {
   }
   departamentos: {
     obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']
-    crearDepartamentos: typeof routes['departamentos.crear_departamentos']
+    crearDepartamento: typeof routes['departamentos.crear_departamento']
+    actualizarDepart: typeof routes['departamentos.actualizar_depart']
+  }
+  municipios: {
+    obtenerDepartamentos: typeof routes['municipios.obtener_departamentos']
+    crearMunicipio: typeof routes['municipios.crear_municipio']
+    actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
   }
 }

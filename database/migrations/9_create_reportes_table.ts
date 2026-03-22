@@ -6,15 +6,15 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('idUsuario').references('id').inTable('usuarios').notNullable()
-      table.integer('idInstitucion').references('id').inTable('instituciones').notNullable()
-      table.integer('idProblematica').references('id').inTable('problematicas').notNullable()
-      table.integer('idSector').references('id').inTable('sectores')
+      table.integer('id_usuario').references('id').inTable('usuarios').notNullable()
+      table.integer('id_institucion').references('id').inTable('instituciones').notNullable()
+      table.integer('id_problematica').references('id').inTable('problematicas').notNullable()
+      table.integer('id_sector').references('id').inTable('sectores')
       table.string('formato').notNullable()
       table.string('ubicacion').notNullable()
       table.integer('nvl_prioridad')
-      table.date('fechaGen').notNullable()
-      table.date('fechaFin')
+      table.timestamp('fecha_gen').notNullable()
+      table.date('fecha_fin')
       table.string('estado')
     })
   }

@@ -6,15 +6,15 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
-      table.string('numeroCedula', 16).notNullable().unique()
+      table.string('numero_cedula', 16).notNullable().unique()
       table.string('nombres', 40).notNullable()
       table.string('apellidos', 40).notNullable()
       table.string('sexo', 1)
       table.string('correo').notNullable().unique()
       table.string('contraseña', 35).notNullable()
-      table.integer('idSector').references('id').inTable('sectores').notNullable()
-      table.integer('idRol').references('id').inTable('roles').notNullable()
-      table.integer('idInstitucion').references('id').inTable('instituciones').notNullable()
+      table.integer('id_sector').references('id').inTable('sectores').notNullable()
+      table.integer('id_rol').references('id').inTable('roles').notNullable()
+      table.integer('id_institucion').references('id').inTable('instituciones').notNullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

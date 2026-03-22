@@ -33,14 +33,14 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class DepartamentoSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'nomdepartamento', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'nomDepartamento', 'updatedAt'] as const
   $columns = DepartamentoSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare nomdepartamento: string
+  declare nomDepartamento: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -114,7 +114,7 @@ export class ReporteSchema extends BaseModel {
   declare estado: string | null
   @column.date()
   declare fechaFin: DateTime | null
-  @column.date()
+  @column.dateTime()
   declare fechaGen: DateTime
   @column()
   declare formato: string
@@ -148,14 +148,14 @@ export class RoleSchema extends BaseModel {
 }
 
 export class SectoreSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idmunicipios', 'nombreSector', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'idMunicipios', 'nombreSector', 'updatedAt'] as const
   $columns = SectoreSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idmunicipios: number
+  declare idMunicipios: number
   @column()
   declare nombreSector: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })

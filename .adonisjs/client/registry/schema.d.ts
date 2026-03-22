@@ -67,13 +67,61 @@ export interface Registry {
       errorResponse: unknown
     }
   }
-  'departamentos.crear_departamentos': {
+  'departamentos.crear_departamento': {
     methods: ["POST"]
     pattern: '/departamento'
     types: {
       body: {}
       paramsTuple: []
       params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'departamentos.actualizar_depart': {
+    methods: ["PUT"]
+    pattern: '/departamento/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'municipios.obtener_departamentos': {
+    methods: ["GET","HEAD"]
+    pattern: '/municipios'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'municipios.crear_municipio': {
+    methods: ["POST"]
+    pattern: '/municipios'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'municipios.actualizar_municipio': {
+    methods: ["GET","HEAD"]
+    pattern: '/municipios/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
       query: {}
       response: unknown
       errorResponse: unknown
