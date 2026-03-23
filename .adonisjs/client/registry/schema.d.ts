@@ -127,4 +127,76 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'problematicas.obtener_problematicas': {
+    methods: ["GET","HEAD"]
+    pattern: '/problematica'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'problematicas.crear_problematica': {
+    methods: ["POST"]
+    pattern: '/problematica'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'problematicas.actualizar_problematica': {
+    methods: ["PUT"]
+    pattern: '/problematica/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'instituciones.obtener_instituciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/instituciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'instituciones.crear_institucion': {
+    methods: ["POST"]
+    pattern: '/instituciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'instituciones.actualizar_instituc': {
+    methods: ["PUT"]
+    pattern: '/instituciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
 }

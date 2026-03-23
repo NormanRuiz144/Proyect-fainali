@@ -66,6 +66,42 @@ const routes = {
     tokens: [{"old":"/municipios/:id","type":0,"val":"municipios","end":""},{"old":"/municipios/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['municipios.actualizar_municipio']['types'],
   },
+  'problematicas.obtener_problematicas': {
+    methods: ["GET","HEAD"],
+    pattern: '/problematica',
+    tokens: [{"old":"/problematica","type":0,"val":"problematica","end":""}],
+    types: placeholder as Registry['problematicas.obtener_problematicas']['types'],
+  },
+  'problematicas.crear_problematica': {
+    methods: ["POST"],
+    pattern: '/problematica',
+    tokens: [{"old":"/problematica","type":0,"val":"problematica","end":""}],
+    types: placeholder as Registry['problematicas.crear_problematica']['types'],
+  },
+  'problematicas.actualizar_problematica': {
+    methods: ["PUT"],
+    pattern: '/problematica/:id',
+    tokens: [{"old":"/problematica/:id","type":0,"val":"problematica","end":""},{"old":"/problematica/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['problematicas.actualizar_problematica']['types'],
+  },
+  'instituciones.obtener_instituciones': {
+    methods: ["GET","HEAD"],
+    pattern: '/instituciones',
+    tokens: [{"old":"/instituciones","type":0,"val":"instituciones","end":""}],
+    types: placeholder as Registry['instituciones.obtener_instituciones']['types'],
+  },
+  'instituciones.crear_institucion': {
+    methods: ["POST"],
+    pattern: '/instituciones',
+    tokens: [{"old":"/instituciones","type":0,"val":"instituciones","end":""}],
+    types: placeholder as Registry['instituciones.crear_institucion']['types'],
+  },
+  'instituciones.actualizar_instituc': {
+    methods: ["PUT"],
+    pattern: '/instituciones/:id',
+    tokens: [{"old":"/instituciones/:id","type":0,"val":"instituciones","end":""},{"old":"/instituciones/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['instituciones.actualizar_instituc']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }
