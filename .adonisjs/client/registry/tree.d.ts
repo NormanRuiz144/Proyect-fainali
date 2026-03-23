@@ -26,4 +26,14 @@ export interface ApiDefinition {
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
   }
+  problematicas: {
+    obtenerProblematicas: typeof routes['problematicas.obtener_problematicas']
+    crearProblematica: typeof routes['problematicas.crear_problematica']
+    actualizarProblematica: typeof routes['problematicas.actualizar_problematica']
+  }
+  instituciones: {
+    obtenerInstituciones: typeof routes['instituciones.obtener_instituciones']
+    crearInstitucion: typeof routes['instituciones.crear_institucion']
+    actualizarInstituc: typeof routes['instituciones.actualizar_instituc']
+  }
 }

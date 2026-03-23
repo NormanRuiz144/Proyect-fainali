@@ -6,7 +6,9 @@
 export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
   Departamentos: () => import('#controllers/departamentos_controller'),
+  Instituciones: () => import('#controllers/instituciones_controller'),
   Municipios: () => import('#controllers/municipios_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  Problematicas: () => import('#controllers/problematicas_controller'),
   Profile: () => import('#controllers/profile_controller'),
 }

@@ -12,6 +12,8 @@ import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 import DepartamentosController from '#controllers/departamentos_controller'
 import MunicipiosController from '#controllers/municipios_controller'
+import ProblematicasController from '#controllers/problematicas_controller'
+import InstitucionesController from '#controllers/instituciones_controller'
 
 router.get('/', () => {
   return { hello: 'world' }
@@ -47,3 +49,13 @@ router.put('/departamento/:id', [DepartamentosController, 'actualizarDepart'])
 router.get('/municipios', [MunicipiosController, 'obtenerDepartamentos'])
 router.post('/municipios', [MunicipiosController, 'crearMunicipio'])
 router.get('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])
+
+//Rutas de Problematicas
+router.get('/problematica',[ProblematicasController,'obtenerProblematicas'])
+router.post('/problematica',[ProblematicasController,'crearProblematica'])
+router.put('/problematica/:id',[ProblematicasController,'actualizarProblematica'])
+
+// //Rutas de Problematicas
+router.get('/instituciones',[InstitucionesController,'obtenerInstituciones'])
+router.post('/instituciones',[InstitucionesController,'crearInstitucion'])
+router.put('/instituciones/:id',[InstitucionesController,'actualizarInstituc'])
