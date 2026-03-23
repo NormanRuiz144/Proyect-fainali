@@ -3,6 +3,8 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import { HasMany } from '@adonisjs/lucid/types/relations'
+import { hasMany } from '@adonisjs/lucid/orm'
 
 export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
   static accessTokens = DbAccessTokensProvider.forModel(User)
@@ -15,4 +17,6 @@ export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
     }
     return `${first.slice(0, 2)}`.toUpperCase()
   }
+
+  // Relaciones
 }

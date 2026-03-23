@@ -14,12 +14,4 @@ git branch -r
 
 # cambiar a otra rama remota
 
-git checkout -b Guido origin/Guido
-
-# guardar cambios locales
-
-git stash
-
-# recuperar cambios locales
-
-git stash pop
+git checkout -b [Nombre_Rama] origin/[Nombre_Rama]

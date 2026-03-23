@@ -61,7 +61,7 @@ const routes = {
     types: placeholder as Registry['municipios.crear_municipio']['types'],
   },
   'municipios.actualizar_municipio': {
-    methods: ["GET","HEAD"],
+    methods: ["PUT"],
     pattern: '/municipios/:id',
     tokens: [{"old":"/municipios/:id","type":0,"val":"municipios","end":""},{"old":"/municipios/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['municipios.actualizar_municipio']['types'],

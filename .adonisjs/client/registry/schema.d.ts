@@ -116,7 +116,7 @@ export interface Registry {
     }
   }
   'municipios.actualizar_municipio': {
-    methods: ["GET","HEAD"]
+    methods: ["PUT"]
     pattern: '/municipios/:id'
     types: {
       body: {}

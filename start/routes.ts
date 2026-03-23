@@ -48,14 +48,14 @@ router.put('/departamento/:id', [DepartamentosController, 'actualizarDepart'])
 // Rutas de Municipios
 router.get('/municipios', [MunicipiosController, 'obtenerDepartamentos'])
 router.post('/municipios', [MunicipiosController, 'crearMunicipio'])
-router.get('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])
+router.put('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])
 
 //Rutas de Problematicas
-router.get('/problematica',[ProblematicasController,'obtenerProblematicas'])
-router.post('/problematica',[ProblematicasController,'crearProblematica'])
-router.put('/problematica/:id',[ProblematicasController,'actualizarProblematica'])
+router.get('/problematica', [ProblematicasController, 'obtenerProblematicas'])
+router.post('/problematica', [ProblematicasController, 'crearProblematica'])
+router.put('/problematica/:id', [ProblematicasController, 'actualizarProblematica'])
 
 // //Rutas de Problematicas
-router.get('/instituciones',[InstitucionesController,'obtenerInstituciones'])
-router.post('/instituciones',[InstitucionesController,'crearInstitucion'])
-router.put('/instituciones/:id',[InstitucionesController,'actualizarInstituc'])
+router.get('/instituciones', [InstitucionesController, 'obtenerInstituciones'])
+router.post('/instituciones', [InstitucionesController, 'crearInstitucion'])
+router.put('/instituciones/:id', [InstitucionesController, 'actualizarInstituc'])
