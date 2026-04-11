@@ -14,11 +14,11 @@ import DepartamentosController from '#controllers/departamentos_controller'
 import MunicipiosController from '#controllers/municipios_controller'
 import ProblematicasController from '#controllers/problematicas_controller'
 import InstitucionesController from '#controllers/instituciones_controller'
-
+import ReportesController from '#controllers/reportes_controller'
 router.get('/', () => {
   return { hello: 'world' }
 })
-
+   
 router
   .group(() => {
     router
@@ -36,7 +36,7 @@ router
       })
       .prefix('account')
       .as('profile')
-      .use(middleware.auth())
+      .use(middleware.auth())   
   })
   .prefix('/api/v1')
 
@@ -59,3 +59,8 @@ router.put('/problematica/:id',[ProblematicasController,'actualizarProblematica'
 router.get('/instituciones',[InstitucionesController,'obtenerInstituciones'])
 router.post('/instituciones',[InstitucionesController,'crearInstitucion'])
 router.put('/instituciones/:id',[InstitucionesController,'actualizarInstituc'])
+
+// Rutas de Reportes
+router.get('/reportes', [ReportesController, 'obtenerReportes'])
+router.post('/reportes', [ReportesController, 'crearReporte'])
+router.put('/reportes/:id', [ReportesController, 'actualizarReporte'])
