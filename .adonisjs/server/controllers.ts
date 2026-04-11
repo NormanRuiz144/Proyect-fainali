@@ -11,4 +11,5 @@ export const controllers = {
   Problematicas: () => import('#controllers/problematicas_controller'),
   Profile: () => import('#controllers/profile_controller'),
   User: () => import('#controllers/user_controller'),
+  Reportes: () => import('#controllers/reportes_controller'),
 }
