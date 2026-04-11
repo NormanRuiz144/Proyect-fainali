@@ -3,8 +3,9 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import { HasMany } from '@adonisjs/lucid/types/relations'
-import { hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { belongsTo, hasMany } from '@adonisjs/lucid/orm'
+import Institucione from './institucione.ts'
 
 export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
   static accessTokens = DbAccessTokensProvider.forModel(User)
@@ -19,4 +20,10 @@ export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
   }
 
   // Relaciones
+  @belongsTo(() => Institucione)
+  declare Institucion: BelongsTo<typeof Institucione>
+  // @belongsTo(() => Role)
+  // declare rol: BelongsTo<typeof Institucione>
+  // @belongsTo(() => Sectores)
+  // declare sector: BelongsTo<typeof Institucione>
 }

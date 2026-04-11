@@ -10,13 +10,13 @@ const password = () => vine.string().minLength(8).maxLength(32)
  * Validator to use when performing self-signup
  */
 export const signupValidator = vine.create({
-  numeroCedula: vine.string().unique({ table: 'usuarios' }),
+  numero_cedula: vine.string().unique({ table: 'usuarios' }),
   nombres: vine.string().trim(),
   apellidos: vine.string().trim(),
   sexo: vine.string().maxLength(1).minLength(1),
   correo: email().unique({ table: 'usuarios', column: 'correo' }),
   contrasena: password(),
-  passwordConfirmation: password().sameAs('contraseña'),
+  confirmationContra: password().sameAs('contrasena'),
   idSector: vine.number(),
   idRol: vine.number(),
   idInstitucion: vine.number().optional(),
