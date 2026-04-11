@@ -102,6 +102,24 @@ const routes = {
     tokens: [{"old":"/instituciones/:id","type":0,"val":"instituciones","end":""},{"old":"/instituciones/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['instituciones.actualizar_instituc']['types'],
   },
+  'reportes.obtener_reportes': {
+    methods: ["GET","HEAD"],
+    pattern: '/reportes',
+    tokens: [{"old":"/reportes","type":0,"val":"reportes","end":""}],
+    types: placeholder as Registry['reportes.obtener_reportes']['types'],
+  },
+  'reportes.crear_reporte': {
+    methods: ["POST"],
+    pattern: '/reportes',
+    tokens: [{"old":"/reportes","type":0,"val":"reportes","end":""}],
+    types: placeholder as Registry['reportes.crear_reporte']['types'],
+  },
+  'reportes.actualizar_reporte': {
+    methods: ["PUT"],
+    pattern: '/reportes/:id',
+    tokens: [{"old":"/reportes/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['reportes.actualizar_reporte']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

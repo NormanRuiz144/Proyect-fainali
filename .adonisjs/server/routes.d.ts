@@ -20,6 +20,9 @@ export type ScannedRoutes = {
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'instituciones.crear_institucion': { paramsTuple?: []; params?: {} }
     'instituciones.actualizar_instituc': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
+    'reportes.crear_reporte': { paramsTuple?: []; params?: {} }
+    'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -28,6 +31,7 @@ export type ScannedRoutes = {
     'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
+    'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -36,6 +40,7 @@ export type ScannedRoutes = {
     'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
+    'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'auth.new_account.store': { paramsTuple?: []; params?: {} }
@@ -45,11 +50,13 @@ export type ScannedRoutes = {
     'municipios.crear_municipio': { paramsTuple?: []; params?: {} }
     'problematicas.crear_problematica': { paramsTuple?: []; params?: {} }
     'instituciones.crear_institucion': { paramsTuple?: []; params?: {} }
+    'reportes.crear_reporte': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'departamentos.actualizar_depart': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.actualizar_problematica': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'instituciones.actualizar_instituc': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

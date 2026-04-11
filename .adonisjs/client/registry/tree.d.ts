@@ -36,4 +36,9 @@ export interface ApiDefinition {
     crearInstitucion: typeof routes['instituciones.crear_institucion']
     actualizarInstituc: typeof routes['instituciones.actualizar_instituc']
   }
+  reportes: {
+    obtenerReportes: typeof routes['reportes.obtener_reportes']
+    crearReporte: typeof routes['reportes.crear_reporte']
+    actualizarReporte: typeof routes['reportes.actualizar_reporte']
+  }
 }

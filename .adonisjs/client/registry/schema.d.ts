@@ -199,4 +199,40 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'reportes.obtener_reportes': {
+    methods: ["GET","HEAD"]
+    pattern: '/reportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'reportes.crear_reporte': {
+    methods: ["POST"]
+    pattern: '/reportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'reportes.actualizar_reporte': {
+    methods: ["PUT"]
+    pattern: '/reportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
 }
