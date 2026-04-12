@@ -6,6 +6,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 //GET_ROL//
 
  export default class RolesController {
+
+
   async obtenerRol({ response }: HttpContext) {
     const listaRol = await Roles.all()
 
@@ -33,7 +35,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
       if (!rol) {
         return response.status(404).json({
-          mensaje: `No se encontró el rol con id ${idRol}.`,
+          mensaje: `Ingresar un Id valido.`,
         })
       }
 
@@ -108,28 +110,7 @@ async actualizarRol({ params, request, response }: HttpContext) {
     rol: rolEncontrado
   })
 }
-  // async actualizarRol({ params, request, response }: HttpContext) {
-  //   const idRol = Number(params.id)
-  //   const nuevoRol = await request.validateUsing(ingresarRol)
 
-  //   const exite = await Roles.query()
-  //     .where('rol', nuevoRol.nomRol)
-  //     .first()
-  //   if (exite) {
-  //     return response.status(404).json({
-  //       mensaje: `Rol existente: ${nuevoRol.nomRol}.`,
-  //     })
-  //   }
-
-  //   let rolEncontrado = await Roles.query().where('id', idRol).first()
-
-  //   if (rolEncontrado) {
-  //     rolEncontrado.rol = nuevoRol.nomRol
-  //     await rolEncontrado.save()
-  //     return response.ok({ mensage: 'El rol fue actualizado.' })
-  //   }
-  //   return response.status(404).json({ mensaje: 'Vaya algo salio mal, rol no actualizado.' })
-  // }
 }
 
 //DESABILITAR//

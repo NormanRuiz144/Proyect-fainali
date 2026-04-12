@@ -15,10 +15,13 @@ import MunicipiosController from '#controllers/municipios_controller'
 import ProblematicasController from '#controllers/problematicas_controller'
 import InstitucionesController from '#controllers/instituciones_controller'
 import ReportesController from '#controllers/reportes_controller'
+import SectoresController from '#controllers/sectores_controller'
+import RolesController from '#controllers/roles_controller'
+import detaReporteController from '#controllers/detaReporte_controller'
 router.get('/', () => {
   return { hello: 'world' }
 })
-   
+
 router
   .group(() => {
     router
@@ -36,7 +39,7 @@ router
       })
       .prefix('account')
       .as('profile')
-      .use(middleware.auth())   
+      .use(middleware.auth())
   })
   .prefix('/api/v1')
 
@@ -64,3 +67,22 @@ router.put('/instituciones/:id',[InstitucionesController,'actualizarInstituc'])
 router.get('/reportes', [ReportesController, 'obtenerReportes'])
 router.post('/reportes', [ReportesController, 'crearReporte'])
 router.put('/reportes/:id', [ReportesController, 'actualizarReporte'])
+
+//Rutas Sectores//
+router.get('/sectores',[SectoresController,'obtenerSectores'])
+router.get('/sectores/:id',[SectoresController,'obtenerSectorId'])
+router.post('/sectores',[SectoresController,'crearSector'])
+router.put('/sectores/:id',[SectoresController,'actualizarSector'])
+
+//RUTAS ROL//
+router.get('/roles', [RolesController, 'obtenerRol'])
+router.get('/roles/:id', [RolesController, 'obtenerRolId'])
+router.post('/roles', [RolesController, 'crearRol'])
+router.put('/roles/:id', [RolesController, 'actualizarRol'])
+
+//RUTAS DETALLE REPORTE//
+
+router.get('/detalleReportes',[detaReporteController,'obtenerDetaReporte'])
+router.get('/detalleReportes/:id',[detaReporteController,'obtenerDetalleId'])
+router.post('/detalleReportes',[detaReporteController,'crearDetalleReporte'])
+router.put('/detalleReportes/:id',[detaReporteController,'actualizarDetalleReporte'])

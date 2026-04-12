@@ -235,4 +235,148 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'sectores.obtener_sectores': {
+    methods: ["GET","HEAD"]
+    pattern: '/sectores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.obtener_sector_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/sectores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.crear_sector': {
+    methods: ["POST"]
+    pattern: '/sectores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.actualizar_sector': {
+    methods: ["PUT"]
+    pattern: '/sectores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.obtener_rol': {
+    methods: ["GET","HEAD"]
+    pattern: '/roles'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.obtener_rol_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/roles/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.crear_rol': {
+    methods: ["POST"]
+    pattern: '/roles'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.actualizar_rol': {
+    methods: ["PUT"]
+    pattern: '/roles/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.obtener_deta_reporte': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalleReportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.obtener_detalle_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalleReportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.crear_detalle_reporte': {
+    methods: ["POST"]
+    pattern: '/detalleReportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.actualizar_detalle_reporte': {
+    methods: ["PUT"]
+    pattern: '/detalleReportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
 }

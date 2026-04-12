@@ -23,6 +23,18 @@ export type ScannedRoutes = {
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
     'reportes.crear_reporte': { paramsTuple?: []; params?: {} }
     'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
+    'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sectores.crear_sector': { paramsTuple?: []; params?: {} }
+    'sectores.actualizar_sector': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'roles.obtener_rol': { paramsTuple?: []; params?: {} }
+    'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'roles.crear_rol': { paramsTuple?: []; params?: {} }
+    'roles.actualizar_rol': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
+    'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'deta_reporte.crear_detalle_reporte': { paramsTuple?: []; params?: {} }
+    'deta_reporte.actualizar_detalle_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -32,6 +44,12 @@ export type ScannedRoutes = {
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
+    'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
+    'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'roles.obtener_rol': { paramsTuple?: []; params?: {} }
+    'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
+    'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -41,6 +59,12 @@ export type ScannedRoutes = {
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
+    'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
+    'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'roles.obtener_rol': { paramsTuple?: []; params?: {} }
+    'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
+    'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'auth.new_account.store': { paramsTuple?: []; params?: {} }
@@ -51,12 +75,18 @@ export type ScannedRoutes = {
     'problematicas.crear_problematica': { paramsTuple?: []; params?: {} }
     'instituciones.crear_institucion': { paramsTuple?: []; params?: {} }
     'reportes.crear_reporte': { paramsTuple?: []; params?: {} }
+    'sectores.crear_sector': { paramsTuple?: []; params?: {} }
+    'roles.crear_rol': { paramsTuple?: []; params?: {} }
+    'deta_reporte.crear_detalle_reporte': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'departamentos.actualizar_depart': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.actualizar_problematica': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'instituciones.actualizar_instituc': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sectores.actualizar_sector': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'roles.actualizar_rol': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'deta_reporte.actualizar_detalle_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

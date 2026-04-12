@@ -5,6 +5,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
 export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
+  public static table = 'usuarios'
   static accessTokens = DbAccessTokensProvider.forModel(User)
   declare currentAccessToken?: AccessToken
 
