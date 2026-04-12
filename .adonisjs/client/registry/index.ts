@@ -120,6 +120,78 @@ const routes = {
     tokens: [{"old":"/reportes/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.actualizar_reporte']['types'],
   },
+  'sectores.obtener_sectores': {
+    methods: ["GET","HEAD"],
+    pattern: '/sectores',
+    tokens: [{"old":"/sectores","type":0,"val":"sectores","end":""}],
+    types: placeholder as Registry['sectores.obtener_sectores']['types'],
+  },
+  'sectores.obtener_sector_id': {
+    methods: ["GET","HEAD"],
+    pattern: '/sectores/:id',
+    tokens: [{"old":"/sectores/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.obtener_sector_id']['types'],
+  },
+  'sectores.crear_sector': {
+    methods: ["POST"],
+    pattern: '/sectores',
+    tokens: [{"old":"/sectores","type":0,"val":"sectores","end":""}],
+    types: placeholder as Registry['sectores.crear_sector']['types'],
+  },
+  'sectores.actualizar_sector': {
+    methods: ["PUT"],
+    pattern: '/sectores/:id',
+    tokens: [{"old":"/sectores/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.actualizar_sector']['types'],
+  },
+  'roles.obtener_rol': {
+    methods: ["GET","HEAD"],
+    pattern: '/roles',
+    tokens: [{"old":"/roles","type":0,"val":"roles","end":""}],
+    types: placeholder as Registry['roles.obtener_rol']['types'],
+  },
+  'roles.obtener_rol_id': {
+    methods: ["GET","HEAD"],
+    pattern: '/roles/:id',
+    tokens: [{"old":"/roles/:id","type":0,"val":"roles","end":""},{"old":"/roles/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['roles.obtener_rol_id']['types'],
+  },
+  'roles.crear_rol': {
+    methods: ["POST"],
+    pattern: '/roles',
+    tokens: [{"old":"/roles","type":0,"val":"roles","end":""}],
+    types: placeholder as Registry['roles.crear_rol']['types'],
+  },
+  'roles.actualizar_rol': {
+    methods: ["PUT"],
+    pattern: '/roles/:id',
+    tokens: [{"old":"/roles/:id","type":0,"val":"roles","end":""},{"old":"/roles/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['roles.actualizar_rol']['types'],
+  },
+  'deta_reporte.obtener_deta_reporte': {
+    methods: ["GET","HEAD"],
+    pattern: '/detalleReportes',
+    tokens: [{"old":"/detalleReportes","type":0,"val":"detalleReportes","end":""}],
+    types: placeholder as Registry['deta_reporte.obtener_deta_reporte']['types'],
+  },
+  'deta_reporte.obtener_detalle_id': {
+    methods: ["GET","HEAD"],
+    pattern: '/detalleReportes/:id',
+    tokens: [{"old":"/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['deta_reporte.obtener_detalle_id']['types'],
+  },
+  'deta_reporte.crear_detalle_reporte': {
+    methods: ["POST"],
+    pattern: '/detalleReportes',
+    tokens: [{"old":"/detalleReportes","type":0,"val":"detalleReportes","end":""}],
+    types: placeholder as Registry['deta_reporte.crear_detalle_reporte']['types'],
+  },
+  'deta_reporte.actualizar_detalle_reporte': {
+    methods: ["PUT"],
+    pattern: '/detalleReportes/:id',
+    tokens: [{"old":"/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['deta_reporte.actualizar_detalle_reporte']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

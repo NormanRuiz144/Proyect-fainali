@@ -41,4 +41,22 @@ export interface ApiDefinition {
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']
   }
+  sectores: {
+    obtenerSectores: typeof routes['sectores.obtener_sectores']
+    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
+    crearSector: typeof routes['sectores.crear_sector']
+    actualizarSector: typeof routes['sectores.actualizar_sector']
+  }
+  roles: {
+    obtenerRol: typeof routes['roles.obtener_rol']
+    obtenerRolId: typeof routes['roles.obtener_rol_id']
+    crearRol: typeof routes['roles.crear_rol']
+    actualizarRol: typeof routes['roles.actualizar_rol']
+  }
+  detaReporte: {
+    obtenerDetaReporte: typeof routes['deta_reporte.obtener_deta_reporte']
+    obtenerDetalleId: typeof routes['deta_reporte.obtener_detalle_id']
+    crearDetalleReporte: typeof routes['deta_reporte.crear_detalle_reporte']
+    actualizarDetalleReporte: typeof routes['deta_reporte.actualizar_detalle_reporte']
+  }
 }
