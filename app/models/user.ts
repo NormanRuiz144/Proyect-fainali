@@ -3,27 +3,34 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import Institucione from './institucione.ts'
+import Roles from './roles.ts'
+import Sectores from './sectores.ts'
+import Reporte from './reporte.ts'
+import DetalleReportes from './detalleReporte.ts'
 
-export default class User extends compose(UsuarioSchema, withAuthFinder(hash)) {
-  static accessTokens = DbAccessTokensProvider.forModel(User)
+export default class Usuario extends compose(UsuarioSchema, withAuthFinder(hash)) {
+  static accessTokens = DbAccessTokensProvider.forModel(Usuario)
   declare currentAccessToken?: AccessToken
 
-  get initials() {
-    const [first, last] = this.nombres ? this.nombres.split(' ') : this.correo.split('@')
-    if (first && last) {
-      return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase()
-    }
-    return `${first.slice(0, 2)}`.toUpperCase()
-  }
+  static table = 'usuarios'
+  static passwordColumn = 'contrasena'
 
   // Relaciones
   @belongsTo(() => Institucione)
   declare Institucion: BelongsTo<typeof Institucione>
-  // @belongsTo(() => Role)
-  // declare rol: BelongsTo<typeof Institucione>
-  // @belongsTo(() => Sectores)
-  // declare sector: BelongsTo<typeof Institucione>
+
+  @belongsTo(() => Roles)
+  declare rol: BelongsTo<typeof Roles>
+
+  @belongsTo(() => Sectores)
+  declare sector: BelongsTo<typeof Sectores>
+
+  @hasMany(() => Reporte)
+  declare reporte: HasMany<typeof Reporte>
+
+  @hasMany(() => DetalleReportes)
+  declare detalleReporte: HasMany<typeof DetalleReportes>
 }

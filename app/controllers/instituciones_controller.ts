@@ -7,7 +7,7 @@ export default class InstitucionesController {
   async obtenerInstituciones({ response }: HttpContext) {
     const listinstituc = await Institucione.all()
 
-    if (!listinstituc || listinstituc.length == 0) {
+    if (!listinstituc || listinstituc.length === 0) {
       throw new Error('No se han encontrado Instituciones.')
     }
     return response.ok({ lista_Instituciones: listinstituc })
@@ -15,7 +15,7 @@ export default class InstitucionesController {
 
   // Crear un nueva Institucion//
   async crearInstitucion({ request, response }: HttpContext) {
-    const { nombreInstitucion, id_municipio } = await request.validateUsing(ingresarInstitu)
+    const { nombreInstitucion, idMunicipio } = await request.validateUsing(ingresarInstitu)
     const exite = await Institucione.query().where('nombre_institucion', nombreInstitucion).first()
     if (exite) {
       return response.status(404).json({
@@ -24,7 +24,7 @@ export default class InstitucionesController {
     }
     const nuevaInstituc = await Institucione.create({
       nombreInstitucion,
-      idMunicipio: id_municipio,
+      idMunicipio: idMunicipio,
     })
 
     if (!nuevaInstituc) {
@@ -52,7 +52,7 @@ export default class InstitucionesController {
 
     if (encontradaInstituc) {
       encontradaInstituc.nombreInstitucion = nuevaInstituc.nombreInstitucion
-      encontradaInstituc.idMunicipio = nuevaInstituc.id_municipio
+      encontradaInstituc.idMunicipio = nuevaInstituc.idMunicipio
       await encontradaInstituc.save()
       return response.ok({ mensage: 'La institucion se a actualizado correctamente.' })
     }

@@ -14,7 +14,7 @@ export default class extends BaseSchema {
       table.string('contrasena', 35).notNullable()
       table.integer('id_sector').references('id').inTable('sectores').notNullable()
       table.integer('id_rol').references('id').inTable('roles').notNullable()
-      table.integer('id_institucion').references('id').inTable('instituciones').notNullable()
+      table.integer('id_institucion').references('id').inTable('instituciones').nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

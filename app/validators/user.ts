@@ -10,7 +10,7 @@ const password = () => vine.string().minLength(8).maxLength(32)
  * Validator to use when performing self-signup
  */
 export const signupValidator = vine.create({
-  numero_cedula: vine.string().unique({ table: 'usuarios' }),
+  numeroCedula: vine.string().unique({ table: 'usuarios', column: 'numero_cedula' }),
   nombres: vine.string().trim(),
   apellidos: vine.string().trim(),
   sexo: vine.string().maxLength(1).minLength(1),
@@ -27,6 +27,31 @@ export const signupValidator = vine.create({
  * during login
  */
 export const loginValidator = vine.create({
-  email: email(),
-  password: vine.string(),
+  correo: email(),
+  contrasena: vine.string(),
+})
+
+export const crearUsuarioValidator = vine.create({
+  numeroCedula: vine.string().unique({ table: 'usuarios', column: 'numero_cedula' }),
+  nombres: vine.string().trim(),
+  apellidos: vine.string().trim(),
+  sexo: vine.string().maxLength(1).minLength(1),
+  correo: email().unique({ table: 'usuarios', column: 'correo' }),
+  contrasena: password(),
+  idSector: vine.number(),
+  idRol: vine.number(),
+  idInstitucion: vine.number().optional(),
+})
+
+export const actualizarUsuarioValidator = vine.create({
+  nombres: vine.string().trim().optional(),
+  apellidos: vine.string().trim().optional(),
+  sexo: vine.string().maxLength(1).minLength(1).optional(),
+  idSector: vine.number().optional(),
+  idRol: vine.number().optional(),
+  idInstitucion: vine.number().optional(),
+})
+
+export const bajaValidator = vine.create({
+  idInstitucion: vine.number(),
 })

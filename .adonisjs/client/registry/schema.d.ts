@@ -7,7 +7,7 @@ import type { InferInput, SimpleError } from '@vinejs/vine/types'
 export type ParamValue = string | number | bigint | boolean
 
 export interface Registry {
-  'auth.user.store': {
+  'auth.user.registrarse': {
     methods: ["POST"]
     pattern: '/auth/resgistro'
     types: {
@@ -15,8 +15,8 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: ExtractQuery<InferInput<(typeof import('#validators/user').signupValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['store']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['registrarse']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['registrarse']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'auth.access_token.store': {
@@ -53,6 +53,78 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
+    }
+  }
+  'user.list_usuarios_insti': {
+    methods: ["GET","HEAD"]
+    pattern: '/usuarios/list'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuariosInsti']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuariosInsti']>>>
+    }
+  }
+  'user.crear_usuario': {
+    methods: ["POST"]
+    pattern: '/usuarios/crear'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').crearUsuarioValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').crearUsuarioValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['crearUsuario']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['crearUsuario']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.buscar_usurio_by_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/usuarios/:userId'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['buscarUsurioById']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['buscarUsurioById']>>>
+    }
+  }
+  'user.actualizar_usuario': {
+    methods: ["PUT"]
+    pattern: '/usuarios/actualizar/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['actualizarUsuario']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['actualizarUsuario']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.reasignar_institucion_rol': {
+    methods: ["PUT"]
+    pattern: '/usuarios/reasignar/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.baja_insti': {
+    methods: ["PUT"]
+    pattern: '/usuarios/bajaInst/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'departamentos.obtener_departamentos': {
@@ -226,6 +298,150 @@ export interface Registry {
   'reportes.actualizar_reporte': {
     methods: ["PUT"]
     pattern: '/reportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.obtener_sectores': {
+    methods: ["GET","HEAD"]
+    pattern: '/sectores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.obtener_sector_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/sectores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.crear_sector': {
+    methods: ["POST"]
+    pattern: '/sectores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.actualizar_sector': {
+    methods: ["PUT"]
+    pattern: '/sectores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.obtener_rol': {
+    methods: ["GET","HEAD"]
+    pattern: '/roles'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.obtener_rol_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/roles/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.crear_rol': {
+    methods: ["POST"]
+    pattern: '/roles'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'roles.actualizar_rol': {
+    methods: ["PUT"]
+    pattern: '/roles/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.obtener_deta_reporte': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalleReportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.obtener_detalle_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalleReportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.crear_detalle_reporte': {
+    methods: ["POST"]
+    pattern: '/detalleReportes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'deta_reporte.actualizar_detalle_reporte': {
+    methods: ["PUT"]
+    pattern: '/detalleReportes/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]

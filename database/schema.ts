@@ -176,7 +176,7 @@ export class UsuarioSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number
+  declare idInstitucion: number | null
   @column()
   declare idRol: number
   @column()

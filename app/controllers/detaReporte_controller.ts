@@ -11,7 +11,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 //GET_ALL_DETALLE REPORTE//
 
  export default class detaReporteController {
-  async obtenerDetaReporte({ response }: HttpContext) {
+ async obtenerDetaReporte({ response }: HttpContext) {
     const listaDetaReporte = await DetalleReportes.all()
 
     if (!listaDetaReporte ||listaDetaReporte.length == 0) {
@@ -22,7 +22,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
   //GET DETALLE REPORTE ID//
 
-  public async obtenerDetalleId({ params, response }: HttpContext) {
+ public async obtenerDetalleId({ params, response }: HttpContext) {
       const idDetalleReporte = Number(params.id)
 
       // Validar que el id sea un número válido
@@ -37,7 +37,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
       if (!detalleReporte) {
         return response.status(404).json({
-          mensaje: `No se encontró ningun detalle reporte con id ${idDetalleReporte}.`,
+          mensaje: `Ingrese un Id Valido.`,
         })
       }
 
@@ -49,53 +49,7 @@ import type { HttpContext } from '@adonisjs/core/http'
   }
 
 
-  // Crear un nuevo reporte
 
-
-//   async crearDetalleReporte({ request, response }: HttpContext) {
-//   const { descripcion, fechaSegui, idReporte, idUsuario } = await request.validateUsing(ingresarDetalleReporte)
-
-//   // 1. Validar que el idReporte no esté ya asignado a otro detalle
-//   const reporteAsignado = await DetalleReportes.query()
-//     .where('id_reporte', idReporte)
-//     .first()
-
-//   if (reporteAsignado) {
-//     return response.status(409).json({
-//       mensaje: `Error: El reporte con ID ${idReporte} ya tiene un detalle asignado y no puede repetirse.`,
-//     })
-//   }
-
-//   // 2. Opcional: Tu validación anterior por si quieres evitar el duplicado exacto de todo el objeto
-//   // Aunque con la validación de arriba, esta ya queda cubierta si el ID del reporte es el mismo.
-//   const existe = await DetalleReportes.query()
-//     .where({
-//       id_reporte: idReporte,
-//       id_usuario: idUsuario,
-//       descripcion: descripcion,
-//       fecha_seguimiento: fechaSegui // Asegúrate que en la DB sea fecha_seguimiento
-//     })
-//     .first()
-
-//   if (existe) {
-//     return response.status(409).json({
-//       mensaje: `El detalle con la descripción "${descripcion}" ya existe para este reporte.`,
-//     })
-//   }
-
-//   // 3. Crear el nuevo registro
-//   const nuevoDetalleReporte = await DetalleReportes.create({
-//     id_reporte: idReporte,
-//     id_usuario: idUsuario,
-//     descripcion: descripcion,
-//     fechaSeguimiento: fechaSegui
-//   })
-
-//   return response.ok({
-//     mensaje: 'Detalle reporte creado con éxito.',
-//     Sectores: nuevoDetalleReporte
-//   })
-// }
 async crearDetalleReporte({ request, response }: HttpContext) {
   const { descripcion, fechaSegui, idReporte, idUsuario } = await request.validateUsing(ingresarDetalleReporte)
 
@@ -160,94 +114,6 @@ async crearDetalleReporte({ request, response }: HttpContext) {
 
 
 
-//ACTUALIZAR DETALLE REPORTE//
-//   async actualizarDetalleReporte({ params, request, response }: HttpContext) {
-//   // 1. Obtener el ID de la URL
-//   const idDetalleReporte = Number(params.id)
-
-//   // 2. Validar los datos que vienen del Body
-//   // Asegúrate de que el validador permita estos campos
-//   const datos = await request.validateUsing(actualizarDetalleReporteValidator)
-
-//   try {
-//     // 3. Buscar el registro directamente por su Primary Key
-//     const registro = await DetalleReportes.find(idDetalleReporte)
-
-//     // 4. Si no existe, avisar de inmediato
-//     if (!registro) {
-//       return response.status(404).json({ mensaje: 'El registro no existe.' })
-//     }
-
-//     // 5. Actualizar los campos
-//     // Usamos el operador de coalescencia (??) o validamos que existan
-//     registro.descripcion = datos.descripcion!
-//     registro.fechaSeguimiento = datos.fechaSeguimiento!
-
-//     // 6. Guardar cambios
-//     await registro.save()
-
-//     return response.ok({ mensaje: 'El sector fue actualizado correctamente.' })
-
-//  } catch (error) {
-//   let mensajeError = 'Error desconocido'
-
-//   if (error instanceof Error) {
-//     mensajeError = error.message
-//   }
-
-//   return response.status(500).json({
-//     mensaje: 'Error interno al intentar actualizar.',
-//     error: mensajeError
-//   })
-// }
-// }
-// async actualizarDetalleReporte({ params, request, response }: HttpContext) {
-//   // 1. Validar que el ID de la URL sea un número válido
-//   const idDetalleReporte = Number(params.id)
-
-//   if (isNaN(idDetalleReporte) || idDetalleReporte <= 0) {
-//     return response.status(400).json({
-//       mensaje: 'ID de detalle inválido, vuelve a intentarlo con un número válido.',
-//     })
-//   }
-
-//   try {
-//     // 2. Validar la EXISTENCIA del registro en la base de datos
-//     const registro = await DetalleReportes.find(idDetalleReporte)
-
-//     if (!registro) {
-//       return response.status(404).json({
-//         mensaje: `El detalle de reporte con ID ${idDetalleReporte} no existe.`
-//       })
-//     }
-
-//     // 3. Validar los datos que vienen del Body (ahora que sabemos que el ID es real)
-//     const datos = await request.validateUsing(actualizarDetalleReporteValidator)
-
-//     // 4. Actualizar los campos
-//     // 5. Actualizar los campos
-// //     // Usamos el operador de coalescencia (??) o validamos que existan
-//     registro.descripcion = datos.descripcion!
-//     registro.fechaSeguimiento = datos.fechaSeguimiento!
-
-//     // 6. Guardar cambios
-//     await registro.save()
-
-//     return response.ok({ mensaje: 'El detalle Reporte fue actualizado correctamente.' })
-
-//  } catch (error) {
-//   let mensajeError = 'Error desconocido'
-
-//   if (error instanceof Error) {
-//     mensajeError = error.message
-//   }
-
-//   return response.status(500).json({
-//     mensaje: 'Asegurate de que los campos esten llenos correctamente.',
-//     error: mensajeError
-//   })
-// }
-// }
 async actualizarDetalleReporte({ params, request, response }: HttpContext) {
   // 1. Validar que el ID de la URL sea un número válido
   const idDetalleReporte = Number(params.id)
