@@ -1,5 +1,5 @@
 import { ReporteSchema } from '#database/schema'
-
+import { column } from '@adonisjs/lucid/orm'
 
 // Descomentar lo de abajo
 
@@ -11,6 +11,19 @@ import { ReporteSchema } from '#database/schema'
 // import Sector from '#models/sectore'
 
 export default class Reporte extends ReporteSchema {
+
+  // Al conseguir la data se pasa a arreglo
+  @column({
+    consume: (value: any) => {
+      if (!value) return null;
+      try {
+        return typeof value === 'string' ? JSON.parse(value) : value;
+      } catch (error) {
+        return value;
+      }
+    }
+  })
+  declare formato: any
 
   // Descomentar esto cuano ya las otras esten hechas xd
  

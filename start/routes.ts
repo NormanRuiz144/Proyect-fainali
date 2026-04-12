@@ -64,3 +64,4 @@ router.put('/instituciones/:id',[InstitucionesController,'actualizarInstituc'])
 router.get('/reportes', [ReportesController, 'obtenerReportes'])
 router.post('/reportes', [ReportesController, 'crearReporte'])
 router.put('/reportes/:id', [ReportesController, 'actualizarReporte'])
+

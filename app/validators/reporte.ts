@@ -6,7 +6,12 @@ export const ingresarReporte = vine.compile(
     idInstitucion: vine.number(),
     idProblematica: vine.number(),
     idSector: vine.number().optional(),
-    formato: vine.string().maxLength(200).trim(),
+    formato: vine.array(
+      vine.file({
+        size: '20mb',
+        extnames: ['jpg', 'png', 'jpeg', 'webp', 'heic']
+      })
+    ).maxLength(6).optional(),
     ubicacion: vine.string().maxLength(200).trim(),
     nvlPrioridad: vine.number().optional(),
     estado: vine.string().maxLength(50).optional(),
