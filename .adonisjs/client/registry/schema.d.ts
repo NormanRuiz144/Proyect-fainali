@@ -7,21 +7,21 @@ import type { InferInput, SimpleError } from '@vinejs/vine/types'
 export type ParamValue = string | number | bigint | boolean
 
 export interface Registry {
-  'auth.new_account.store': {
+  'auth.user.registrarse': {
     methods: ["POST"]
-    pattern: '/api/v1/auth/signup'
+    pattern: '/auth/resgistro'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/user').signupValidator)>>
       paramsTuple: []
       params: {}
       query: ExtractQuery<InferInput<(typeof import('#validators/user').signupValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/new_account_controller').default['store']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/new_account_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['registrarse']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['registrarse']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'auth.access_token.store': {
     methods: ["POST"]
-    pattern: '/api/v1/auth/login'
+    pattern: '/auth/login'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/user').loginValidator)>>
       paramsTuple: []
@@ -33,7 +33,7 @@ export interface Registry {
   }
   'auth.access_token.destroy': {
     methods: ["POST"]
-    pattern: '/api/v1/auth/logout'
+    pattern: '/auth/logout'
     types: {
       body: {}
       paramsTuple: []
@@ -45,7 +45,7 @@ export interface Registry {
   }
   'profile.profile.show': {
     methods: ["GET","HEAD"]
-    pattern: '/api/v1/account/profile'
+    pattern: '/account/profile'
     types: {
       body: {}
       paramsTuple: []
@@ -53,6 +53,78 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
+    }
+  }
+  'user.list_usuarios_insti': {
+    methods: ["GET","HEAD"]
+    pattern: '/usuarios/list'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuariosInsti']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuariosInsti']>>>
+    }
+  }
+  'user.crear_usuario': {
+    methods: ["POST"]
+    pattern: '/usuarios/crear'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').crearUsuarioValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').crearUsuarioValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['crearUsuario']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['crearUsuario']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.buscar_usurio_by_id': {
+    methods: ["GET","HEAD"]
+    pattern: '/usuarios/:userId'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['buscarUsurioById']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['buscarUsurioById']>>>
+    }
+  }
+  'user.actualizar_usuario': {
+    methods: ["PUT"]
+    pattern: '/usuarios/actualizar/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['actualizarUsuario']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['actualizarUsuario']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.reasignar_institucion_rol': {
+    methods: ["PUT"]
+    pattern: '/usuarios/reasignar/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').reasignarValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').reasignarValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'user.baja_insti': {
+    methods: ["PUT"]
+    pattern: '/usuarios/bajaInst/:userId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      paramsTuple: [ParamValue]
+      params: { userId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'departamentos.obtener_departamentos': {
@@ -116,7 +188,7 @@ export interface Registry {
     }
   }
   'municipios.actualizar_municipio': {
-    methods: ["GET","HEAD"]
+    methods: ["PUT"]
     pattern: '/municipios/:id'
     types: {
       body: {}

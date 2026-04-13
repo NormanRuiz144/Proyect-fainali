@@ -6,29 +6,65 @@ import type { ApiDefinition } from './tree.d.ts'
 const placeholder: any = {}
 
 const routes = {
-  'auth.new_account.store': {
+  'auth.user.registrarse': {
     methods: ["POST"],
-    pattern: '/api/v1/auth/signup',
-    tokens: [{"old":"/api/v1/auth/signup","type":0,"val":"api","end":""},{"old":"/api/v1/auth/signup","type":0,"val":"v1","end":""},{"old":"/api/v1/auth/signup","type":0,"val":"auth","end":""},{"old":"/api/v1/auth/signup","type":0,"val":"signup","end":""}],
-    types: placeholder as Registry['auth.new_account.store']['types'],
+    pattern: '/auth/resgistro',
+    tokens: [{"old":"/auth/resgistro","type":0,"val":"auth","end":""},{"old":"/auth/resgistro","type":0,"val":"resgistro","end":""}],
+    types: placeholder as Registry['auth.user.registrarse']['types'],
   },
   'auth.access_token.store': {
     methods: ["POST"],
-    pattern: '/api/v1/auth/login',
-    tokens: [{"old":"/api/v1/auth/login","type":0,"val":"api","end":""},{"old":"/api/v1/auth/login","type":0,"val":"v1","end":""},{"old":"/api/v1/auth/login","type":0,"val":"auth","end":""},{"old":"/api/v1/auth/login","type":0,"val":"login","end":""}],
+    pattern: '/auth/login',
+    tokens: [{"old":"/auth/login","type":0,"val":"auth","end":""},{"old":"/auth/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['auth.access_token.store']['types'],
   },
   'auth.access_token.destroy': {
     methods: ["POST"],
-    pattern: '/api/v1/auth/logout',
-    tokens: [{"old":"/api/v1/auth/logout","type":0,"val":"api","end":""},{"old":"/api/v1/auth/logout","type":0,"val":"v1","end":""},{"old":"/api/v1/auth/logout","type":0,"val":"auth","end":""},{"old":"/api/v1/auth/logout","type":0,"val":"logout","end":""}],
+    pattern: '/auth/logout',
+    tokens: [{"old":"/auth/logout","type":0,"val":"auth","end":""},{"old":"/auth/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['auth.access_token.destroy']['types'],
   },
   'profile.profile.show': {
     methods: ["GET","HEAD"],
-    pattern: '/api/v1/account/profile',
-    tokens: [{"old":"/api/v1/account/profile","type":0,"val":"api","end":""},{"old":"/api/v1/account/profile","type":0,"val":"v1","end":""},{"old":"/api/v1/account/profile","type":0,"val":"account","end":""},{"old":"/api/v1/account/profile","type":0,"val":"profile","end":""}],
+    pattern: '/account/profile',
+    tokens: [{"old":"/account/profile","type":0,"val":"account","end":""},{"old":"/account/profile","type":0,"val":"profile","end":""}],
     types: placeholder as Registry['profile.profile.show']['types'],
+  },
+  'user.list_usuarios_insti': {
+    methods: ["GET","HEAD"],
+    pattern: '/usuarios/list',
+    tokens: [{"old":"/usuarios/list","type":0,"val":"usuarios","end":""},{"old":"/usuarios/list","type":0,"val":"list","end":""}],
+    types: placeholder as Registry['user.list_usuarios_insti']['types'],
+  },
+  'user.crear_usuario': {
+    methods: ["POST"],
+    pattern: '/usuarios/crear',
+    tokens: [{"old":"/usuarios/crear","type":0,"val":"usuarios","end":""},{"old":"/usuarios/crear","type":0,"val":"crear","end":""}],
+    types: placeholder as Registry['user.crear_usuario']['types'],
+  },
+  'user.buscar_usurio_by_id': {
+    methods: ["GET","HEAD"],
+    pattern: '/usuarios/:userId',
+    tokens: [{"old":"/usuarios/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/:userId","type":1,"val":"userId","end":""}],
+    types: placeholder as Registry['user.buscar_usurio_by_id']['types'],
+  },
+  'user.actualizar_usuario': {
+    methods: ["PUT"],
+    pattern: '/usuarios/actualizar/:userId',
+    tokens: [{"old":"/usuarios/actualizar/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/actualizar/:userId","type":0,"val":"actualizar","end":""},{"old":"/usuarios/actualizar/:userId","type":1,"val":"userId","end":""}],
+    types: placeholder as Registry['user.actualizar_usuario']['types'],
+  },
+  'user.reasignar_institucion_rol': {
+    methods: ["PUT"],
+    pattern: '/usuarios/reasignar/:userId',
+    tokens: [{"old":"/usuarios/reasignar/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/reasignar/:userId","type":0,"val":"reasignar","end":""},{"old":"/usuarios/reasignar/:userId","type":1,"val":"userId","end":""}],
+    types: placeholder as Registry['user.reasignar_institucion_rol']['types'],
+  },
+  'user.baja_insti': {
+    methods: ["PUT"],
+    pattern: '/usuarios/bajaInst/:userId',
+    tokens: [{"old":"/usuarios/bajaInst/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/bajaInst/:userId","type":0,"val":"bajaInst","end":""},{"old":"/usuarios/bajaInst/:userId","type":1,"val":"userId","end":""}],
+    types: placeholder as Registry['user.baja_insti']['types'],
   },
   'departamentos.obtener_departamentos': {
     methods: ["GET","HEAD"],
@@ -61,7 +97,7 @@ const routes = {
     types: placeholder as Registry['municipios.crear_municipio']['types'],
   },
   'municipios.actualizar_municipio': {
-    methods: ["GET","HEAD"],
+    methods: ["PUT"],
     pattern: '/municipios/:id',
     tokens: [{"old":"/municipios/:id","type":0,"val":"municipios","end":""},{"old":"/municipios/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['municipios.actualizar_municipio']['types'],

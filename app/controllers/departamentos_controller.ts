@@ -37,6 +37,7 @@ export default class DepartamentosController {
 
     const exite = await Departamento.query()
       .where('nom_departamento', nuevoDepart.nomDepartamento)
+      .andWhere('id', '!=', idDepart)
       .first()
     if (exite) {
       return response.status(404).json({

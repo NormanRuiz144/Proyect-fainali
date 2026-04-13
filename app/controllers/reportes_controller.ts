@@ -6,12 +6,13 @@ import { DateTime } from 'luxon' //sirve para dejar la fecha fija cuando se crea
 export default class ReportesController {
   // Listar Reportes
   async obtenerReportes({ response }: HttpContext) {
+    const listaReportes = await Reporte.query()
+      .preload('usuario')
+      .preload('institucion')
+      .preload('problematica')
+    // .preload('sector')
 
-    // descomentar esto cuando ya esten las que falten xd xd jijin jaja
-    // const listaReportes = await Reporte.query().preload('usuario').preload('institucion').preload('problematica').preload('sector')
-    //
-
-    const listaReportes = await Reporte.all()
+    // const listaReportes = await Reporte.all()
 
     if (!listaReportes || listaReportes.length === 0) {
       throw new Error('No se han encontrado reportes.')
@@ -25,7 +26,7 @@ export default class ReportesController {
 
     const nuevoReporte = await Reporte.create({
       ...datosGenerales,
-      fechaGen: DateTime.now() // Asigna por defecto la fecha y hora actual automáticamente
+      fechaGen: DateTime.now(), // Asigna por defecto la fecha y hora actual automáticamente
     })
 
     if (!nuevoReporte) {
@@ -34,7 +35,7 @@ export default class ReportesController {
 
     return response.ok({
       mensaje: 'Reporte registrado con éxito.',
-      reporte: nuevoReporte
+      reporte: nuevoReporte,
     })
   }
 
@@ -50,12 +51,12 @@ export default class ReportesController {
       await encontradoReporte.save()
       return response.ok({
         mensaje: 'El reporte se ha actualizado correctamente.',
-        reporte: encontradoReporte
+        reporte: encontradoReporte,
       })
     }
 
     return response.status(404).json({
-      mensaje: 'El reporte no pudo ser encontrado para actualizar.'
+      mensaje: 'El reporte no pudo ser encontrado para actualizar.',
     })
   }
 }
