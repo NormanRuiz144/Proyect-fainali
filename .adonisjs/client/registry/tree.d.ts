@@ -3,8 +3,8 @@ import type { routes } from './index.ts'
 
 export interface ApiDefinition {
   auth: {
-    newAccount: {
-      store: typeof routes['auth.new_account.store']
+    user: {
+      registrarse: typeof routes['auth.user.registrarse']
     }
     accessToken: {
       store: typeof routes['auth.access_token.store']
@@ -15,6 +15,14 @@ export interface ApiDefinition {
     profile: {
       show: typeof routes['profile.profile.show']
     }
+  }
+  user: {
+    listUsuariosInsti: typeof routes['user.list_usuarios_insti']
+    crearUsuario: typeof routes['user.crear_usuario']
+    buscarUsurioById: typeof routes['user.buscar_usurio_by_id']
+    actualizarUsuario: typeof routes['user.actualizar_usuario']
+    reasignarInstitucionRol: typeof routes['user.reasignar_institucion_rol']
+    bajaInsti: typeof routes['user.baja_insti']
   }
   departamentos: {
     obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']
@@ -40,5 +48,23 @@ export interface ApiDefinition {
     obtenerReportes: typeof routes['reportes.obtener_reportes']
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']
+  }
+  sectores: {
+    obtenerSectores: typeof routes['sectores.obtener_sectores']
+    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
+    crearSector: typeof routes['sectores.crear_sector']
+    actualizarSector: typeof routes['sectores.actualizar_sector']
+  }
+  roles: {
+    obtenerRol: typeof routes['roles.obtener_rol']
+    obtenerRolId: typeof routes['roles.obtener_rol_id']
+    crearRol: typeof routes['roles.crear_rol']
+    actualizarRol: typeof routes['roles.actualizar_rol']
+  }
+  detaReporte: {
+    obtenerDetaReporte: typeof routes['deta_reporte.obtener_deta_reporte']
+    obtenerDetalleId: typeof routes['deta_reporte.obtener_detalle_id']
+    crearDetalleReporte: typeof routes['deta_reporte.crear_detalle_reporte']
+    actualizarDetalleReporte: typeof routes['deta_reporte.actualizar_detalle_reporte']
   }
 }

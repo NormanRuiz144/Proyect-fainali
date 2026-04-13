@@ -3,18 +3,18 @@ import { ingresarReporte } from '#validators/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon' //sirve para dejar la fecha fija cuando se crea
 import { v2 as cloudinary } from 'cloudinary'
+import env from '#start/env'
 
-
-   
 export default class ReportesController {
   // Listar Reportes
   async obtenerReportes({ response }: HttpContext) {
-    
-    // descomentar esto cuando ya esten las que falten xd xd jijin jaja
-    // const listaReportes = await Reporte.query().preload('usuario').preload('institucion').preload('problematica').preload('sector')
-    // 
+    const listaReportes = await Reporte.query()
+      .preload('usuario')
+      .preload('institucion')
+      .preload('problematica')
+    // .preload('sector')
 
-    const listaReportes = await Reporte.all()
+    // const listaReportes = await Reporte.all()
 
     if (!listaReportes || listaReportes.length === 0) {
       throw new Error('No se han encontrado reportes.')
@@ -27,35 +27,36 @@ export default class ReportesController {
     // Esto  configuracion se pone ADENTRO de la función para asegurar que esta vaina
     // reconozca los valores del .env al momento exacto de hacer la petición
     cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
-      api_key: process.env.CLOUDINARY_API_KEY || '',
-      api_secret: process.env.CLOUDINARY_API_SECRET || ''
+      cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
+      api_key: env.get('CLOUDINARY_API_KEY') || '',
+      api_secret: env.get('CLOUDINARY_API_SECRET') || ''
     })
 
     const datosGenerales = await request.validateUsing(ingresarReporte)
-    
-    // Extraer imagenes del arreglo de formato validadas
+
     const imagenes = datosGenerales.formato
     let urlsSeguras: string[] = []
 
+    // Si se subieron imágenes, se mandan a Cloudinary
     if (imagenes && imagenes.length > 0) {
       for (const imagen of imagenes) {
         if (imagen.tmpPath) {
           const resultado = await cloudinary.uploader.upload(imagen.tmpPath, {
-            folder: 'reportes' // Las imágenes se guardarán en esta carpeta en Cloudinary
+            folder: 'reportes'
           })
           urlsSeguras.push(resultado.secure_url)
         }
       }
     }
 
-    // Séparamos 'formato' para manejarlo manualmente con las URLs de Cloudinary
     const { formato, ...restoDatos } = datosGenerales
 
     const nuevoReporte = await Reporte.create({
       ...restoDatos,
-      formato: urlsSeguras.length > 0 ? JSON.stringify(urlsSeguras) : null,
-      fechaGen: DateTime.now() // Asigna por defecto la fecha y hora actual automáticamente
+      // Guardamos el arreglo de URLs como texto JSON si hay imágenes
+      ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {}),
+      estado: restoDatos.estado || 'Pendiente', // El estado por defecto será Pendiente
+      fechaGen: DateTime.now(), // Asigna por defecto la fecha y hora actual automáticamente
     })
 
     if (!nuevoReporte) {
@@ -64,7 +65,7 @@ export default class ReportesController {
 
     return response.ok({
       mensaje: 'Reporte registrado con éxito.',
-      reporte: nuevoReporte
+      reporte: nuevoReporte,
     })
   }
 
@@ -78,9 +79,9 @@ export default class ReportesController {
     if (encontradoReporte) {
       // Configuramos Cloudinary aquí también para las actualizaciones
       cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
-        api_key: process.env.CLOUDINARY_API_KEY || '',
-        api_secret: process.env.CLOUDINARY_API_SECRET || ''
+        cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
+        api_key: env.get('CLOUDINARY_API_KEY') || '',
+        api_secret: env.get('CLOUDINARY_API_SECRET') || ''
       })
 
       const imagenes = datosNuevos.formato
@@ -108,14 +109,14 @@ export default class ReportesController {
 
       encontradoReporte.merge(reporteActualizado)
       await encontradoReporte.save()
-      return response.ok({ 
+      return response.ok({
         mensaje: 'El reporte se ha actualizado correctamente.',
-        reporte: encontradoReporte 
+        reporte: encontradoReporte,
       })
     }
 
-    return response.status(404).json({ 
-      mensaje: 'El reporte no pudo ser encontrado para actualizar.' 
+    return response.status(404).json({
+      mensaje: 'El reporte no pudo ser encontrado para actualizar.',
     })
   }
 }
