@@ -107,10 +107,10 @@ export interface Registry {
     methods: ["PUT"]
     pattern: '/usuarios/reasignar/:userId'
     types: {
-      body: ExtractBody<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      body: ExtractBody<InferInput<(typeof import('#validators/user').reasignarValidator)>>
       paramsTuple: [ParamValue]
       params: { userId: ParamValue }
-      query: ExtractQuery<InferInput<(typeof import('#validators/user').actualizarUsuarioValidator)>>
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').reasignarValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['reasignarInstitucionRol']>>> | { status: 422; response: { errors: SimpleError[] } }
     }

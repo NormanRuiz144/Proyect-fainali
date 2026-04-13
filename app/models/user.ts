@@ -11,21 +11,23 @@ import Sectores from './sectores.ts'
 import Reporte from './reporte.ts'
 import DetalleReportes from './detalleReporte.ts'
 
-export default class Usuario extends compose(UsuarioSchema, withAuthFinder(hash)) {
+const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
+  uids: ['correo'],
+  passwordColumnName: 'contrasena',
+})
+
+export default class Usuario extends compose(UsuarioSchema, AuthFinder) {
   static accessTokens = DbAccessTokensProvider.forModel(Usuario)
   declare currentAccessToken?: AccessToken
 
-  static table = 'usuarios'
-  static passwordColumn = 'contrasena'
-
   // Relaciones
-  @belongsTo(() => Institucione)
+  @belongsTo(() => Institucione, { foreignKey: 'idInstitucion' })
   declare Institucion: BelongsTo<typeof Institucione>
 
-  @belongsTo(() => Roles)
+  @belongsTo(() => Roles, { foreignKey: 'idRol' })
   declare rol: BelongsTo<typeof Roles>
 
-  @belongsTo(() => Sectores)
+  @belongsTo(() => Sectores, { foreignKey: 'idSector' })
   declare sector: BelongsTo<typeof Sectores>
 
   @hasMany(() => Reporte)

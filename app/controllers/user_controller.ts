@@ -3,6 +3,7 @@ import {
   actualizarUsuarioValidator,
   bajaValidator,
   crearUsuarioValidator,
+  reasignarValidator,
   signupValidator,
 } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -44,12 +45,16 @@ export default class UserController {
   }
 
   // Listar los usuarios que formen parte de x institucion
-  async listUsuariosInsti({ request, response }: HttpContext) {
-    const idInti = request.input('idInstitucion')
+  async listUsuariosInsti({ auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const idInsti = user!.idInstitucion
+    if (!idInsti) {
+      throw new Exception('El usuario usado no tiene acceso este recurso.', { status: 403 })
+    }
     try {
       const list = await Usuarios.query()
-        .select(['nombres', 'apellidos', 'correo', 'id_sector', 'id_rol'])
-        .where('id_intitucion', idInti)
+        .select('nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
+        .where('id_institucion', idInsti || 0)
 
       if (list && list.length === 0) {
         response
@@ -84,10 +89,15 @@ export default class UserController {
     if (!userId) {
       throw new Exception('No se pudo realizar la busqueda', { status: 404 })
     }
-    const usuarioFinded = await Usuarios.query().where('id', userId).firstOrFail()
+    const usuarioFinded = await Usuarios.query()
+      .select('numero_cedula', 'nombres', 'apellidos', 'sexo', 'correo', 'id_rol', 'id_institucion')
+      .where('id', userId)
+      .firstOrFail()
     if (!usuarioFinded) {
       throw new Exception('Usuario no encontrado.', { status: 404 })
     }
+    await usuarioFinded.load('rol')
+    await usuarioFinded.load('Institucion')
     response.ok({ message: 'Usuario encontrado', Usuario: usuarioFinded })
   }
   // Actualizar datos de un usuario
@@ -102,6 +112,7 @@ export default class UserController {
       throw new Exception('Usuario no encontrado.', { status: 404 })
     }
     // zona pa actualizar
+    usuarioFinded.numeroCedula = dataUpdate.numeroCedula || usuarioFinded.numeroCedula
     usuarioFinded.nombres = dataUpdate.nombres || usuarioFinded.nombres
     usuarioFinded.apellidos = dataUpdate.apellidos || usuarioFinded.apellidos
     usuarioFinded.sexo = dataUpdate.sexo || usuarioFinded.sexo
@@ -115,7 +126,7 @@ export default class UserController {
   async reasignarInstitucionRol({ params, request, response, auth }: HttpContext) {
     const userId = Number(params.userId)
     const userAuth = await auth.authenticate()
-    const dataUpdate = await request.validateUsing(actualizarUsuarioValidator)
+    const dataUpdate = await request.validateUsing(reasignarValidator)
     if (!userId) {
       throw new Exception('No se pudo realizar la busqueda', { status: 404 })
     }
@@ -148,7 +159,10 @@ export default class UserController {
     if (!userId) {
       throw new Exception('No se pudo realizar la busqueda', { status: 404 })
     }
-    const usuarioFinded = await Usuarios.query().where('id', userId).first()
+    const usuarioFinded = await Usuarios.query()
+      .where('id', userId)
+      .andWhere('id_institucion', idInstitucion)
+      .first()
     if (!usuarioFinded) {
       throw new Exception('Usuario no encontrado.', { status: 404 })
     }

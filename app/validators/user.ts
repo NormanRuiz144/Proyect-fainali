@@ -3,8 +3,8 @@ import vine from '@vinejs/vine'
 /**
  * Shared rules for email and password.
  */
-const email = () => vine.string().email().maxLength(254)
-const password = () => vine.string().minLength(8).maxLength(32)
+const email = () => vine.string().email().maxLength(254).trim()
+const password = () => vine.string().minLength(8).maxLength(32).trim()
 
 /**
  * Validator to use when performing self-signup
@@ -44,12 +44,18 @@ export const crearUsuarioValidator = vine.create({
 })
 
 export const actualizarUsuarioValidator = vine.create({
+  numeroCedula: vine.string().unique({ table: 'usuarios', column: 'numero_cedula' }).optional(),
   nombres: vine.string().trim().optional(),
   apellidos: vine.string().trim().optional(),
   sexo: vine.string().maxLength(1).minLength(1).optional(),
   idSector: vine.number().optional(),
   idRol: vine.number().optional(),
   idInstitucion: vine.number().optional(),
+})
+
+export const reasignarValidator = vine.create({
+  idRol: vine.number().min(1).nonNegative(),
+  idInstitucion: vine.number().min(1).nonNegative(),
 })
 
 export const bajaValidator = vine.create({
