@@ -30,7 +30,7 @@ export interface ApiDefinition {
     actualizarDepart: typeof routes['departamentos.actualizar_depart']
   }
   municipios: {
-    obtenerDepartamentos: typeof routes['municipios.obtener_departamentos']
+    obtenerMunicipios: typeof routes['municipios.obtener_municipios']
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
   }
