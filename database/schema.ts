@@ -117,7 +117,7 @@ export class ReporteSchema extends BaseModel {
   @column.dateTime()
   declare fechaGen: DateTime
   @column()
-  declare formato: string
+  declare formato: any | null//ss
   @column({ isPrimary: true })
   declare id: number
   @column()
@@ -176,7 +176,7 @@ export class UsuarioSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number
+  declare idInstitucion: number | null
   @column()
   declare idRol: number
   @column()

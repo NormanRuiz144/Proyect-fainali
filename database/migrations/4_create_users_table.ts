@@ -11,10 +11,10 @@ export default class extends BaseSchema {
       table.string('apellidos', 40).notNullable()
       table.string('sexo', 1)
       table.string('correo').notNullable().unique()
-      table.string('contraseña', 35).notNullable()
+      table.string('contrasena', 255).notNullable()
       table.integer('id_sector').references('id').inTable('sectores').notNullable()
       table.integer('id_rol').references('id').inTable('roles').notNullable()
-      table.integer('id_institucion').references('id').inTable('instituciones').notNullable()
+      table.integer('id_institucion').references('id').inTable('instituciones').nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

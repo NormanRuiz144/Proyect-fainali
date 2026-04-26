@@ -3,8 +3,8 @@ import type { routes } from './index.ts'
 
 export interface ApiDefinition {
   auth: {
-    newAccount: {
-      store: typeof routes['auth.new_account.store']
+    user: {
+      registrarse: typeof routes['auth.user.registrarse']
     }
     accessToken: {
       store: typeof routes['auth.access_token.store']
@@ -15,6 +15,14 @@ export interface ApiDefinition {
     profile: {
       show: typeof routes['profile.profile.show']
     }
+  }
+  user: {
+    listUsuariosInsti: typeof routes['user.list_usuarios_insti']
+    crearUsuario: typeof routes['user.crear_usuario']
+    buscarUsurioById: typeof routes['user.buscar_usurio_by_id']
+    actualizarUsuario: typeof routes['user.actualizar_usuario']
+    reasignarInstitucionRol: typeof routes['user.reasignar_institucion_rol']
+    bajaInsti: typeof routes['user.baja_insti']
   }
   departamentos: {
     obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']

@@ -4,10 +4,16 @@ type ParamValue = string | number | bigint | boolean
 
 export type ScannedRoutes = {
   ALL: {
-    'auth.new_account.store': { paramsTuple?: []; params?: {} }
+    'auth.user.registrarse': { paramsTuple?: []; params?: {} }
     'auth.access_token.store': { paramsTuple?: []; params?: {} }
     'auth.access_token.destroy': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
+    'user.crear_usuario': { paramsTuple?: []; params?: {} }
+    'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
+    'user.actualizar_usuario': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
+    'user.reasignar_institucion_rol': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
+    'user.baja_insti': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
     'departamentos.crear_departamento': { paramsTuple?: []; params?: {} }
     'departamentos.actualizar_depart': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -39,9 +45,10 @@ export type ScannedRoutes = {
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
+    'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
     'municipios.obtener_departamentos': { paramsTuple?: []; params?: {} }
-    'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
@@ -55,9 +62,10 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
+    'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
     'municipios.obtener_departamentos': { paramsTuple?: []; params?: {} }
-    'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
@@ -70,9 +78,10 @@ export type ScannedRoutes = {
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
-    'auth.new_account.store': { paramsTuple?: []; params?: {} }
+    'auth.user.registrarse': { paramsTuple?: []; params?: {} }
     'auth.access_token.store': { paramsTuple?: []; params?: {} }
     'auth.access_token.destroy': { paramsTuple?: []; params?: {} }
+    'user.crear_usuario': { paramsTuple?: []; params?: {} }
     'departamentos.crear_departamento': { paramsTuple?: []; params?: {} }
     'municipios.crear_municipio': { paramsTuple?: []; params?: {} }
     'problematicas.crear_problematica': { paramsTuple?: []; params?: {} }
@@ -83,7 +92,11 @@ export type ScannedRoutes = {
     'deta_reporte.crear_detalle_reporte': { paramsTuple?: []; params?: {} }
   }
   PUT: {
+    'user.actualizar_usuario': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
+    'user.reasignar_institucion_rol': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
+    'user.baja_insti': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.actualizar_depart': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.actualizar_problematica': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'instituciones.actualizar_instituc': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

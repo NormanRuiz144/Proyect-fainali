@@ -3,16 +3,19 @@ import Reporte from '#models/reporte'
 import { ingresarReporte } from '#validators/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon' //sirve para dejar la fecha fija cuando se crea
+import { v2 as cloudinary } from 'cloudinary'
+import env from '#start/env'
 
 export default class ReportesController {
   // Listar Reportes
   async obtenerReportes({ response }: HttpContext) {
+    const listaReportes = await Reporte.query()
+      .preload('usuario')
+      .preload('institucion')
+      .preload('problematica')
+    // .preload('sector')
 
-    // descomentar esto cuando ya esten las que falten xd xd jijin jaja
-    // const listaReportes = await Reporte.query().preload('usuario').preload('institucion').preload('problematica').preload('sector')
-    //
-
-    const listaReportes = await Reporte.all()
+    // const listaReportes = await Reporte.all()
 
     if (!listaReportes || listaReportes.length === 0) {
       throw new Error('No se han encontrado reportes.')
@@ -86,11 +89,39 @@ export default class ReportesController {
 
   // Crear un nuevo reporte
   async crearReporte({ request, response }: HttpContext) {
+    // Esto  configuracion se pone ADENTRO de la función para asegurar que esta vaina
+    // reconozca los valores del .env al momento exacto de hacer la petición
+    cloudinary.config({
+      cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
+      api_key: env.get('CLOUDINARY_API_KEY') || '',
+      api_secret: env.get('CLOUDINARY_API_SECRET') || ''
+    })
+
     const datosGenerales = await request.validateUsing(ingresarReporte)
 
+    const imagenes = datosGenerales.formato
+    let urlsSeguras: string[] = []
+
+    // Si se subieron imágenes, se mandan a Cloudinary
+    if (imagenes && imagenes.length > 0) {
+      for (const imagen of imagenes) {
+        if (imagen.tmpPath) {
+          const resultado = await cloudinary.uploader.upload(imagen.tmpPath, {
+            folder: 'reportes'
+          })
+          urlsSeguras.push(resultado.secure_url)
+        }
+      }
+    }
+
+    const { formato, ...restoDatos } = datosGenerales
+
     const nuevoReporte = await Reporte.create({
-      ...datosGenerales,
-      fechaGen: DateTime.now() // Asigna por defecto la fecha y hora actual automáticamente
+      ...restoDatos,
+      // Guardamos el arreglo de URLs como texto JSON si hay imágenes
+      ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {}),
+      estado: restoDatos.estado || 'Pendiente', // El estado por defecto será Pendiente
+      fechaGen: DateTime.now(), // Asigna por defecto la fecha y hora actual automáticamente
     })
 
     if (!nuevoReporte) {
@@ -99,7 +130,7 @@ export default class ReportesController {
 
     return response.ok({
       mensaje: 'Reporte registrado con éxito.',
-      reporte: nuevoReporte
+      reporte: nuevoReporte,
     })
   }
 
@@ -120,16 +151,46 @@ export default class ReportesController {
     const encontradoReporte = await Reporte.query().where('id', idRep).first()
 
     if (encontradoReporte) {
-      encontradoReporte.merge(datosNuevos)
+      // Configuramos Cloudinary aquí también para las actualizaciones
+      cloudinary.config({
+        cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
+        api_key: env.get('CLOUDINARY_API_KEY') || '',
+        api_secret: env.get('CLOUDINARY_API_SECRET') || ''
+      })
+
+      const imagenes = datosNuevos.formato
+      let urlsSeguras: string[] = []
+
+      // Si se subieron nuevas imágenes, se mandanna a Cloudinary
+      if (imagenes && imagenes.length > 0) {
+        for (const imagen of imagenes) {
+          if (imagen.tmpPath) {
+            const resultado = await cloudinary.uploader.upload(imagen.tmpPath, {
+              folder: 'reportes'
+            })
+            urlsSeguras.push(resultado.secure_url)
+          }
+        }
+      }
+
+      const { formato, ...restoDatos } = datosNuevos
+      
+      const reporteActualizado = {
+        ...restoDatos,
+        // Solo se actualiza el campo de formato si se subieron nuevas imágenes
+        ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {})
+      }
+
+      encontradoReporte.merge(reporteActualizado)
       await encontradoReporte.save()
       return response.ok({
         mensaje: 'El reporte se ha actualizado correctamente.',
-        reporte: encontradoReporte
+        reporte: encontradoReporte,
       })
     }
 
     return response.status(404).json({
-      mensaje: 'El reporte no pudo ser encontrado para actualizar.'
+      mensaje: 'El reporte no pudo ser encontrado para actualizar.',
     })
   }
 }
