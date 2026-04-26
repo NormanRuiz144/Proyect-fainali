@@ -120,6 +120,12 @@ const routes = {
     tokens: [{"old":"/reportes/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.actualizar_reporte']['types'],
   },
+  'reportes.obtener_reporte_int': {
+    methods: ["GET","HEAD"],
+    pattern: '/reportes/:id',
+    tokens: [{"old":"/reportes/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['reportes.obtener_reporte_int']['types'],
+  },
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"],
     pattern: '/sectores',

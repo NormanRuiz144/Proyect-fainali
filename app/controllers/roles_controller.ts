@@ -67,7 +67,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 //PUT_ROL//
 
 async actualizarRol({ params, request, response }: HttpContext) {
-  // 1. Validar que el ID sea un número válido
+  //  Validar que el ID sea un número válido
   const idRol = Number(params.id)
 
   if (isNaN(idRol) || idRol <= 0) {
@@ -76,7 +76,7 @@ async actualizarRol({ params, request, response }: HttpContext) {
     })
   }
 
-  // 2. Validar que el ROL EXISTA en la base de datos antes de continuar
+  // Validar que el ROL EXISTA en la base de datos antes de continuar
   const rolEncontrado = await Roles.find(idRol)
 
   if (!rolEncontrado) {
@@ -85,10 +85,10 @@ async actualizarRol({ params, request, response }: HttpContext) {
     })
   }
 
-  // 3. Validar los datos del cuerpo (Body)
+  // Validar los datos del cuerpo (Body)
   const nuevoRol = await request.validateUsing(ingresarRol)
 
-  // 4. Verificar si el nuevo nombre del rol ya existe en OTRO registro
+  // Verificar si el nuevo nombre del rol ya existe en OTRO registro
   // Usamos whereNot para que no choque con el registro que estamos editando
   const existeNombre = await Roles.query()
     .where('rol', nuevoRol.nomRol)
@@ -101,7 +101,7 @@ async actualizarRol({ params, request, response }: HttpContext) {
     })
   }
 
-  // 5. Actualizar y guardar
+  // Actualizar y guardar
   rolEncontrado.rol = nuevoRol.nomRol
   await rolEncontrado.save()
 

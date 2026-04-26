@@ -23,6 +23,7 @@ export type ScannedRoutes = {
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
     'reportes.crear_reporte': { paramsTuple?: []; params?: {} }
     'reportes.actualizar_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'reportes.obtener_reporte_int': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
     'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sectores.crear_sector': { paramsTuple?: []; params?: {} }
@@ -44,6 +45,7 @@ export type ScannedRoutes = {
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
+    'reportes.obtener_reporte_int': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
     'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.obtener_rol': { paramsTuple?: []; params?: {} }
@@ -59,6 +61,7 @@ export type ScannedRoutes = {
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
+    'reportes.obtener_reporte_int': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sectores.obtener_sectores': { paramsTuple?: []; params?: {} }
     'sectores.obtener_sector_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.obtener_rol': { paramsTuple?: []; params?: {} }

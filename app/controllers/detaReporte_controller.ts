@@ -53,7 +53,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 async crearDetalleReporte({ request, response }: HttpContext) {
   const { descripcion, fechaSegui, idReporte, idUsuario } = await request.validateUsing(ingresarDetalleReporte)
 
-  // 1. VALIDAR QUE EL REPORTE EXISTA
+  // VALIDAR QUE EL REPORTE EXISTA
   // Reemplaza 'Reporte' por el nombre real de tu modelo de reportes
   const reporteExiste = await Reporte.find(idReporte)
   if (!reporteExiste) {
@@ -62,7 +62,7 @@ async crearDetalleReporte({ request, response }: HttpContext) {
     })
   }
 
-  // 2. VALIDAR QUE EL USUARIO EXISTA
+  //  VALIDAR QUE EL USUARIO EXISTA
   // Reemplaza 'Usuario' por el nombre real de tu modelo de usuarios
   const usuarioExiste = await User.find(idUsuario)
   if (!usuarioExiste) {
@@ -71,7 +71,7 @@ async crearDetalleReporte({ request, response }: HttpContext) {
     })
   }
 
-  // 3. Validar que el idReporte no esté ya asignado a otro detalle (Relación 1 a 1)
+  // Validar que el idReporte no esté ya asignado a otro detalle (Relación 1 a 1)
   const reporteAsignado = await DetalleReportes.query()
     .where('id_reporte', idReporte)
     .first()
@@ -82,7 +82,7 @@ async crearDetalleReporte({ request, response }: HttpContext) {
     })
   }
 
-  // 4. Evitar duplicado exacto (Opcional pero recomendado)
+  // Evitar duplicado exacto (Opcional pero recomendado)
   const existe = await DetalleReportes.query()
     .where({
       id_reporte: idReporte,
@@ -98,7 +98,7 @@ async crearDetalleReporte({ request, response }: HttpContext) {
     })
   }
 
-  // 5. Crear el nuevo registro
+  //  Crear el nuevo registro
   const nuevoDetalleReporte = await DetalleReportes.create({
     id_reporte: idReporte,
     id_usuario: idUsuario,
@@ -115,7 +115,7 @@ async crearDetalleReporte({ request, response }: HttpContext) {
 
 
 async actualizarDetalleReporte({ params, request, response }: HttpContext) {
-  // 1. Validar que el ID de la URL sea un número válido
+  // Validar que el ID de la URL sea un número válido
   const idDetalleReporte = Number(params.id)
 
   if (isNaN(idDetalleReporte) || idDetalleReporte <= 0) {
@@ -125,7 +125,7 @@ async actualizarDetalleReporte({ params, request, response }: HttpContext) {
   }
 
   try {
-    // 2. Validar la EXISTENCIA del registro
+    //  Validar la EXISTENCIA del registro
     const registro = await DetalleReportes.find(idDetalleReporte)
 
     if (!registro) {
@@ -134,7 +134,7 @@ async actualizarDetalleReporte({ params, request, response }: HttpContext) {
       })
     }
 
-    // 3. Validar los datos del Body con el Validador de VineJS
+    // Validar los datos del Body con el Validador de VineJS
     const datos = await request.validateUsing(actualizarDetalleReporteValidator)
 
     // 4. Validación manual de seguridad (Campos no vacíos o nulos)
@@ -145,11 +145,11 @@ async actualizarDetalleReporte({ params, request, response }: HttpContext) {
       })
     }
 
-    // 5. Actualizar los campos
+    // Actualizar los campos
     registro.descripcion = datos.descripcion
     registro.fechaSeguimiento = datos.fechaSeguimiento
 
-   6. //Guardar cambios
+   //Guardar cambios
     await registro.save()
 
     return response.ok({ mensaje: 'El detalle Reporte fue actualizado correctamente.' })

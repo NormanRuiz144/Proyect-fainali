@@ -235,6 +235,18 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'reportes.obtener_reporte_int': {
+    methods: ["GET","HEAD"]
+    pattern: '/reportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"]
     pattern: '/sectores'

@@ -8,9 +8,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 //import vine from "@vinejs/vine"
 
 
-//GET_SECTORES//
+
 
  export default class SectoresController {
+
+//GET_SECTORES//
   async obtenerSectores({ response }: HttpContext) {
     const listaSectores = await Sectores.all()
 
@@ -70,9 +72,8 @@ async crearSector({ request, response }: HttpContext) {
       mensaje: `El municipio con ID ${idMunicipio} no existe. Debes incluir un municipio válido.`
     })
   }
-  // -------------------------------------------------
 
-  // 2. Verificar duplicidad compuesta (Nombre + Municipio)
+  // Verificar duplicidad compuesta (Nombre + Municipio)
   const existe = await Sectores.query()
     .where('nombre_sector', nomSector)
     .andWhere('id_municipios', idMunicipio) // Quitamos el '!' porque ya validamos que existe
@@ -84,13 +85,13 @@ async crearSector({ request, response }: HttpContext) {
     })
   }
 
-  // 3. Creación del registro
+  // Creación del registro
   const nuevoSector = await Sectores.create({
     nombreSector: nomSector,
     idMunicipios: idMunicipio
   })
 
-  // 4. Respuesta exitosa
+  // Respuesta exitosa
   return response.created({
     mensaje: 'Sector creado correctamente.',
     Sectores: nuevoSector
@@ -101,7 +102,7 @@ async crearSector({ request, response }: HttpContext) {
 
 // //PUT_SECTOR//
 async actualizarSector({ params, request, response }: HttpContext) {
-  // 1. Validar el FORMATO del ID del Sector
+  // Validar el FORMATO del ID del Sector
   const idSector = Number(params.id)
 
   if (isNaN(idSector) || idSector <= 0) {
@@ -110,7 +111,7 @@ async actualizarSector({ params, request, response }: HttpContext) {
     })
   }
 
-  // 2. Validar la EXISTENCIA del Sector
+  // Validar la EXISTENCIA del Sector
   const sectorEncontrado = await Sectores.find(idSector)
 
   if (!sectorEncontrado) {
@@ -119,12 +120,12 @@ async actualizarSector({ params, request, response }: HttpContext) {
     })
   }
 
-  // 3. Validar los datos del cuerpo (Body)
+  // Validar los datos del cuerpo (Body)
   const datosNuevos = await request.validateUsing(ingresarSector)
 
   // --- NUEVAS VALIDACIONES ---
 
-  // 4. Validar que el municipio enviado EXISTA
+  // Validar que el municipio enviado EXISTA
   const municipioExiste = await Municipio.find(datosNuevos.idMunicipio)
   if (!municipioExiste) {
     return response.status(404).json({
@@ -132,7 +133,7 @@ async actualizarSector({ params, request, response }: HttpContext) {
     })
   }
 
-  // 5. Validar que el municipio corresponda al registro que se intenta editar
+  // Validar que el municipio corresponda al registro que se intenta editar
   // Esto asegura que no estés intentando mover un sector a un municipio que no le pertenece originalmente
   if (sectorEncontrado.idMunicipios !== datosNuevos.idMunicipio) {
     return response.status(403).json({
@@ -142,7 +143,7 @@ async actualizarSector({ params, request, response }: HttpContext) {
 
   // --- FIN DE NUEVAS VALIDACIONES ---
 
-  // 6. Verificar si el nuevo nombre ya está en uso por OTRO registro
+  // Verificar si el nuevo nombre ya está en uso por OTRO registro
   const existeNombre = await Sectores.query()
     .where('nombreSector', datosNuevos.nomSector)
     .whereNot('id', idSector)
@@ -154,7 +155,7 @@ async actualizarSector({ params, request, response }: HttpContext) {
     })
   }
 
-  // 7. Aplicar cambios y guardar
+  // Aplicar cambios y guardar
   sectorEncontrado.nombreSector = datosNuevos.nomSector
   sectorEncontrado.idMunicipios = datosNuevos.idMunicipio!
 
