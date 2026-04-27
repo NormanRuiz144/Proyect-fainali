@@ -117,7 +117,7 @@ export class ReporteSchema extends BaseModel {
   @column.dateTime()
   declare fechaGen: DateTime
   @column()
-  declare formato: any | null//ss
+  declare formato: any | null
   @column({ isPrimary: true })
   declare id: number
   @column()
