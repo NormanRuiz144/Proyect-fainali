@@ -10,18 +10,22 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
-import DepartamentosController from '#controllers/departamentos_controller'
-import MunicipiosController from '#controllers/municipios_controller'
-import ProblematicasController from '#controllers/problematicas_controller'
-import InstitucionesController from '#controllers/instituciones_controller'
-import ReportesController from '#controllers/reportes_controller'
-import SectoresController from '#controllers/sectores_controller'
-import RolesController from '#controllers/roles_controller'
-import detaReporteController from '#controllers/detaReporte_controller'
+import AutoSwagger from '@rnwonder/adonis-autoswagger'
+import swagger from '#config/swagger'
+
+router.get('/swagger', async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger)
+})
+
+router.get('/docs', async () => {
+  return AutoSwagger.default.ui('/swagger', swagger)
+})
+
+//Ruta super importante
 router.get('/', () => {
   return { hello: 'world' }
 })
-
+// Grupo de autenticacion
 router.group(() => {
   router
     .group(() => {
@@ -43,9 +47,9 @@ router.group(() => {
 // rutas de Usuario
 router
   .group(() => {
-    router.get('/list', [controllers.User, 'listUsuariosInsti'])
+    router.get('/listar', [controllers.User, 'listUsuariosInsti'])
     router.post('/crear', [controllers.User, 'crearUsuario'])
-    router.get('/:userId', [controllers.User, 'buscarUsurioById'])
+    router.get('/obtener/:userId', [controllers.User, 'buscarUsurioById'])
     router.put('/actualizar/:userId', [controllers.User, 'actualizarUsuario'])
     router.put('/reasignar/:userId', [controllers.User, 'reasignarInstitucionRol'])
     router.put('/bajaInst/:userId', [controllers.User, 'bajaInsti'])
@@ -53,47 +57,114 @@ router
   })
   .prefix('/usuarios')
   .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 // Rutas de departamentos
-router.get('/departamento', [DepartamentosController, 'obtenerDepartamentos'])
-router.post('/departamento', [DepartamentosController, 'crearDepartamento'])
-router.put('/departamento/:id', [DepartamentosController, 'actualizarDepart'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Departamentos, 'obtenerDepartamentos'])
+    router.post('/agregar', [controllers.Departamentos, 'crearDepartamento'])
+    router.put('/actu/:id', [controllers.Departamentos, 'actualizarDepart'])
+  })
+  .prefix('departamento')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 // Rutas de Municipios
-router.get('/municipios', [MunicipiosController, 'obtenerDepartamentos'])
-router.post('/municipios', [MunicipiosController, 'crearMunicipio'])
-router.put('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Municipios, 'obtenerMunicipios'])
+    router.post('/agregar', [controllers.Municipios, 'crearMunicipio'])
+    router.put('/actu/:id', [controllers.Municipios, 'actualizarMunicipio'])
+  })
+  .prefix('municipios')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 //Rutas de Problematicas
-router.get('/problematica', [ProblematicasController, 'obtenerProblematicas'])
-router.post('/problematica', [ProblematicasController, 'crearProblematica'])
-router.put('/problematica/:id', [ProblematicasController, 'actualizarProblematica'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Problematicas, 'obtenerProblematicas'])
+    router.post('/agregar', [controllers.Problematicas, 'crearProblematica'])
+    router.put('/actu/:id', [controllers.Problematicas, 'actualizarProblematica'])
+  })
+  .prefix('problematica')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 // //Rutas de Instituciones
-router.get('/instituciones', [InstitucionesController, 'obtenerInstituciones'])
-router.post('/instituciones', [InstitucionesController, 'crearInstitucion'])
-router.put('/instituciones/:id', [InstitucionesController, 'actualizarInstituc'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Instituciones, 'obtenerInstituciones'])
+    router.post('/agregar', [controllers.Instituciones, 'crearInstitucion'])
+    router.put('/actu/:id', [controllers.Instituciones, 'actualizarInstituc'])
+  })
+  .prefix('instituciones')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 // Rutas de Reportes
-router.get('/reportes', [ReportesController, 'obtenerReportes'])
-router.post('/reportes', [ReportesController, 'crearReporte'])
-router.put('/reportes/:id', [ReportesController, 'actualizarReporte'])
+router
+  .group(() => {
+    router
+      .get('/listar', [controllers.Reportes, 'obtenerReportes'])
+      .use(middleware.rolGuardia(['Admin']))
+    router
+      .post('/agregar', [controllers.Reportes, 'crearReporte'])
+      .use(middleware.rolGuardia(['Admin', 'default']))
+    router
+      .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
+      .use(middleware.rolGuardia(['Admin', 'default']))
+  })
+  .prefix('reportes')
+  .use(middleware.auth())
 
 //Rutas Sectores//
-router.get('/sectores', [SectoresController, 'obtenerSectores'])
-router.get('/sectores/:id', [SectoresController, 'obtenerSectorId'])
-router.post('/sectores', [SectoresController, 'crearSector'])
-router.put('/sectores/:id', [SectoresController, 'actualizarSector'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Sectores, 'obtenerSectores'])
+    router
+      .get('/obtener/:id', [controllers.Sectores, 'obtenerSectorId'])
+      .use(middleware.rolGuardia(['Admin']))
+    router
+      .post('/agregar', [controllers.Sectores, 'crearSector'])
+      .use(middleware.rolGuardia(['Admin']))
+    router
+      .put('/actu/:id', [controllers.Sectores, 'actualizarSector'])
+      .use(middleware.rolGuardia(['Admin']))
+  })
+  .prefix('sectores')
+  .use(middleware.auth())
 
 //RUTAS ROL//
-router.get('/roles', [RolesController, 'obtenerRol'])
-router.get('/roles/:id', [RolesController, 'obtenerRolId'])
-router.post('/roles', [RolesController, 'crearRol'])
-router.put('/roles/:id', [RolesController, 'actualizarRol'])
+router
+  .group(() => {
+    router.get('/listar', [controllers.Roles, 'obtenerRol'])
+    router.get('/obtener/:id', [controllers.Roles, 'obtenerRolId'])
+    router.post('/agregar', [controllers.Roles, 'crearRol'])
+    router.put('/actu/:id', [controllers.Roles, 'actualizarRol'])
+  })
+  .prefix('roles')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
 //RUTAS DETALLE REPORTE//
+router
+  .group(() => {
+    router.get('/listar', [controllers.DetaReporte, 'obtenerDetaReporte'])
+    router.get('/obtener/:id', [controllers.DetaReporte, 'obtenerDetalleId'])
+    router.post('/agregar', [controllers.DetaReporte, 'crearDetalleReporte'])
+    router.put('/actu/:id', [controllers.DetaReporte, 'actualizarDetalleReporte'])
+  })
+  .prefix('detalleReportes')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
 
-router.get('/detalleReportes', [detaReporteController, 'obtenerDetaReporte'])
-router.get('/detalleReportes/:id', [detaReporteController, 'obtenerDetalleId'])
-router.post('/detalleReportes', [detaReporteController, 'crearDetalleReporte'])
-router.put('/detalleReportes/:id', [detaReporteController, 'actualizarDetalleReporte'])
+// Rutas pal Dashboard
+router
+  .group(() => {
+    router.get('/load', [controllers.Dashboard, 'showData'])
+  })
+  .prefix('dashboard')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
