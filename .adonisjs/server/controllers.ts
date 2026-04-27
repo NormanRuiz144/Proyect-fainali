@@ -5,6 +5,7 @@
 
 export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
+  Dashboard: () => import('#controllers/dashboard_controller'),
   Departamentos: () => import('#controllers/departamentos_controller'),
   DetaReporte: () => import('#controllers/detaReporte_controller'),
   Instituciones: () => import('#controllers/instituciones_controller'),

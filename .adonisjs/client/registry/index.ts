@@ -228,6 +228,12 @@ const routes = {
     tokens: [{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['deta_reporte.actualizar_detalle_reporte']['types'],
   },
+  'dashboard.show_data': {
+    methods: ["GET","HEAD"],
+    pattern: '/dashboard/load',
+    tokens: [{"old":"/dashboard/load","type":0,"val":"dashboard","end":""},{"old":"/dashboard/load","type":0,"val":"load","end":""}],
+    types: placeholder as Registry['dashboard.show_data']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

@@ -10,6 +10,16 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
+import AutoSwagger from '@rnwonder/adonis-autoswagger'
+import swagger from '#config/swagger'
+
+router.get('/swagger', async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger)
+})
+
+router.get('/docs', async () => {
+  return AutoSwagger.default.ui('/swagger', swagger)
+})
 
 //Ruta super importante
 router.get('/', () => {
@@ -33,14 +43,13 @@ router.group(() => {
     .prefix('account')
     .as('profile')
     .use(middleware.auth())
-    .use(middleware.rolGuardia(['Admin']))
 })
 // rutas de Usuario
 router
   .group(() => {
-    router.get('/list', [controllers.User, 'listUsuariosInsti'])
+    router.get('/listar', [controllers.User, 'listUsuariosInsti'])
     router.post('/crear', [controllers.User, 'crearUsuario'])
-    router.get('/:userId', [controllers.User, 'buscarUsurioById'])
+    router.get('/obtener/:userId', [controllers.User, 'buscarUsurioById'])
     router.put('/actualizar/:userId', [controllers.User, 'actualizarUsuario'])
     router.put('/reasignar/:userId', [controllers.User, 'reasignarInstitucionRol'])
     router.put('/bajaInst/:userId', [controllers.User, 'bajaInsti'])
@@ -102,10 +111,10 @@ router
       .use(middleware.rolGuardia(['Admin']))
     router
       .post('/agregar', [controllers.Reportes, 'crearReporte'])
-      .use(middleware.rolGuardia(['Admin', 'Usuario Ordinario']))
+      .use(middleware.rolGuardia(['Admin', 'default']))
     router
-      .put('/actualizar/:id', [controllers.Reportes, 'actualizarReporte'])
-      .use(middleware.rolGuardia(['Admin', 'Usuario Ordinario']))
+      .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
+      .use(middleware.rolGuardia(['Admin', 'default']))
   })
   .prefix('reportes')
   .use(middleware.auth())
@@ -142,11 +151,20 @@ router
 //RUTAS DETALLE REPORTE//
 router
   .group(() => {
-    router.get('/detalleReportes', [controllers.DetaReporte, 'obtenerDetaReporte'])
-    router.get('/detalleReportes/:id', [controllers.DetaReporte, 'obtenerDetalleId'])
-    router.post('/detalleReportes', [controllers.DetaReporte, 'crearDetalleReporte'])
-    router.put('/detalleReportes/:id', [controllers.DetaReporte, 'actualizarDetalleReporte'])
+    router.get('/listar', [controllers.DetaReporte, 'obtenerDetaReporte'])
+    router.get('/obtener/:id', [controllers.DetaReporte, 'obtenerDetalleId'])
+    router.post('/agregar', [controllers.DetaReporte, 'crearDetalleReporte'])
+    router.put('/actu/:id', [controllers.DetaReporte, 'actualizarDetalleReporte'])
   })
   .prefix('detalleReportes')
+  .use(middleware.auth())
+  .use(middleware.rolGuardia(['Admin']))
+
+// Rutas pal Dashboard
+router
+  .group(() => {
+    router.get('/load', [controllers.Dashboard, 'showData'])
+  })
+  .prefix('dashboard')
   .use(middleware.auth())
   .use(middleware.rolGuardia(['Admin']))

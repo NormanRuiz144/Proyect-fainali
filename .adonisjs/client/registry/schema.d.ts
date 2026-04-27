@@ -451,4 +451,16 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detaReporte_controller').default['actualizarDetalleReporte']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'dashboard.show_data': {
+    methods: ["GET","HEAD"]
+    pattern: '/dashboard/load'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dashboard_controller').default['showData']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dashboard_controller').default['showData']>>>
+    }
+  }
 }

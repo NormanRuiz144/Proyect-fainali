@@ -67,4 +67,7 @@ export interface ApiDefinition {
     crearDetalleReporte: typeof routes['deta_reporte.crear_detalle_reporte']
     actualizarDetalleReporte: typeof routes['deta_reporte.actualizar_detalle_reporte']
   }
+  dashboard: {
+    showData: typeof routes['dashboard.show_data']
+  }
 }

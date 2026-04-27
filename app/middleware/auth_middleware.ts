@@ -14,7 +14,7 @@ export default class AuthMiddleware {
       guards?: (keyof Authenticators)[]
     } = {}
   ) {
-    await ctx.auth.authenticateUsing(options.guards)
+    await ctx.auth.authenticateUsing(options.guards, { loginRoute: '/login' })
     return next()
   }
 }
