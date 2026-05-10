@@ -17,7 +17,7 @@ export type ScannedRoutes = {
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
     'departamentos.crear_departamento': { paramsTuple?: []; params?: {} }
     'departamentos.actualizar_depart': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'municipios.obtener_departamentos': { paramsTuple?: []; params?: {} }
+    'municipios.obtener_municipios': { paramsTuple?: []; params?: {} }
     'municipios.crear_municipio': { paramsTuple?: []; params?: {} }
     'municipios.actualizar_municipio': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
@@ -41,13 +41,14 @@ export type ScannedRoutes = {
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.crear_detalle_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.actualizar_detalle_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
     'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
-    'municipios.obtener_departamentos': { paramsTuple?: []; params?: {} }
+    'municipios.obtener_municipios': { paramsTuple?: []; params?: {} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
@@ -57,13 +58,14 @@ export type ScannedRoutes = {
     'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
     'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
-    'municipios.obtener_departamentos': { paramsTuple?: []; params?: {} }
+    'municipios.obtener_municipios': { paramsTuple?: []; params?: {} }
     'problematicas.obtener_problematicas': { paramsTuple?: []; params?: {} }
     'instituciones.obtener_instituciones': { paramsTuple?: []; params?: {} }
     'reportes.obtener_reportes': { paramsTuple?: []; params?: {} }
@@ -73,6 +75,7 @@ export type ScannedRoutes = {
     'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'auth.user.registrarse': { paramsTuple?: []; params?: {} }

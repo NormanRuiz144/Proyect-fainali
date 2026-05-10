@@ -3,7 +3,7 @@ import { ingresarMuni } from '#validators/municipio'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MunicipiosController {
-  async obtenerDepartamentos({ response }: HttpContext) {
+  async obtenerMunicipios({ response }: HttpContext) {
     const listaMuni = await Municipio.all()
 
     if (!listaMuni || listaMuni.length == 0) {

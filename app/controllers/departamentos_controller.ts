@@ -4,6 +4,12 @@ import { ingresarDepart } from '#validators/departamento'
 
 export default class DepartamentosController {
   // Listar todos los Departamentos
+  /**
+   * @obtenerDepartamentos
+   * @tag Hola
+   * @summary Obtener todos los departamnetos
+   * @responseBody 200 - {lista_Departamentos: {id: number, nom_departamento:string }}
+   */
   async obtenerDepartamentos({ response }: HttpContext) {
     const listadepart = await Departamento.all()
 
