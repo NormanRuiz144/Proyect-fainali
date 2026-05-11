@@ -8,13 +8,18 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DashboardController {
   async showData({ auth, response }: HttpContext) {
+    
+    // DESCOMENTAR ESTO PARA CUANDO este el login y a la basura el id fijo
+    /*
     const userLogged = await auth.authenticate()
     await userLogged.load((preloader) => {
       preloader.load('Institucion')
       preloader.load('rol')
     })
-
     const idInstitucion = userLogged.idInstitucion
+    */
+
+    const idInstitucion = 1 // para evitar el login
 
     if (!idInstitucion) {
       return response.status(403).json({ error: 'Usuario sin institución asignada' })

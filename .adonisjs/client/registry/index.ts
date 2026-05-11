@@ -32,8 +32,8 @@ const routes = {
   },
   'user.list_usuarios_insti': {
     methods: ["GET","HEAD"],
-    pattern: '/usuarios/list',
-    tokens: [{"old":"/usuarios/list","type":0,"val":"usuarios","end":""},{"old":"/usuarios/list","type":0,"val":"list","end":""}],
+    pattern: '/usuarios/listar',
+    tokens: [{"old":"/usuarios/listar","type":0,"val":"usuarios","end":""},{"old":"/usuarios/listar","type":0,"val":"listar","end":""}],
     types: placeholder as Registry['user.list_usuarios_insti']['types'],
   },
   'user.crear_usuario': {
@@ -44,8 +44,8 @@ const routes = {
   },
   'user.buscar_usurio_by_id': {
     methods: ["GET","HEAD"],
-    pattern: '/usuarios/:userId',
-    tokens: [{"old":"/usuarios/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/:userId","type":1,"val":"userId","end":""}],
+    pattern: '/usuarios/obtener/:userId',
+    tokens: [{"old":"/usuarios/obtener/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/obtener/:userId","type":0,"val":"obtener","end":""},{"old":"/usuarios/obtener/:userId","type":1,"val":"userId","end":""}],
     types: placeholder as Registry['user.buscar_usurio_by_id']['types'],
   },
   'user.actualizar_usuario': {
@@ -152,8 +152,8 @@ const routes = {
   },
   'reportes.actualizar_reporte': {
     methods: ["PUT"],
-    pattern: '/reportes/actualizar/:id',
-    tokens: [{"old":"/reportes/actualizar/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/actualizar/:id","type":0,"val":"actualizar","end":""},{"old":"/reportes/actualizar/:id","type":1,"val":"id","end":""}],
+    pattern: '/reportes/actu/:id',
+    tokens: [{"old":"/reportes/actu/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/actu/:id","type":0,"val":"actu","end":""},{"old":"/reportes/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.actualizar_reporte']['types'],
   },
   'sectores.obtener_sectores': {
@@ -206,26 +206,26 @@ const routes = {
   },
   'deta_reporte.obtener_deta_reporte': {
     methods: ["GET","HEAD"],
-    pattern: '/detalleReportes/detalleReportes',
-    tokens: [{"old":"/detalleReportes/detalleReportes","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes","type":0,"val":"detalleReportes","end":""}],
+    pattern: '/detalleReportes/listar',
+    tokens: [{"old":"/detalleReportes/listar","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/listar","type":0,"val":"listar","end":""}],
     types: placeholder as Registry['deta_reporte.obtener_deta_reporte']['types'],
   },
   'deta_reporte.obtener_detalle_id': {
     methods: ["GET","HEAD"],
-    pattern: '/detalleReportes/detalleReportes/:id',
-    tokens: [{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":1,"val":"id","end":""}],
+    pattern: '/detalleReportes/obtener/:id',
+    tokens: [{"old":"/detalleReportes/obtener/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/obtener/:id","type":0,"val":"obtener","end":""},{"old":"/detalleReportes/obtener/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['deta_reporte.obtener_detalle_id']['types'],
   },
   'deta_reporte.crear_detalle_reporte': {
     methods: ["POST"],
-    pattern: '/detalleReportes/detalleReportes',
-    tokens: [{"old":"/detalleReportes/detalleReportes","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes","type":0,"val":"detalleReportes","end":""}],
+    pattern: '/detalleReportes/agregar',
+    tokens: [{"old":"/detalleReportes/agregar","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/agregar","type":0,"val":"agregar","end":""}],
     types: placeholder as Registry['deta_reporte.crear_detalle_reporte']['types'],
   },
   'deta_reporte.actualizar_detalle_reporte': {
     methods: ["PUT"],
-    pattern: '/detalleReportes/detalleReportes/:id',
-    tokens: [{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/detalleReportes/:id","type":1,"val":"id","end":""}],
+    pattern: '/detalleReportes/actu/:id',
+    tokens: [{"old":"/detalleReportes/actu/:id","type":0,"val":"detalleReportes","end":""},{"old":"/detalleReportes/actu/:id","type":0,"val":"actu","end":""},{"old":"/detalleReportes/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['deta_reporte.actualizar_detalle_reporte']['types'],
   },
   'dashboard.show_data': {

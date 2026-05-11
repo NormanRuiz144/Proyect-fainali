@@ -57,7 +57,7 @@ export interface Registry {
   }
   'user.list_usuarios_insti': {
     methods: ["GET","HEAD"]
-    pattern: '/usuarios/list'
+    pattern: '/usuarios/listar'
     types: {
       body: {}
       paramsTuple: []
@@ -81,7 +81,7 @@ export interface Registry {
   }
   'user.buscar_usurio_by_id': {
     methods: ["GET","HEAD"]
-    pattern: '/usuarios/:userId'
+    pattern: '/usuarios/obtener/:userId'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -297,7 +297,7 @@ export interface Registry {
   }
   'reportes.actualizar_reporte': {
     methods: ["PUT"]
-    pattern: '/reportes/actualizar/:id'
+    pattern: '/reportes/actu/:id'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/reporte').ingresarReporte)>>
       paramsTuple: [ParamValue]
@@ -405,7 +405,7 @@ export interface Registry {
   }
   'deta_reporte.obtener_deta_reporte': {
     methods: ["GET","HEAD"]
-    pattern: '/detalleReportes/detalleReportes'
+    pattern: '/detalleReportes/listar'
     types: {
       body: {}
       paramsTuple: []
@@ -417,7 +417,7 @@ export interface Registry {
   }
   'deta_reporte.obtener_detalle_id': {
     methods: ["GET","HEAD"]
-    pattern: '/detalleReportes/detalleReportes/:id'
+    pattern: '/detalleReportes/obtener/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -429,7 +429,7 @@ export interface Registry {
   }
   'deta_reporte.crear_detalle_reporte': {
     methods: ["POST"]
-    pattern: '/detalleReportes/detalleReportes'
+    pattern: '/detalleReportes/agregar'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/detalleReporte').ingresarDetalleReporte)>>
       paramsTuple: []
@@ -441,7 +441,7 @@ export interface Registry {
   }
   'deta_reporte.actualizar_detalle_reporte': {
     methods: ["PUT"]
-    pattern: '/detalleReportes/detalleReportes/:id'
+    pattern: '/detalleReportes/actu/:id'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/detalleReporte').actualizarDetalleReporteValidator)>>
       paramsTuple: [ParamValue]
