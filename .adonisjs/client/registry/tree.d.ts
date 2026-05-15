@@ -31,6 +31,7 @@ export interface ApiDefinition {
   }
   municipios: {
     municipiosPorDepartamento: typeof routes['municipios.municipios_por_departamento']
+    obtenerMunicipios: typeof routes['municipios.obtener_municipios']
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
   }
