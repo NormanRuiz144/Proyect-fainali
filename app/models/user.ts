@@ -10,6 +10,7 @@ import Roles from './roles.ts'
 import Sectores from './sectores.ts'
 import Reporte from './reporte.ts'
 import DetalleReportes from './detalleReporte.ts'
+import { column } from '@adonisjs/lucid/orm'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['correo'],
@@ -17,6 +18,8 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class Usuario extends compose(UsuarioSchema, AuthFinder) {
+  @column({ columnName: 'contrasena', isPrimary: false })
+  declare contrasena: string
   static accessTokens = DbAccessTokensProvider.forModel(Usuario)
   declare currentAccessToken?: AccessToken
 

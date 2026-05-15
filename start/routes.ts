@@ -25,7 +25,7 @@ router.get('/', () => {
 router.group(() => {
   router
     .group(() => {
-      router.post('resgistro', [controllers.User, 'registrarse'])
+      router.post('registro', [controllers.User, 'registrarse'])
       router.post('login', [controllers.AccessToken, 'store'])
       router.post('logout', [controllers.AccessToken, 'destroy']).use(middleware.auth())
     })
@@ -56,11 +56,13 @@ router
 
 // Rutas de departamentos
 router.get('/departamento', [DepartamentosController, 'obtenerDepartamentos'])
+router.get('/departamento/:id/municipios', [MunicipiosController, 'municipiosPorDepartamento'])
 router.post('/departamento', [DepartamentosController, 'crearDepartamento'])
 router.put('/departamento/:id', [DepartamentosController, 'actualizarDepart'])
 
 // Rutas de Municipios
 router.get('/municipios', [MunicipiosController, 'obtenerDepartamentos'])
+router.get('/municipios/:id/sectores', [SectoresController, 'sectoresPorMunicipio'])
 router.post('/municipios', [MunicipiosController, 'crearMunicipio'])
 router.put('/municipios/:id', [MunicipiosController, 'actualizarMunicipio'])
 
@@ -79,6 +81,7 @@ router.get('/reportes', [ReportesController, 'obtenerReportes'])
 router.post('/reportes', [ReportesController, 'crearReporte'])
 router.put('/reportes/:id', [ReportesController, 'actualizarReporte'])
 router.get('/reportes/:id', [ReportesController, 'obtenerReporteInt'])
+
 
 
 

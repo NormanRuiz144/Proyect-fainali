@@ -9,7 +9,7 @@ export type ParamValue = string | number | bigint | boolean
 export interface Registry {
   'auth.user.registrarse': {
     methods: ["POST"]
-    pattern: '/auth/resgistro'
+    pattern: '/auth/registro'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/user').signupValidator)>>
       paramsTuple: []
@@ -139,6 +139,18 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'municipios.municipios_por_departamento': {
+    methods: ["GET","HEAD"]
+    pattern: '/departamento/:id/municipios'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'departamentos.crear_departamento': {
     methods: ["POST"]
     pattern: '/departamento'
@@ -170,6 +182,18 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'sectores.sectores_por_municipio': {
+    methods: ["GET","HEAD"]
+    pattern: '/municipios/:id/sectores'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
       query: {}
       response: unknown
       errorResponse: unknown

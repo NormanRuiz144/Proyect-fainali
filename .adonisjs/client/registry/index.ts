@@ -8,8 +8,8 @@ const placeholder: any = {}
 const routes = {
   'auth.user.registrarse': {
     methods: ["POST"],
-    pattern: '/auth/resgistro',
-    tokens: [{"old":"/auth/resgistro","type":0,"val":"auth","end":""},{"old":"/auth/resgistro","type":0,"val":"resgistro","end":""}],
+    pattern: '/auth/registro',
+    tokens: [{"old":"/auth/registro","type":0,"val":"auth","end":""},{"old":"/auth/registro","type":0,"val":"registro","end":""}],
     types: placeholder as Registry['auth.user.registrarse']['types'],
   },
   'auth.access_token.store': {
@@ -72,6 +72,12 @@ const routes = {
     tokens: [{"old":"/departamento","type":0,"val":"departamento","end":""}],
     types: placeholder as Registry['departamentos.obtener_departamentos']['types'],
   },
+  'municipios.municipios_por_departamento': {
+    methods: ["GET","HEAD"],
+    pattern: '/departamento/:id/municipios',
+    tokens: [{"old":"/departamento/:id/municipios","type":0,"val":"departamento","end":""},{"old":"/departamento/:id/municipios","type":1,"val":"id","end":""},{"old":"/departamento/:id/municipios","type":0,"val":"municipios","end":""}],
+    types: placeholder as Registry['municipios.municipios_por_departamento']['types'],
+  },
   'departamentos.crear_departamento': {
     methods: ["POST"],
     pattern: '/departamento',
@@ -89,6 +95,12 @@ const routes = {
     pattern: '/municipios',
     tokens: [{"old":"/municipios","type":0,"val":"municipios","end":""}],
     types: placeholder as Registry['municipios.obtener_departamentos']['types'],
+  },
+  'sectores.sectores_por_municipio': {
+    methods: ["GET","HEAD"],
+    pattern: '/municipios/:id/sectores',
+    tokens: [{"old":"/municipios/:id/sectores","type":0,"val":"municipios","end":""},{"old":"/municipios/:id/sectores","type":1,"val":"id","end":""},{"old":"/municipios/:id/sectores","type":0,"val":"sectores","end":""}],
+    types: placeholder as Registry['sectores.sectores_por_municipio']['types'],
   },
   'municipios.crear_municipio': {
     methods: ["POST"],

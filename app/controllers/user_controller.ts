@@ -20,22 +20,21 @@ export default class UserController {
       sexo,
       correo,
       contrasena,
-      idInstitucion,
       idSector,
-      idRol,
     } = await request.validateUsing(signupValidator)
 
-    const user = await Usuarios.create({
+    const userData: Record<string, unknown> = {
       numeroCedula,
       nombres,
       apellidos,
       sexo,
       correo,
       contrasena,
-      idInstitucion: idInstitucion,
       idSector,
-      idRol,
-    })
+      idRol: 1,
+    }
+
+    const user = await Usuarios.create(userData)
     const token = await Usuarios.accessTokens.create(user)
 
     return serialize({
@@ -43,6 +42,8 @@ export default class UserController {
       token: token.value!.release(),
     })
   }
+
+
 
   // Listar los usuarios que formen parte de x institucion
   async listUsuariosInsti({ auth, response }: HttpContext) {

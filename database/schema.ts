@@ -117,7 +117,7 @@ export class ReporteSchema extends BaseModel {
   @column.dateTime()
   declare fechaGen: DateTime
   @column()
-  declare formato: any | null//ss
+  declare formato: string
   @column({ isPrimary: true })
   declare id: number
   @column()
@@ -168,7 +168,7 @@ export class UsuarioSchema extends BaseModel {
   @column()
   declare apellidos: string
   @column()
-  declare contrasena: string
+  declare contrasena: string | null
   @column()
   declare correo: string
   @column.dateTime({ autoCreate: true })
@@ -180,7 +180,7 @@ export class UsuarioSchema extends BaseModel {
   @column()
   declare idRol: number
   @column()
-  declare idSector: number
+  declare idSector: number | null
   @column()
   declare nombres: string
   @column()

@@ -26,60 +26,84 @@ export default class ReportesController {
 
 
 
-  //BUSCAR REPORTE POR ID DE INSTITUCION//
-//GET_POR_ID
-  //   public async obtenerReporteInt({ params, response }: HttpContext) {
-  //     const idInstitucion = Number(params.id)
+//   BUSCAR REPORTE POR ID DE INSTITUCION//
+// // GET_POR_ID
+// public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+//   const idInstitucion = Number(params.id)
 
-  //     // Validar que el id sea un número válido
-  //     if (isNaN(idInstitucion)) {
-  //       return response.status(400).json({
-  //         mensaje: 'El parámetro id no es válido.',
-  //       })
-  //     }
+//   // 1. Obtener el ID del usuario autenticado de la sesión/token
+//   // Esto evita que alguien suplante a otro usuario
+//   const usuarioAutenticado = auth.user
+//   if (!usuarioAutenticado) {
+//     return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+//   }
 
-  //     // Buscar el sector por id
-  //     //const institucion = await Reporte.all()
-  //     const institucion = await Reporte.query().where('id ', idInstitucion)
+//   // 2. Validar que el parámetro ID de la institución sea un número
+//   if (isNaN(idInstitucion)) {
+//     return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+//   }
 
+//   // 3. Consulta de seguridad:
+//   // Filtramos por la institución Y por el dueño de los reportes simultáneamente
+//   const reportes = await Reporte.query()
+//     .where('idInstitucion', idInstitucion)
+//     .where('idUsuario', usuarioAutenticado.id)
 
-  //     if (!Institucione) {
-  //       return response.status(404).json({
-  //         mensaje: `Ingresar un Id valido.`,
-  //       })
-  //     }else{
-  //      return response.ok({
-  //       mensaje: 'Rol encontrado.',
-  //      institucion,
-  //     })
+//   // 4. Validar si existen resultados
+//   // Si está vacío, puede ser que la institución no exista O que el usuario no tenga acceso
+//   if (reportes.length === 0) {
+//     return response.forbidden({
+//       mensaje: 'No tienes permiso para acceder a esta información o la institución no existe.',
+//     })
+//   }
 
-  //     }
+//   return response.ok({
+//     mensaje: 'Información recuperada con éxito.',
+//     data: reportes,
+//   })
+// }
+// BUSCAR REPORTES POR INSTITUCIÓN (Acceso para miembros de la misma)
+public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+  const idInstitucionSolicitada = Number(params.id)
+  const usuarioAutenticado = auth.user
 
-  //     // Respuesta exitosa
+  // 1. Verificar autenticación
+  if (!usuarioAutenticado) {
+    return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+  }
 
-  // }
-  public async obtenerReporteInt({ params, response }: HttpContext) {
-  const idInstitucion = Number(params.id)
+  // 2. Validar que el parámetro ID sea un número
+  if (isNaN(idInstitucionSolicitada)) {
+    return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+  }
 
-  // Validar que el id sea un número válido
-  if (isNaN(idInstitucion)) {
-    return response.status(400).json({
-      mensaje: 'El parámetro id no es válido.',
+  // 3. VALIDACIÓN DE PERTENENCIA:
+  // ¿El usuario pertenece a la institución que quiere consultar?
+  if (usuarioAutenticado.idInstitucion !== idInstitucionSolicitada) {
+    return response.forbidden({
+      mensaje: 'No tienes permiso para estos reportes .'
     })
   }
 
-  // Buscar registros por id
-  const institucion = await Reporte.query().where('idInstitucion', idInstitucion)
+  // 4. Consulta: Traemos TODOS los reportes de esa institución
+  // Ya no filtramos por idUsuario, solo por idInstitucion
+  const reportes = await Reporte.query()
+    .where('idInstitucion', idInstitucionSolicitada)
+    // Opcional: puedes cargar los datos del usuario que creó cada reporte
+    .preload('usuario')
 
-  if (!institucion || institucion.length === 0) {
-    return response.status(404).json({
-      mensaje: `No se encontró ningún reporte con el id ${idInstitucion}.`,
+  // 5. Validar si existen resultados
+  if (reportes.length === 0) {
+    return response.ok({
+      mensaje: 'La institución no tiene reportes registrados todavía.',
+      data: []
     })
   }
 
   return response.ok({
-    mensaje: 'Reporte(s) encontrado(s).',
-    institucion,
+    mensaje: 'Información de la institución recuperada con éxito.',
+    total: reportes.length,
+    data: reportes,
   })
 }
 
@@ -174,7 +198,7 @@ export default class ReportesController {
       }
 
       const { formato, ...restoDatos } = datosNuevos
-      
+
       const reporteActualizado = {
         ...restoDatos,
         // Solo se actualiza el campo de formato si se subieron nuevas imágenes

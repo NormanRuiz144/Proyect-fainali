@@ -17,8 +17,8 @@ export const signupValidator = vine.create({
   correo: email().unique({ table: 'usuarios', column: 'correo' }),
   contrasena: password(),
   confirmationContra: password().sameAs('contrasena'),
-  idSector: vine.number(),
-  idRol: vine.number(),
+  idSector: vine.number().optional(),
+  idRol: vine.number().optional(),
   idInstitucion: vine.number().optional(),
 })
 

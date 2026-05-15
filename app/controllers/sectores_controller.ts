@@ -50,6 +50,19 @@ import type { HttpContext } from '@adonisjs/core/http'
     })
 }
 
+//GET_SECTORES_POR_MUNICIPIO//
+  async sectoresPorMunicipio({ params, response }: HttpContext) {
+    const idMuni = Number(params.id)
+
+    if (isNaN(idMuni)) {
+      return response.status(400).json({ mensaje: 'ID de municipio inválido.' })
+    }
+
+    const listaSectores = await Sectores.query().where('id_municipios', idMuni)
+
+    return response.ok({ lista_Sectores: listaSectores || [] })
+  }
+
 //POST_SECTOR//
 
 async crearSector({ request, response }: HttpContext) {
