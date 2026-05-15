@@ -44,6 +44,7 @@ export type ScannedRoutes = {
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.crear_detalle_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.actualizar_detalle_reporte': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -63,6 +64,7 @@ export type ScannedRoutes = {
     'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -82,6 +84,7 @@ export type ScannedRoutes = {
     'roles.obtener_rol_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'deta_reporte.obtener_deta_reporte': { paramsTuple?: []; params?: {} }
     'deta_reporte.obtener_detalle_id': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'dashboard.show_data': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'auth.user.registrarse': { paramsTuple?: []; params?: {} }

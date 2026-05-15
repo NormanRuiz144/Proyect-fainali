@@ -31,7 +31,6 @@ export interface ApiDefinition {
   }
   municipios: {
     municipiosPorDepartamento: typeof routes['municipios.municipios_por_departamento']
-    obtenerDepartamentos: typeof routes['municipios.obtener_departamentos']
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
   }
@@ -69,5 +68,8 @@ export interface ApiDefinition {
     obtenerDetalleId: typeof routes['deta_reporte.obtener_detalle_id']
     crearDetalleReporte: typeof routes['deta_reporte.crear_detalle_reporte']
     actualizarDetalleReporte: typeof routes['deta_reporte.actualizar_detalle_reporte']
+  }
+  dashboard: {
+    showData: typeof routes['dashboard.show_data']
   }
 }
