@@ -12,6 +12,22 @@ export default class MunicipiosController {
     return response.ok({ lista_Municipios: listaMuni })
   }
 
+  async municipiosPorDepartamento({ params, response }: HttpContext) {
+    const idDepart = Number(params.id)
+
+    if (isNaN(idDepart)) {
+      return response.status(400).json({ mensaje: 'ID de departamento inválido.' })
+    }
+
+    const listaMuni = await Municipio.query().where('id_departamento', idDepart)
+
+    if (!listaMuni || listaMuni.length === 0) {
+      return response.status(404).json({ mensaje: 'No se encontraron municipios para este departamento.' })
+    }
+
+    return response.ok({ lista_Municipios: listaMuni })
+  }
+
   async crearMunicipio({ request, response }: HttpContext) {
     const { nomMunicipio, idDepartamento } = await request.validateUsing(ingresarMuni)
     const exite = await Municipio.query()

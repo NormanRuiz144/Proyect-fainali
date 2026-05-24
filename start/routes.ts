@@ -29,7 +29,7 @@ router.get('/', () => {
 router.group(() => {
   router
     .group(() => {
-      router.post('resgistro', [controllers.User, 'registrarse'])
+      router.post('registro', [controllers.User, 'registrarse'])
       router.post('login', [controllers.AccessToken, 'store'])
       router.post('logout', [controllers.AccessToken, 'destroy']).use(middleware.auth())
     })
@@ -59,7 +59,8 @@ router
   // .use(middleware.auth())
   // .use(middleware.rolGuardia(['Admin']))
 
-// Rutas de departamentos   
+
+// Rutas de departamentos
 router
   .group(() => {
     router.get('/listar', [controllers.Departamentos, 'obtenerDepartamentos'])
@@ -69,6 +70,8 @@ router
   .prefix('departamento')
   // .use(middleware.auth())
   // .use(middleware.rolGuardia(['Admin']))
+
+router.get('/departamento/:id/municipios', [controllers.Municipios, 'municipiosPorDepartamento'])
 
 // Rutas de Municipios
 router
@@ -80,6 +83,8 @@ router
   .prefix('municipios')
   // .use(middleware.auth())
   // .use(middleware.rolGuardia(['Admin']))
+
+router.get('/municipios/:id/sectores', [controllers.Sectores, 'sectoresPorMunicipio'])
 
 //Rutas de Problematicas
 router
@@ -104,6 +109,7 @@ router
   // .use(middleware.rolGuardia(['Admin']))
 
 // Rutas de Reportes
+
 router
   .group(() => {
     router
@@ -115,6 +121,8 @@ router
     router
       .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
       // .use(middleware.rolGuardia(['Admin', 'default']))
+    router
+      .get('/:id', [controllers.Reportes, 'obtenerReporteInt'])
   })
   .prefix('reportes')
   // .use(middleware.auth())

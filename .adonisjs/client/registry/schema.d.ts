@@ -9,7 +9,7 @@ export type ParamValue = string | number | bigint | boolean
 export interface Registry {
   'auth.user.registrarse': {
     methods: ["POST"]
-    pattern: '/auth/resgistro'
+    pattern: '/auth/registro'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/user').signupValidator)>>
       paramsTuple: []
@@ -163,6 +163,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['actualizarDepart']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'municipios.municipios_por_departamento': {
+    methods: ["GET","HEAD"]
+    pattern: '/departamento/:id/municipios'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['municipiosPorDepartamento']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['municipiosPorDepartamento']>>>
+    }
+  }
   'municipios.obtener_municipios': {
     methods: ["GET","HEAD"]
     pattern: '/municipios/listar'
@@ -197,6 +209,18 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/municipio').ingresarMuni)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['actualizarMunicipio']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['actualizarMunicipio']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'sectores.sectores_por_municipio': {
+    methods: ["GET","HEAD"]
+    pattern: '/municipios/:id/sectores'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['sectoresPorMunicipio']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['sectoresPorMunicipio']>>>
     }
   }
   'problematicas.obtener_problematicas': {
@@ -305,6 +329,18 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/reporte').ingresarReporte)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['actualizarReporte']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['actualizarReporte']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'reportes.obtener_reporte_int': {
+    methods: ["GET","HEAD"]
+    pattern: '/reportes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['obtenerReporteInt']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['obtenerReporteInt']>>>
     }
   }
   'sectores.obtener_sectores': {

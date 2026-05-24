@@ -67,7 +67,7 @@
     "@tuyau/core": "^1.0.0",
     "@vinejs/vine": "^4.3.0",
     "better-sqlite3": "^12.6.2",
-    "cloudinary": "^2.9.0",
+    "cloudinary": "^2.10.0",
     "luxon": "^3.7.2",
     "pdfkit": "^0.18.0",
     "pg": "^8.20.0",

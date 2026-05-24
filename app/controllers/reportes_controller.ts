@@ -1,3 +1,4 @@
+import Institucione from '#models/institucione'
 import Reporte from '#models/reporte'
 import { ingresarReporte } from '#validators/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -20,7 +21,95 @@ export default class ReportesController {
       throw new Error('No se han encontrado reportes.')
     }
     return response.ok({ lista_Reportes: listaReportes })
+
   }
+
+
+
+//   BUSCAR REPORTE POR ID DE INSTITUCION//
+// // GET_POR_ID
+// public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+//   const idInstitucion = Number(params.id)
+
+//   // 1. Obtener el ID del usuario autenticado de la sesión/token
+//   // Esto evita que alguien suplante a otro usuario
+//   const usuarioAutenticado = auth.user
+//   if (!usuarioAutenticado) {
+//     return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+//   }
+
+//   // 2. Validar que el parámetro ID de la institución sea un número
+//   if (isNaN(idInstitucion)) {
+//     return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+//   }
+
+//   // 3. Consulta de seguridad:
+//   // Filtramos por la institución Y por el dueño de los reportes simultáneamente
+//   const reportes = await Reporte.query()
+//     .where('idInstitucion', idInstitucion)
+//     .where('idUsuario', usuarioAutenticado.id)
+
+//   // 4. Validar si existen resultados
+//   // Si está vacío, puede ser que la institución no exista O que el usuario no tenga acceso
+//   if (reportes.length === 0) {
+//     return response.forbidden({
+//       mensaje: 'No tienes permiso para acceder a esta información o la institución no existe.',
+//     })
+//   }
+
+//   return response.ok({
+//     mensaje: 'Información recuperada con éxito.',
+//     data: reportes,
+//   })
+// }
+// BUSCAR REPORTES POR INSTITUCIÓN (Acceso para miembros de la misma)
+public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+  const idInstitucionSolicitada = Number(params.id)
+  const usuarioAutenticado = auth.user
+
+  // 1. Verificar autenticación
+  if (!usuarioAutenticado) {
+    return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+  }
+
+  // 2. Validar que el parámetro ID sea un número
+  if (isNaN(idInstitucionSolicitada)) {
+    return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+  }
+
+  // 3. VALIDACIÓN DE PERTENENCIA:
+  // ¿El usuario pertenece a la institución que quiere consultar?
+  if (usuarioAutenticado.idInstitucion !== idInstitucionSolicitada) {
+    return response.forbidden({
+      mensaje: 'No tienes permiso para estos reportes .'
+    })
+  }
+
+  // 4. Consulta: Traemos TODOS los reportes de esa institución
+  // Ya no filtramos por idUsuario, solo por idInstitucion
+  const reportes = await Reporte.query()
+    .where('idInstitucion', idInstitucionSolicitada)
+    // Opcional: puedes cargar los datos del usuario que creó cada reporte
+    .preload('usuario')
+
+  // 5. Validar si existen resultados
+  if (reportes.length === 0) {
+    return response.ok({
+      mensaje: 'La institución no tiene reportes registrados todavía.',
+      data: []
+    })
+  }
+
+  return response.ok({
+    mensaje: 'Información de la institución recuperada con éxito.',
+    total: reportes.length,
+    data: reportes,
+  })
+}
+
+
+
+
 
   // Crear un nuevo reporte
   async crearReporte({ request, response }: HttpContext) {
@@ -69,6 +158,15 @@ export default class ReportesController {
     })
   }
 
+
+
+
+    //recibir idUsuario y idInstitucion validar que estos coincidan de ser haci permitir ver los reportes de esa institucion de lo contrario no permitir el aceso.
+
+
+
+
+
   // Actualizar un reporte
   async actualizarReporte({ params, request, response }: HttpContext) {
     const idRep = Number(params.id)
@@ -100,7 +198,7 @@ export default class ReportesController {
       }
 
       const { formato, ...restoDatos } = datosNuevos
-      
+
       const reporteActualizado = {
         ...restoDatos,
         // Solo se actualiza el campo de formato si se subieron nuevas imágenes

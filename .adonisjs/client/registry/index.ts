@@ -8,8 +8,8 @@ const placeholder: any = {}
 const routes = {
   'auth.user.registrarse': {
     methods: ["POST"],
-    pattern: '/auth/resgistro',
-    tokens: [{"old":"/auth/resgistro","type":0,"val":"auth","end":""},{"old":"/auth/resgistro","type":0,"val":"resgistro","end":""}],
+    pattern: '/auth/registro',
+    tokens: [{"old":"/auth/registro","type":0,"val":"auth","end":""},{"old":"/auth/registro","type":0,"val":"registro","end":""}],
     types: placeholder as Registry['auth.user.registrarse']['types'],
   },
   'auth.access_token.store': {
@@ -84,6 +84,12 @@ const routes = {
     tokens: [{"old":"/departamento/actu/:id","type":0,"val":"departamento","end":""},{"old":"/departamento/actu/:id","type":0,"val":"actu","end":""},{"old":"/departamento/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['departamentos.actualizar_depart']['types'],
   },
+  'municipios.municipios_por_departamento': {
+    methods: ["GET","HEAD"],
+    pattern: '/departamento/:id/municipios',
+    tokens: [{"old":"/departamento/:id/municipios","type":0,"val":"departamento","end":""},{"old":"/departamento/:id/municipios","type":1,"val":"id","end":""},{"old":"/departamento/:id/municipios","type":0,"val":"municipios","end":""}],
+    types: placeholder as Registry['municipios.municipios_por_departamento']['types'],
+  },
   'municipios.obtener_municipios': {
     methods: ["GET","HEAD"],
     pattern: '/municipios/listar',
@@ -101,6 +107,12 @@ const routes = {
     pattern: '/municipios/actu/:id',
     tokens: [{"old":"/municipios/actu/:id","type":0,"val":"municipios","end":""},{"old":"/municipios/actu/:id","type":0,"val":"actu","end":""},{"old":"/municipios/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['municipios.actualizar_municipio']['types'],
+  },
+  'sectores.sectores_por_municipio': {
+    methods: ["GET","HEAD"],
+    pattern: '/municipios/:id/sectores',
+    tokens: [{"old":"/municipios/:id/sectores","type":0,"val":"municipios","end":""},{"old":"/municipios/:id/sectores","type":1,"val":"id","end":""},{"old":"/municipios/:id/sectores","type":0,"val":"sectores","end":""}],
+    types: placeholder as Registry['sectores.sectores_por_municipio']['types'],
   },
   'problematicas.obtener_problematicas': {
     methods: ["GET","HEAD"],
@@ -155,6 +167,12 @@ const routes = {
     pattern: '/reportes/actu/:id',
     tokens: [{"old":"/reportes/actu/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/actu/:id","type":0,"val":"actu","end":""},{"old":"/reportes/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.actualizar_reporte']['types'],
+  },
+  'reportes.obtener_reporte_int': {
+    methods: ["GET","HEAD"],
+    pattern: '/reportes/:id',
+    tokens: [{"old":"/reportes/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['reportes.obtener_reporte_int']['types'],
   },
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"],

@@ -30,9 +30,17 @@ export interface ApiDefinition {
     actualizarDepart: typeof routes['departamentos.actualizar_depart']
   }
   municipios: {
+    municipiosPorDepartamento: typeof routes['municipios.municipios_por_departamento']
     obtenerMunicipios: typeof routes['municipios.obtener_municipios']
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
+  }
+  sectores: {
+    sectoresPorMunicipio: typeof routes['sectores.sectores_por_municipio']
+    obtenerSectores: typeof routes['sectores.obtener_sectores']
+    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
+    crearSector: typeof routes['sectores.crear_sector']
+    actualizarSector: typeof routes['sectores.actualizar_sector']
   }
   problematicas: {
     obtenerProblematicas: typeof routes['problematicas.obtener_problematicas']
@@ -48,12 +56,7 @@ export interface ApiDefinition {
     obtenerReportes: typeof routes['reportes.obtener_reportes']
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']
-  }
-  sectores: {
-    obtenerSectores: typeof routes['sectores.obtener_sectores']
-    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
-    crearSector: typeof routes['sectores.crear_sector']
-    actualizarSector: typeof routes['sectores.actualizar_sector']
+    obtenerReporteInt: typeof routes['reportes.obtener_reporte_int']
   }
   roles: {
     obtenerRol: typeof routes['roles.obtener_rol']
