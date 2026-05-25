@@ -7,43 +7,63 @@ import { DateTime } from 'luxon'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DashboardController {
-  async showData({ auth, response }: HttpContext) {
+  async showData({ auth, request, response }: HttpContext) {
+    // esto controla la obtención de métricas y gráficos del panel de control
     
-    // DESCOMENTAR ESTO PARA CUANDO este el login y a la basura el id fijo
+    // DESCOMENTAR ESTO PARA CUANDO este el login en producción y a la basura el id fijo
     /*
     const userLogged = await auth.authenticate()
     await userLogged.load((preloader) => {
       preloader.load('Institucion')
       preloader.load('rol')
     })
-    const idInstitucion = userLogged.idInstitucion
+    
+    let idInstitucion: number | null = null
+    
+    // Si el usuario es Super Admin (ej. Rol ID 1), permitimos filtrar por parámetro de URL
+    if (userLogged.idRol === 1) {
+      const queryId = request.input('institucionId')
+      idInstitucion = queryId !== undefined ? (queryId === '0' || queryId === '' ? null : Number(queryId)) : null // null significa "Todas las Instituciones"
+    } else {
+      // Si es un admin normal, lo obligamos a ver solo su propia institución
+      idInstitucion = userLogged.idInstitucion
+      if (!idInstitucion) {
+        return response.status(403).json({ error: 'Usuario sin institución asignada o permisos insuficientes' })
+      }
+    }
     */
 
-    const idInstitucion = 1 // para evitar el login
-
-    if (!idInstitucion) {
-      return response.status(403).json({ error: 'Usuario sin institución asignada' })
-    }
+    // PARA DESARROLLO (permite probar el selector de instituciones sin login obligatorio):
+    const queryId = request.input('institucionId')
+    // Si se pasa ?institucionId=0 o vacío, cargamos global (null), de lo contrario usamos el ID o el fallback 1
+    const idInstitucion = queryId !== undefined ? (queryId === '0' || queryId === '' ? null : Number(queryId)) : 1
 
     const today = DateTime.now()
 
+    // consulta de reportes condicional según la institución seleccionada
+    const reporteQuery = Reporte.query()
+      .select('estado', 'nvl_prioridad', 'fecha_gen', 'fecha_fin', 'id_problematica', 'id_sector')
+      .orderBy('id', 'desc')
+
+    if (idInstitucion !== null) {
+      reporteQuery.where('id_institucion', idInstitucion)
+    }
+
     const [reportes, institucion] = await Promise.all([
-      Reporte.query()
-        .where('id_institucion', idInstitucion)
-        .select('estado', 'nvl_prioridad', 'fecha_gen', 'fecha_fin', 'id_problematica', 'id_sector')
-        .orderBy('id', 'desc'),
-      Institucione.find(idInstitucion),
+      reporteQuery,
+      idInstitucion !== null ? Institucione.find(idInstitucion) : null,
     ])
 
     const reportesAll = reportes
     const totalReportes = reportesAll.length
+    
     // Definir variables para KPIs
     let reportesActivos = 0
     let reportesFinalizados = 0
     let alertasAltaPrioridad = 0
     let totalDiasRespuesta = 0
 
-    // Llenar KPIs
+    // Llenar KPIs calculados en caliente
     for (const reporte of reportesAll) {
       const estado = reporte.estado
       const prioridad = reporte.nvlPrioridad
@@ -109,17 +129,23 @@ export default class DashboardController {
         }))
         .sort((a, b) => b.total - a.total)
     }
-    // Obtener los últimos 10 seguimientos
-    const ultimoSeguimiento = await DetalleReportes.query()
+
+    // consulta de últimos seguimientos con filtro condicional
+    const segQuery = DetalleReportes.query()
       .select(
         'detallereportes.descripcion as descripcion',
         'detallereportes.fecha_seguimiento as fechaSeg'
       )
       .join('reportes', 'detallereportes.id_reporte', 'reportes.id')
       .join('usuarios', 'detallereportes.id_usuario', 'usuarios.id')
-      .where('reportes.id_institucion', idInstitucion)
       .orderBy('detallereportes.fecha_seguimiento', 'desc')
       .limit(10)
+
+    if (idInstitucion !== null) {
+      segQuery.where('reportes.id_institucion', idInstitucion)
+    }
+
+    const ultimoSeguimiento = await segQuery
 
     const seguimiento = ultimoSeguimiento.map((dr: any) => ({
       descripcion: dr.descripcion,
@@ -136,7 +162,7 @@ export default class DashboardController {
       porProblema,
       porSector,
       institucion: {
-        nombre: (institucion as any)?.nombreInstitucion || 'Institución',
+        nombre: institucion ? (institucion as any).nombreInstitucion : 'Todas las Instituciones',
         cargaTrabajo: totalReportes,
       },
       seguimiento,
