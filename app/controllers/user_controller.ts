@@ -7,21 +7,13 @@ import {
   signupValidator,
 } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import UserTransformer from '#transformers/user_transformer'
 import { Exception } from '@adonisjs/core/exceptions'
 
 export default class UserController {
   // Registrarse (usar Accesstoken)
   async registrarse({ request, serialize }: HttpContext) {
-    const {
-      numeroCedula,
-      nombres,
-      apellidos,
-      sexo,
-      correo,
-      contrasena,
-      idSector,
-    } = await request.validateUsing(signupValidator)
+    const { numeroCedula, nombres, apellidos, sexo, correo, contrasena, idSector } =
+      await request.validateUsing(signupValidator)
 
     const userData: Record<string, unknown> = {
       numeroCedula,
@@ -38,13 +30,37 @@ export default class UserController {
     const token = await Usuarios.accessTokens.create(user)
 
     return serialize({
-      user: UserTransformer.transform(user),
+      // user: UserTransformer.transform(user),
+      user: user,
       token: token.value!.release(),
     })
   }
 
+  // Listar los usuarios
+  async listUsuarios({ response }: HttpContext) {
+    try {
+      const list = await Usuarios.query().select(
+        'id',
+        'numeroCedula',
+        'nombres',
+        'apellidos',
+        'correo',
+        'id_sector',
+        'id_rol'
+      )
 
+      if (list && list.length === 0) {
+        response.status(400).json({ message: 'No se an encontrado usuarios.' })
+      }
 
+      response.status(200).json({ lista: list })
+    } catch (error) {
+      response.status(500).json({
+        message: 'Error: Ocurrio un error al consultar con la base de datos.',
+        error: error,
+      })
+    }
+  }
   // Listar los usuarios que formen parte de x institucion
   async listUsuariosInsti({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
@@ -54,7 +70,7 @@ export default class UserController {
     }
     try {
       const list = await Usuarios.query()
-        .select('nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
+        .select('id', 'nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
         .where('id_institucion', idInsti || 0)
 
       if (list && list.length === 0) {

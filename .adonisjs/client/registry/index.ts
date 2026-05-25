@@ -30,10 +30,16 @@ const routes = {
     tokens: [{"old":"/account/profile","type":0,"val":"account","end":""},{"old":"/account/profile","type":0,"val":"profile","end":""}],
     types: placeholder as Registry['profile.profile.show']['types'],
   },
-  'user.list_usuarios_insti': {
+  'user.list_usuarios': {
     methods: ["GET","HEAD"],
     pattern: '/usuarios/listar',
     tokens: [{"old":"/usuarios/listar","type":0,"val":"usuarios","end":""},{"old":"/usuarios/listar","type":0,"val":"listar","end":""}],
+    types: placeholder as Registry['user.list_usuarios']['types'],
+  },
+  'user.list_usuarios_insti': {
+    methods: ["GET","HEAD"],
+    pattern: '/usuarios/listarInsti',
+    tokens: [{"old":"/usuarios/listarInsti","type":0,"val":"usuarios","end":""},{"old":"/usuarios/listarInsti","type":0,"val":"listarInsti","end":""}],
     types: placeholder as Registry['user.list_usuarios_insti']['types'],
   },
   'user.crear_usuario': {

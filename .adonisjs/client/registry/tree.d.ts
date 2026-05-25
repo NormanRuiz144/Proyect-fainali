@@ -17,6 +17,7 @@ export interface ApiDefinition {
     }
   }
   user: {
+    listUsuarios: typeof routes['user.list_usuarios']
     listUsuariosInsti: typeof routes['user.list_usuarios_insti']
     crearUsuario: typeof routes['user.crear_usuario']
     buscarUsurioById: typeof routes['user.buscar_usurio_by_id']

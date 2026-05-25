@@ -55,9 +55,21 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
     }
   }
-  'user.list_usuarios_insti': {
+  'user.list_usuarios': {
     methods: ["GET","HEAD"]
     pattern: '/usuarios/listar'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuarios']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['listUsuarios']>>>
+    }
+  }
+  'user.list_usuarios_insti': {
+    methods: ["GET","HEAD"]
+    pattern: '/usuarios/listarInsti'
     types: {
       body: {}
       paramsTuple: []

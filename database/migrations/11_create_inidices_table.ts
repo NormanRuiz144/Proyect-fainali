@@ -44,4 +44,48 @@ export default class extends BaseSchema {
       table.index('nombre_sector')
     })
   }
+
+  async down() {
+    // Eliminar índices de usuarios
+    this.schema.alterTable('usuarios', (table) => {
+      table.dropIndex(['id_sector'])
+      table.dropIndex(['id_rol'])
+      table.dropIndex(['id_institucion'])
+    })
+
+    // Eliminar índices de reportes
+    this.schema.alterTable('reportes', (table) => {
+      table.dropIndex(['id_usuario'])
+      table.dropIndex(['id_institucion'])
+      table.dropIndex(['id_problematica'])
+      table.dropIndex(['id_sector'])
+      table.dropIndex(['estado'])
+      table.dropIndex(['fecha_gen'])
+      table.dropIndex(['nvl_prioridad'])
+    })
+
+    // Eliminar índices de detallereportes
+    this.schema.alterTable('detallereportes', (table) => {
+      table.dropIndex(['id_reporte'])
+      table.dropIndex(['id_usuario'])
+      table.dropIndex(['fecha_seguimiento'])
+    })
+
+    // Eliminar índices de municipios
+    this.schema.alterTable('municipios', (table) => {
+      table.dropIndex(['id_departamento'])
+    })
+
+    // Eliminar índices de instituciones
+    this.schema.alterTable('instituciones', (table) => {
+      table.dropIndex(['id_municipio'])
+      table.dropIndex(['nombre_institucion'])
+    })
+
+    // Eliminar índices de sectores
+    this.schema.alterTable('sectores', (table) => {
+      table.dropIndex(['id_municipios'])
+      table.dropIndex(['nombre_sector'])
+    })
+  }
 }

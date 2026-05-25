@@ -8,6 +8,7 @@ export type ScannedRoutes = {
     'auth.access_token.store': { paramsTuple?: []; params?: {} }
     'auth.access_token.destroy': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios': { paramsTuple?: []; params?: {} }
     'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
     'user.crear_usuario': { paramsTuple?: []; params?: {} }
     'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
@@ -48,6 +49,7 @@ export type ScannedRoutes = {
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios': { paramsTuple?: []; params?: {} }
     'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
     'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }
@@ -68,6 +70,7 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'user.list_usuarios': { paramsTuple?: []; params?: {} }
     'user.list_usuarios_insti': { paramsTuple?: []; params?: {} }
     'user.buscar_usurio_by_id': { paramsTuple: [ParamValue]; params: {'userId': ParamValue} }
     'departamentos.obtener_departamentos': { paramsTuple?: []; params?: {} }

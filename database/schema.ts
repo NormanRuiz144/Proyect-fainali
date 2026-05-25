@@ -168,7 +168,7 @@ export class UsuarioSchema extends BaseModel {
   @column()
   declare apellidos: string
   @column()
-  declare contrasena: string | null
+  declare contrasena: string
   @column()
   declare correo: string
   @column.dateTime({ autoCreate: true })
