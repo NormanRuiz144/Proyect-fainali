@@ -23,7 +23,7 @@ export default class UserController {
       correo,
       contrasena,
       idSector,
-      idRol: 1,
+      idRol: 3,
     }
 
     const user = await Usuarios.create(userData)
@@ -144,6 +144,9 @@ export default class UserController {
     const userId = Number(params.userId)
     const userAuth = await auth.authenticate()
     const dataUpdate = await request.validateUsing(reasignarValidator)
+    if (userAuth.id == userId) {
+      throw new Exception('No puedes reasignarte a ti mismo', { status: 400 })
+    }
     if (!userId) {
       throw new Exception('No se pudo realizar la busqueda', { status: 404 })
     }
@@ -173,18 +176,20 @@ export default class UserController {
     const userId = Number(params.userId)
     const userAuth = await auth.authenticate()
     const { idInstitucion } = await request.validateUsing(bajaValidator)
-    if (!userId) {
-      throw new Exception('No se pudo realizar la busqueda', { status: 404 })
-    }
+    // const idInstitucion = userAuth.idInstitucion!
+    // if (!userId) {
+    //   throw new Exception('No se pudo realizar la busqueda', { status: 404 })
+    // }
     const usuarioFinded = await Usuarios.query()
       .where('id', userId)
-      .andWhere('id_institucion', idInstitucion)
+      // .andWhere('id_institucion', idInstitucion)
       .first()
     if (!usuarioFinded) {
       throw new Exception('Usuario no encontrado.', { status: 404 })
     }
     // zona pa actualizar
-    if (userAuth.idRol == 1 && userAuth.idInstitucion === idInstitucion) {
+    // if (userAuth.idRol == 1 && userAuth.idInstitucion === idInstitucion) {
+    if (userAuth.idRol == 1) {
       usuarioFinded.idRol = 2
       usuarioFinded.idInstitucion = null
     } else {

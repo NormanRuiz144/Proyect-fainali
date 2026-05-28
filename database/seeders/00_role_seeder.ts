@@ -3,7 +3,7 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    const rolesData = [{ rol: 'default' }, { rol: 'Admin' }, { rol: 'Super-Admin' }]
+    const rolesData = [{ rol: 'Super-Admin' }, { rol: 'Admin' }, { rol: 'default' }]
     for (const role of rolesData) {
       const exists = await Roles.findBy('rol', role.rol)
       if (!exists) {
