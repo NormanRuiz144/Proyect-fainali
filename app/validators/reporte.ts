@@ -21,7 +21,7 @@ const schemaReporte = vine.object({
         extnames: ['jpg', 'png', 'jpeg', 'webp', 'heic']
       })
     ).maxLength(6).optional(),
-    ubicacion: vine.string().maxLength(200).trim(),
+    ubicacion: vine.string().maxLength(500).trim(),
     nvlPrioridad: vine.number().optional(),
     estado: vine.string().maxLength(50).optional(),
   })

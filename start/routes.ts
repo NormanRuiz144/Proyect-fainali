@@ -94,13 +94,14 @@ router
     router.get('/listar', [controllers.Problematicas, 'obtenerProblematicas'])
     router
       .post('/agregar', [controllers.Problematicas, 'crearProblematica'])
+      .use(middleware.auth())
       .use(middleware.rolGuardia(['Super-Admin']))
     router
       .put('/actu/:id', [controllers.Problematicas, 'actualizarProblematica'])
+      .use(middleware.auth())
       .use(middleware.rolGuardia(['Super-Admin']))
   })
   .prefix('problematica')
-  .use(middleware.auth())
 
 // //Rutas de Instituciones
 router
@@ -108,13 +109,14 @@ router
     router.get('/listar', [controllers.Instituciones, 'obtenerInstituciones'])
     router
       .post('/agregar', [controllers.Instituciones, 'crearInstitucion'])
+      .use(middleware.auth())
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
     router
       .put('/actu/:id', [controllers.Instituciones, 'actualizarInstituc'])
+      .use(middleware.auth())
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
   })
   .prefix('instituciones')
-  .use(middleware.auth())
 
 // Rutas de Reportes
 
@@ -122,13 +124,13 @@ router
   .group(() => {
     router
       .get('/listar', [controllers.Reportes, 'obtenerReportes'])
-      .use(middleware.rolGuardia(['Admin']))
+      .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
     router
       .post('/agregar', [controllers.Reportes, 'crearReporte'])
-      .use(middleware.rolGuardia(['Admin', 'default']))
+      .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
     router
       .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
-      .use(middleware.rolGuardia(['Admin', 'default']))
+      .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
     router.get('/:id', [controllers.Reportes, 'obtenerReporteInt'])
   })
   .prefix('reportes')
@@ -179,4 +181,4 @@ router
   })
   .prefix('dashboard')
   .use(middleware.auth())
-  .use(middleware.rolGuardia(['Admin']))
+  .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
