@@ -72,6 +72,7 @@ export interface ApiDefinition {
     obtenerReportes: typeof routes['reportes.obtener_reportes']
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']
+    actualizarEstadoReporte: typeof routes['reportes.actualizar_estado_reporte']
     obtenerReporteInt: typeof routes['reportes.obtener_reporte_int']
   }
   roles: {

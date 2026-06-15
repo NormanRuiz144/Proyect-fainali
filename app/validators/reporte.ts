@@ -22,6 +22,7 @@ const schemaReporte = vine.object({
       })
     ).maxLength(6).optional(),
     ubicacion: vine.string().maxLength(500).trim(),
+    descripcion: vine.string().maxLength(1000).optional(),
     nvlPrioridad: vine.number().optional(),
     estado: vine.string().maxLength(50).optional(),
   })

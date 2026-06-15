@@ -127,8 +127,10 @@ export class ProblematicaSchema extends BaseModel {
 }
 
 export class ReporteSchema extends BaseModel {
-  static $columns = ['estado', 'fechaFin', 'fechaGen', 'formato', 'id', 'idInstitucion', 'idProblematica', 'idSector', 'idUsuario', 'nvlPrioridad', 'ubicacion'] as const
+  static $columns = ['descripcion', 'estado', 'fechaFin', 'fechaGen', 'formato', 'id', 'idInstitucion', 'idProblematica', 'idSector', 'idUsuario', 'nvlPrioridad', 'ubicacion'] as const
   $columns = ReporteSchema.$columns
+  @column()
+  declare descripcion: string | null
   @column()
   declare estado: string | null
   @column.date()

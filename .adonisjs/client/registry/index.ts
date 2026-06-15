@@ -252,6 +252,12 @@ const routes = {
     tokens: [{"old":"/reportes/actu/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/actu/:id","type":0,"val":"actu","end":""},{"old":"/reportes/actu/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.actualizar_reporte']['types'],
   },
+  'reportes.actualizar_estado_reporte': {
+    methods: ["PATCH"],
+    pattern: '/reportes/estado/:id',
+    tokens: [{"old":"/reportes/estado/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/estado/:id","type":0,"val":"estado","end":""},{"old":"/reportes/estado/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['reportes.actualizar_estado_reporte']['types'],
+  },
   'reportes.obtener_reporte_int': {
     methods: ["GET","HEAD"],
     pattern: '/reportes/listarInst/:id',
