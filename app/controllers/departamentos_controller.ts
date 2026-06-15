@@ -61,5 +61,38 @@ export default class DepartamentosController {
     return response.status(404).json({ mensaje: 'El departamento no pudo ser actualizado.' })
   }
 
-  // Eliminar un Departamento ???
+  // Eliminar un Departamento
+  async eliminarDepartamento({ params, response }: HttpContext) {
+    const idDepart = Number(params.id)
+    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
+
+    if (encontradoDepart && !encontradoDepart.isDeleted) {
+      encontradoDepart.isDeleted = true
+      await encontradoDepart.save()
+      return response.ok({
+        mensaje: 'El departamento se ha eliminado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El departamento no pudo ser encontrado para eliminar.',
+    })
+  }
+
+  async restaurarDepartamento({ params, response }: HttpContext) {
+    const idDepart = Number(params.id)
+    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
+
+    if (encontradoDepart && encontradoDepart.isDeleted) {
+      encontradoDepart.isDeleted = false
+      await encontradoDepart.save()
+      return response.ok({
+        mensaje: 'El departamento se ha restaurado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El departamento no pudo ser encontrado para restaurar.',
+    })
+  }
 }

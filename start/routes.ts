@@ -70,6 +70,8 @@ router
     router.put('/actu/:id', [controllers.Departamentos, 'actualizarDepart'])
     // .use(middleware.auth())
     // .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
+    router.delete('/eliminar/:id', [controllers.Departamentos, 'eliminarDepartamento'])
+    router.patch('/restaurar/:id', [controllers.Departamentos, 'restaurarDepartamento'])
   })
   .prefix('departamento')
 
@@ -81,6 +83,8 @@ router
     router.get('/listar', [controllers.Municipios, 'obtenerMunicipios'])
     router.post('/agregar', [controllers.Municipios, 'crearMunicipio'])
     router.put('/actu/:id', [controllers.Municipios, 'actualizarMunicipio'])
+    router.delete('/eliminar/:id', [controllers.Municipios, 'eliminarMunicipio'])
+    router.patch('/restaurar/:id', [controllers.Municipios, 'restaurarMunicipio'])
   })
   .prefix('municipios')
 // .use(middleware.auth())
@@ -100,6 +104,15 @@ router
       .put('/actu/:id', [controllers.Problematicas, 'actualizarProblematica'])
       .use(middleware.auth())
       .use(middleware.rolGuardia(['Super-Admin']))
+    router.delete('/eliminar/:id', [controllers.Problematicas, 'eliminarProblematica'])
+    router.patch('/restaurar/:id', [controllers.Problematicas, 'restaurarProblematica'])
+    router.get('/filtrar/:idInst', [controllers.Problematicas, 'filtrarByInstitucion'])
+    router.get('/listar-instituciones-asociadas/:idProb', [
+      controllers.Problematicas,
+      'listarInstitucionesAsociadas',
+    ])
+    router.post('/asignar', [controllers.Problematicas, 'asignarIntitucion'])
+    router.delete('/eliminar-asociacion', [controllers.Problematicas, 'eliminarAsociacion'])
   })
   .prefix('problematica')
 
@@ -107,6 +120,7 @@ router
 router
   .group(() => {
     router.get('/listar', [controllers.Instituciones, 'obtenerInstituciones'])
+    router.get('/obtener/:id', [controllers.Instituciones, 'institucionesPorMunicipio'])
     router
       .post('/agregar', [controllers.Instituciones, 'crearInstitucion'])
       .use(middleware.auth())
@@ -115,6 +129,8 @@ router
       .put('/actu/:id', [controllers.Instituciones, 'actualizarInstituc'])
       .use(middleware.auth())
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
+    router.delete('/eliminar/:id', [controllers.Instituciones, 'eliminarInstitucion'])
+    router.patch('/restaurar/:id', [controllers.Instituciones, 'restaurarInstitucion'])
   })
   .prefix('instituciones')
 
@@ -131,7 +147,13 @@ router
     router
       .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
       .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
+<<<<<<< HEAD
     router.get('/:id', [controllers.Reportes, 'obtenerReporteInt'])
+=======
+    router
+      .get('/listarInst/:id', [controllers.Reportes, 'obtenerReporteInt'])
+      .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
+>>>>>>> c073082f932b7a66df66c20dbdf03a41eaa920b3
   })
   .prefix('reportes')
   .use(middleware.auth())
@@ -146,6 +168,8 @@ router
     // .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
     router.put('/actu/:id', [controllers.Sectores, 'actualizarSector'])
     // .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
+    router.delete('/eliminar/:id', [controllers.Sectores, 'eliminarSector'])
+    router.patch('/restaurar/:id', [controllers.Sectores, 'restaurarSector'])
   })
   .prefix('sectores')
 // .use(middleware.auth())

@@ -29,12 +29,16 @@ export interface ApiDefinition {
     obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']
     crearDepartamento: typeof routes['departamentos.crear_departamento']
     actualizarDepart: typeof routes['departamentos.actualizar_depart']
+    eliminarDepartamento: typeof routes['departamentos.eliminar_departamento']
+    restaurarDepartamento: typeof routes['departamentos.restaurar_departamento']
   }
   municipios: {
     municipiosPorDepartamento: typeof routes['municipios.municipios_por_departamento']
     obtenerMunicipios: typeof routes['municipios.obtener_municipios']
     crearMunicipio: typeof routes['municipios.crear_municipio']
     actualizarMunicipio: typeof routes['municipios.actualizar_municipio']
+    eliminarMunicipio: typeof routes['municipios.eliminar_municipio']
+    restaurarMunicipio: typeof routes['municipios.restaurar_municipio']
   }
   sectores: {
     sectoresPorMunicipio: typeof routes['sectores.sectores_por_municipio']
@@ -42,16 +46,27 @@ export interface ApiDefinition {
     obtenerSectorId: typeof routes['sectores.obtener_sector_id']
     crearSector: typeof routes['sectores.crear_sector']
     actualizarSector: typeof routes['sectores.actualizar_sector']
+    eliminarSector: typeof routes['sectores.eliminar_sector']
+    restaurarSector: typeof routes['sectores.restaurar_sector']
   }
   problematicas: {
     obtenerProblematicas: typeof routes['problematicas.obtener_problematicas']
     crearProblematica: typeof routes['problematicas.crear_problematica']
     actualizarProblematica: typeof routes['problematicas.actualizar_problematica']
+    eliminarProblematica: typeof routes['problematicas.eliminar_problematica']
+    restaurarProblematica: typeof routes['problematicas.restaurar_problematica']
+    filtrarByInstitucion: typeof routes['problematicas.filtrar_by_institucion']
+    listarInstitucionesAsociadas: typeof routes['problematicas.listar_instituciones_asociadas']
+    asignarIntitucion: typeof routes['problematicas.asignar_intitucion']
+    eliminarAsociacion: typeof routes['problematicas.eliminar_asociacion']
   }
   instituciones: {
     obtenerInstituciones: typeof routes['instituciones.obtener_instituciones']
+    institucionesPorMunicipio: typeof routes['instituciones.instituciones_por_municipio']
     crearInstitucion: typeof routes['instituciones.crear_institucion']
     actualizarInstituc: typeof routes['instituciones.actualizar_instituc']
+    eliminarInstitucion: typeof routes['instituciones.eliminar_institucion']
+    restaurarInstitucion: typeof routes['instituciones.restaurar_institucion']
   }
   reportes: {
     obtenerReportes: typeof routes['reportes.obtener_reportes']
