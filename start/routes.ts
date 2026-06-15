@@ -147,13 +147,9 @@ router
     router
       .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
       .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
-<<<<<<< HEAD
-    router.get('/:id', [controllers.Reportes, 'obtenerReporteInt'])
-=======
     router
       .get('/listarInst/:id', [controllers.Reportes, 'obtenerReporteInt'])
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
->>>>>>> c073082f932b7a66df66c20dbdf03a41eaa920b3
   })
   .prefix('reportes')
   .use(middleware.auth())
