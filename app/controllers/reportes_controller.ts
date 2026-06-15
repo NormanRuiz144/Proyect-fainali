@@ -205,4 +205,25 @@ export default class ReportesController {
       mensaje: 'El reporte no pudo ser encontrado para actualizar.',
     })
   }
+
+  // Actualizar SOLO el estado del reporte
+  async actualizarEstadoReporte({ params, request, response }: HttpContext) {
+    const idRep = Number(params.id)
+    const { estado } = request.only(['estado'])
+
+    const encontradoReporte = await Reporte.query().where('id', idRep).first()
+
+    if (encontradoReporte) {
+      encontradoReporte.estado = estado
+      await encontradoReporte.save()
+      return response.ok({
+        mensaje: 'El estado del reporte se ha actualizado correctamente.',
+        reporte: encontradoReporte,
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El reporte no pudo ser encontrado para actualizar.',
+    })
+  }
 }

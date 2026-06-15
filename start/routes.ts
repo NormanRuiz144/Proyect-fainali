@@ -148,6 +148,9 @@ router
       .put('/actu/:id', [controllers.Reportes, 'actualizarReporte'])
       .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
     router
+      .patch('/estado/:id', [controllers.Reportes, 'actualizarEstadoReporte'])
+      .use(middleware.rolGuardia(['Admin', 'default', 'Super-Admin']))
+    router
       .get('/listarInst/:id', [controllers.Reportes, 'obtenerReporteInt'])
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
   })

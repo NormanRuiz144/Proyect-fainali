@@ -499,6 +499,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['actualizarReporte']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'reportes.actualizar_estado_reporte': {
+    methods: ["PATCH"]
+    pattern: '/reportes/estado/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['actualizarEstadoReporte']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['actualizarEstadoReporte']>>>
+    }
+  }
   'reportes.obtener_reporte_int': {
     methods: ["GET","HEAD"]
     pattern: '/reportes/listarInst/:id'
