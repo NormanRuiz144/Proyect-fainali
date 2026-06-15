@@ -22,7 +22,9 @@ export default class MunicipiosController {
     const listaMuni = await Municipio.query().where('id_departamento', idDepart)
 
     if (!listaMuni || listaMuni.length === 0) {
-      return response.status(404).json({ mensaje: 'No se encontraron municipios para este departamento.' })
+      return response
+        .status(404)
+        .json({ mensaje: 'No se encontraron municipios para este departamento.' })
     }
 
     return response.ok({ lista_Municipios: listaMuni })
@@ -73,5 +75,39 @@ export default class MunicipiosController {
       return response.ok({ mensage: 'El municipio sea actualizado correctamente.' })
     }
     return response.status(404).json({ mensaje: 'El municipio no pudo ser actualizado.' })
+  }
+
+  async eliminarMunicipio({ params, response }: HttpContext) {
+    const idMuni = Number(params.id)
+    const encontradoMuni = await Municipio.query().where('id', idMuni).first()
+
+    if (encontradoMuni && !encontradoMuni.isDeleted) {
+      encontradoMuni.isDeleted = true
+      await encontradoMuni.save()
+      return response.ok({
+        mensaje: 'El municipio se ha eliminado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El municipio no pudo ser encontrado para eliminar.',
+    })
+  }
+
+  async restaurarMunicipio({ params, response }: HttpContext) {
+    const idMuni = Number(params.id)
+    const encontradoMuni = await Municipio.query().where('id', idMuni).first()
+
+    if (encontradoMuni && encontradoMuni.isDeleted) {
+      encontradoMuni.isDeleted = false
+      await encontradoMuni.save()
+      return response.ok({
+        mensaje: 'El municipio se ha restaurado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El municipio no pudo ser encontrado para restaurar.',
+    })
   }
 }

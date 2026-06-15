@@ -175,6 +175,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['actualizarDepart']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'departamentos.eliminar_departamento': {
+    methods: ["DELETE"]
+    pattern: '/departamento/eliminar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['eliminarDepartamento']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['eliminarDepartamento']>>>
+    }
+  }
+  'departamentos.restaurar_departamento': {
+    methods: ["PATCH"]
+    pattern: '/departamento/restaurar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['restaurarDepartamento']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/departamentos_controller').default['restaurarDepartamento']>>>
+    }
+  }
   'municipios.municipios_por_departamento': {
     methods: ["GET","HEAD"]
     pattern: '/departamento/:id/municipios'
@@ -221,6 +245,30 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/municipio').ingresarMuni)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['actualizarMunicipio']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['actualizarMunicipio']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'municipios.eliminar_municipio': {
+    methods: ["DELETE"]
+    pattern: '/municipios/eliminar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['eliminarMunicipio']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['eliminarMunicipio']>>>
+    }
+  }
+  'municipios.restaurar_municipio': {
+    methods: ["PATCH"]
+    pattern: '/municipios/restaurar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['restaurarMunicipio']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['restaurarMunicipio']>>>
     }
   }
   'sectores.sectores_por_municipio': {
@@ -271,6 +319,78 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['actualizarProblematica']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'problematicas.eliminar_problematica': {
+    methods: ["DELETE"]
+    pattern: '/problematica/eliminar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarProblematica']>>>
+    }
+  }
+  'problematicas.restaurar_problematica': {
+    methods: ["PATCH"]
+    pattern: '/problematica/restaurar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['restaurarProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['restaurarProblematica']>>>
+    }
+  }
+  'problematicas.filtrar_by_institucion': {
+    methods: ["GET","HEAD"]
+    pattern: '/problematica/filtrar/:idInst'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { idInst: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['filtrarByInstitucion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['filtrarByInstitucion']>>>
+    }
+  }
+  'problematicas.listar_instituciones_asociadas': {
+    methods: ["GET","HEAD"]
+    pattern: '/problematica/listar-instituciones-asociadas/:idProb'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { idProb: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['listarInstitucionesAsociadas']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['listarInstitucionesAsociadas']>>>
+    }
+  }
+  'problematicas.asignar_intitucion': {
+    methods: ["POST"]
+    pattern: '/problematica/asignar'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/problematica').asignarInstitucion)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/problematica').asignarInstitucion)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['asignarIntitucion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['asignarIntitucion']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'problematicas.eliminar_asociacion': {
+    methods: ["DELETE"]
+    pattern: '/problematica/eliminar-asociacion'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/problematica').asignarInstitucion)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/problematica').asignarInstitucion)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarAsociacion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarAsociacion']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'instituciones.obtener_instituciones': {
     methods: ["GET","HEAD"]
     pattern: '/instituciones/listar'
@@ -281,6 +401,18 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['obtenerInstituciones']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['obtenerInstituciones']>>>
+    }
+  }
+  'instituciones.instituciones_por_municipio': {
+    methods: ["GET","HEAD"]
+    pattern: '/instituciones/obtener/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['institucionesPorMunicipio']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['institucionesPorMunicipio']>>>
     }
   }
   'instituciones.crear_institucion': {
@@ -305,6 +437,30 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/institucione').ingresarInstitu)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['actualizarInstituc']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['actualizarInstituc']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'instituciones.eliminar_institucion': {
+    methods: ["DELETE"]
+    pattern: '/instituciones/eliminar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['eliminarInstitucion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['eliminarInstitucion']>>>
+    }
+  }
+  'instituciones.restaurar_institucion': {
+    methods: ["PATCH"]
+    pattern: '/instituciones/restaurar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['restaurarInstitucion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['restaurarInstitucion']>>>
     }
   }
   'reportes.obtener_reportes': {
@@ -345,7 +501,7 @@ export interface Registry {
   }
   'reportes.obtener_reporte_int': {
     methods: ["GET","HEAD"]
-    pattern: '/reportes/:id'
+    pattern: '/reportes/listarInst/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -401,6 +557,30 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/sector').ingresarSector)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['actualizarSector']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['actualizarSector']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'sectores.eliminar_sector': {
+    methods: ["DELETE"]
+    pattern: '/sectores/eliminar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['eliminarSector']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['eliminarSector']>>>
+    }
+  }
+  'sectores.restaurar_sector': {
+    methods: ["PATCH"]
+    pattern: '/sectores/restaurar/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['restaurarSector']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sectores_controller').default['restaurarSector']>>>
     }
   }
   'roles.obtener_rol': {

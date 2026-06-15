@@ -33,12 +33,14 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class DepartamentoSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'nomDepartamento', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'isDeleted', 'nomDepartamento', 'updatedAt'] as const
   $columns = DepartamentoSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare isDeleted: boolean | null
   @column()
   declare nomDepartamento: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -65,7 +67,7 @@ export class DetallereporteSchema extends BaseModel {
 }
 
 export class InstitucioneSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idMunicipio', 'nombreInstitucion', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'idMunicipio', 'isDeleted', 'nombreInstitucion', 'updatedAt'] as const
   $columns = InstitucioneSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -74,13 +76,15 @@ export class InstitucioneSchema extends BaseModel {
   @column()
   declare idMunicipio: number | null
   @column()
+  declare isDeleted: boolean | null
+  @column()
   declare nombreInstitucion: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
 export class MunicipioSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idDepartamento', 'nomMunicipio', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'idDepartamento', 'isDeleted', 'nomMunicipio', 'updatedAt'] as const
   $columns = MunicipioSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -89,18 +93,33 @@ export class MunicipioSchema extends BaseModel {
   @column()
   declare idDepartamento: number
   @column()
+  declare isDeleted: boolean | null
+  @column()
   declare nomMunicipio: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
+export class ProblematicaInstitucionSchema extends BaseModel {
+  static $columns = ['id', 'idInstitucion', 'idProblematica'] as const
+  $columns = ProblematicaInstitucionSchema.$columns
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare idInstitucion: number
+  @column()
+  declare idProblematica: number
+}
+
 export class ProblematicaSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'problema', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'isDeleted', 'problema', 'updatedAt'] as const
   $columns = ProblematicaSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare isDeleted: boolean | null
   @column()
   declare problema: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -148,7 +167,7 @@ export class RoleSchema extends BaseModel {
 }
 
 export class SectoreSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idMunicipios', 'nombreSector', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'idMunicipios', 'isDeleted', 'nombreSector', 'updatedAt'] as const
   $columns = SectoreSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -156,6 +175,8 @@ export class SectoreSchema extends BaseModel {
   declare id: number
   @column()
   declare idMunicipios: number
+  @column()
+  declare isDeleted: boolean | null
   @column()
   declare nombreSector: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
