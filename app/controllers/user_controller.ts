@@ -118,8 +118,15 @@ export default class UserController {
     response.ok({ message: 'Usuario encontrado', Usuario: usuarioFinded })
   }
   // Actualizar datos de un usuario
-  async actualizarUsuario({ params, request, response }: HttpContext) {
+  async actualizarUsuario({ params, request, response, auth }: HttpContext) {
+    const userAuth = await auth.authenticate()
     const userId = Number(params.userId)
+    
+    // Validar que el usuario solo pueda actualizarse a sí mismo (a menos que sea Admin o Super-Admin)
+    if (userAuth.id !== userId && userAuth.idRol !== 1 && userAuth.idRol !== 2) {
+      return response.abort({ message: 'No tienes permisos para actualizar este perfil' }, 403)
+    }
+
     const dataUpdate = await request.validateUsing(actualizarUsuarioValidator)
     if (!userId) {
       throw new Exception('No se pudo realizar la busqueda', { status: 404 })
@@ -129,11 +136,22 @@ export default class UserController {
       throw new Exception('Usuario no encontrado.', { status: 404 })
     }
     // zona pa actualizar
-    usuarioFinded.numeroCedula = dataUpdate.numeroCedula || usuarioFinded.numeroCedula
-    usuarioFinded.nombres = dataUpdate.nombres || usuarioFinded.nombres
-    usuarioFinded.apellidos = dataUpdate.apellidos || usuarioFinded.apellidos
-    usuarioFinded.sexo = dataUpdate.sexo || usuarioFinded.sexo
-    usuarioFinded.idSector = dataUpdate.idSector || usuarioFinded.idSector
+    if (userAuth.idRol === 1 || userAuth.idRol === 2) {
+      usuarioFinded.numeroCedula = dataUpdate.numeroCedula || usuarioFinded.numeroCedula
+      usuarioFinded.nombres = dataUpdate.nombres || usuarioFinded.nombres
+      usuarioFinded.apellidos = dataUpdate.apellidos || usuarioFinded.apellidos
+      usuarioFinded.sexo = dataUpdate.sexo || usuarioFinded.sexo
+      usuarioFinded.correo = dataUpdate.correo || usuarioFinded.correo
+      usuarioFinded.idSector = dataUpdate.idSector || usuarioFinded.idSector
+    } else {
+      // Si es un ciudadano normal, solo puede actualizar su correo y dirección (sector)
+      if (dataUpdate.correo) {
+        usuarioFinded.correo = dataUpdate.correo
+      }
+      if (dataUpdate.idSector) {
+        usuarioFinded.idSector = dataUpdate.idSector
+      }
+    }
 
     await usuarioFinded.save()
 

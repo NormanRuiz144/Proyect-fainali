@@ -17,6 +17,7 @@ export default class extends BaseSchema {
       table.timestamp('fecha_gen').notNullable()
       table.date('fecha_fin')
       table.string('estado')
+      table.text('descripcion').nullable()
     })
   }
 

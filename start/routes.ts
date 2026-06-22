@@ -47,18 +47,17 @@ router.group(() => {
 // rutas de Usuario
 router
   .group(() => {
-    router.get('/listar', [controllers.User, 'listUsuarios'])
-    router.get('/listarInsti', [controllers.User, 'listUsuariosInsti'])
-    router.post('/crear', [controllers.User, 'crearUsuario'])
-    router.get('/obtener/:userId', [controllers.User, 'buscarUsurioById'])
-    router.put('/actualizar/:userId', [controllers.User, 'actualizarUsuario'])
-    router.put('/reasignar/:userId', [controllers.User, 'reasignarInstitucionRol'])
-    router.put('/bajaInst/:userId', [controllers.User, 'bajaInsti'])
+    router.get('/listar', [controllers.User, 'listUsuarios']).use(middleware.rolGuardia(['Super-Admin']))
+    router.get('/listarInsti', [controllers.User, 'listUsuariosInsti']).use(middleware.rolGuardia(['Super-Admin']))
+    router.post('/crear', [controllers.User, 'crearUsuario']).use(middleware.rolGuardia(['Super-Admin']))
+    router.get('/obtener/:userId', [controllers.User, 'buscarUsurioById']).use(middleware.rolGuardia(['Super-Admin']))
+    router.put('/actualizar/:userId', [controllers.User, 'actualizarUsuario']) // Allowed to all authenticated users
+    router.put('/reasignar/:userId', [controllers.User, 'reasignarInstitucionRol']).use(middleware.rolGuardia(['Super-Admin']))
+    router.put('/bajaInst/:userId', [controllers.User, 'bajaInsti']).use(middleware.rolGuardia(['Super-Admin']))
     // router.delete('/dormirUsuario/:userId',[controllers.User, ''])
   })
   .prefix('/usuarios')
   .use(middleware.auth())
-  .use(middleware.rolGuardia(['Super-Admin']))
 
 // Rutas de departamentos
 router
@@ -138,6 +137,9 @@ router
 
 router
   .group(() => {
+    router
+      .get('/historial', [controllers.Reportes, 'historialUsuario'])
+      .use(middleware.rolGuardia(['default', 'Admin', 'Super-Admin']))
     router
       .get('/listar', [controllers.Reportes, 'obtenerReportes'])
       .use(middleware.rolGuardia(['Admin', 'Super-Admin']))

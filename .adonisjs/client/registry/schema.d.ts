@@ -463,6 +463,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/instituciones_controller').default['restaurarInstitucion']>>>
     }
   }
+  'reportes.historial_usuario': {
+    methods: ["GET","HEAD"]
+    pattern: '/reportes/historial'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['historialUsuario']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/reportes_controller').default['historialUsuario']>>>
+    }
+  }
   'reportes.obtener_reportes': {
     methods: ["GET","HEAD"]
     pattern: '/reportes/listar'

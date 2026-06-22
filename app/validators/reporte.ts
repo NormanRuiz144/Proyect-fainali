@@ -11,10 +11,10 @@ const mensajesPersonalizados = {
 }
 
 const schemaReporte = vine.object({
-    idUsuario: vine.number(),
-    idInstitucion: vine.number(),
-    idProblematica: vine.number(),
-    idSector: vine.number().optional(),
+    idUsuario: vine.number().optional(), // El frontend ya no necesita enviarlo, se tomará del token
+    idInstitucion: vine.number().exists({ table: 'instituciones', column: 'id' }),
+    idProblematica: vine.number().exists({ table: 'problematicas', column: 'id' }),
+    idSector: vine.number().exists({ table: 'sectores', column: 'id' }).optional(),
     formato: vine.array(
       vine.file({
         size: '20mb',
@@ -24,7 +24,7 @@ const schemaReporte = vine.object({
     ubicacion: vine.string().maxLength(500).trim(),
     descripcion: vine.string().maxLength(1000).optional(),
     nvlPrioridad: vine.number().optional(),
-    estado: vine.string().maxLength(50).optional(),
+    estado: vine.string().maxLength(50).optional(), // Ignorado en backend pero opcional
   })
 
 
