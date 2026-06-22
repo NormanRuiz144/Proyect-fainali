@@ -21,95 +21,90 @@ export default class ReportesController {
       throw new Error('No se han encontrado reportes.')
     }
     return response.ok({ lista_Reportes: listaReportes })
-
   }
 
+  //   BUSCAR REPORTE POR ID DE INSTITUCION//
+  // // GET_POR_ID
+  // public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+  //   const idInstitucion = Number(params.id)
 
+  //   // 1. Obtener el ID del usuario autenticado de la sesión/token
+  //   // Esto evita que alguien suplante a otro usuario
+  //   const usuarioAutenticado = auth.user
+  //   if (!usuarioAutenticado) {
+  //     return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+  //   }
 
-//   BUSCAR REPORTE POR ID DE INSTITUCION//
-// // GET_POR_ID
-// public async obtenerReporteInt({ params, response, auth }: HttpContext) {
-//   const idInstitucion = Number(params.id)
+  //   // 2. Validar que el parámetro ID de la institución sea un número
+  //   if (isNaN(idInstitucion)) {
+  //     return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+  //   }
 
-//   // 1. Obtener el ID del usuario autenticado de la sesión/token
-//   // Esto evita que alguien suplante a otro usuario
-//   const usuarioAutenticado = auth.user
-//   if (!usuarioAutenticado) {
-//     return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
-//   }
+  //   // 3. Consulta de seguridad:
+  //   // Filtramos por la institución Y por el dueño de los reportes simultáneamente
+  //   const reportes = await Reporte.query()
+  //     .where('idInstitucion', idInstitucion)
+  //     .where('idUsuario', usuarioAutenticado.id)
 
-//   // 2. Validar que el parámetro ID de la institución sea un número
-//   if (isNaN(idInstitucion)) {
-//     return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
-//   }
+  //   // 4. Validar si existen resultados
+  //   // Si está vacío, puede ser que la institución no exista O que el usuario no tenga acceso
+  //   if (reportes.length === 0) {
+  //     return response.forbidden({
+  //       mensaje: 'No tienes permiso para acceder a esta información o la institución no existe.',
+  //     })
+  //   }
 
-//   // 3. Consulta de seguridad:
-//   // Filtramos por la institución Y por el dueño de los reportes simultáneamente
-//   const reportes = await Reporte.query()
-//     .where('idInstitucion', idInstitucion)
-//     .where('idUsuario', usuarioAutenticado.id)
+  //   return response.ok({
+  //     mensaje: 'Información recuperada con éxito.',
+  //     data: reportes,
+  //   })
+  // }
+  // BUSCAR REPORTES POR INSTITUCIÓN (Acceso para miembros de la misma)
+  public async obtenerReporteInt({ params, response, auth }: HttpContext) {
+    const idInstitucionSolicitada = Number(params.id)
+    const usuarioAutenticado = auth.user
 
-//   // 4. Validar si existen resultados
-//   // Si está vacío, puede ser que la institución no exista O que el usuario no tenga acceso
-//   if (reportes.length === 0) {
-//     return response.forbidden({
-//       mensaje: 'No tienes permiso para acceder a esta información o la institución no existe.',
-//     })
-//   }
+    // 1. Verificar autenticación
+    if (!usuarioAutenticado) {
+      return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+    }
 
-//   return response.ok({
-//     mensaje: 'Información recuperada con éxito.',
-//     data: reportes,
-//   })
-// }
-// BUSCAR REPORTES POR INSTITUCIÓN (Acceso para miembros de la misma)
-public async obtenerReporteInt({ params, response, auth }: HttpContext) {
-  const idInstitucionSolicitada = Number(params.id)
-  const usuarioAutenticado = auth.user
+    // 2. Validar que el parámetro ID sea un número
+    if (isNaN(idInstitucionSolicitada)) {
+      return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
+    }
 
-  // 1. Verificar autenticación
-  if (!usuarioAutenticado) {
-    return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
-  }
+    // 3. VALIDACIÓN DE PERTENENCIA:
+    // ¿El usuario pertenece a la institución que quiere consultar?
+    if (usuarioAutenticado.idInstitucion !== idInstitucionSolicitada) {
+      return response.forbidden({
+        mensaje: 'No tienes permiso para estos reportes .',
+      })
+    }
 
-  // 2. Validar que el parámetro ID sea un número
-  if (isNaN(idInstitucionSolicitada)) {
-    return response.badRequest({ mensaje: 'El ID de institución no es válido.' })
-  }
+    // 4. Consulta: Traemos TODOS los reportes de esa institución
+    // Ya no filtramos por idUsuario, solo por idInstitucion
+    const reportes = await Reporte.query()
+      .where('idInstitucion', idInstitucionSolicitada)
+      // Opcional: puedes cargar los datos del usuario que creó cada reporte
+      .preload('usuario')
+      .preload('institucion')
+      .preload('problematica')
 
-  // 3. VALIDACIÓN DE PERTENENCIA:
-  // ¿El usuario pertenece a la institución que quiere consultar?
-  if (usuarioAutenticado.idInstitucion !== idInstitucionSolicitada) {
-    return response.forbidden({
-      mensaje: 'No tienes permiso para estos reportes .'
-    })
-  }
+    // 5. Validar si existen resultados
+    if (reportes.length === 0) {
+      return response.ok({
+        mensaje: 'La institución no tiene reportes registrados todavía.',
+        data: [],
+      })
+    }
 
-  // 4. Consulta: Traemos TODOS los reportes de esa institución
-  // Ya no filtramos por idUsuario, solo por idInstitucion
-  const reportes = await Reporte.query()
-    .where('idInstitucion', idInstitucionSolicitada)
-    // Opcional: puedes cargar los datos del usuario que creó cada reporte
-    .preload('usuario')
-
-  // 5. Validar si existen resultados
-  if (reportes.length === 0) {
     return response.ok({
-      mensaje: 'La institución no tiene reportes registrados todavía.',
-      data: []
+      mensaje: 'Información de la institución recuperada con éxito.',
+      total: reportes.length,
+      data: reportes,
     })
   }
-
-  return response.ok({
-    mensaje: 'Información de la institución recuperada con éxito.',
-    total: reportes.length,
-    data: reportes,
-  })
-}
-
-
-
-
 
   // Crear un nuevo reporte
   async crearReporte({ request, response }: HttpContext) {
@@ -118,7 +113,7 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
     cloudinary.config({
       cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
       api_key: env.get('CLOUDINARY_API_KEY') || '',
-      api_secret: env.get('CLOUDINARY_API_SECRET') || ''
+      api_secret: env.get('CLOUDINARY_API_SECRET') || '',
     })
 
     const datosGenerales = await request.validateUsing(ingresarReporte)
@@ -131,7 +126,7 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
       for (const imagen of imagenes) {
         if (imagen.tmpPath) {
           const resultado = await cloudinary.uploader.upload(imagen.tmpPath, {
-            folder: 'reportes'
+            folder: 'reportes',
           })
           urlsSeguras.push(resultado.secure_url)
         }
@@ -158,14 +153,7 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
     })
   }
 
-
-
-
-    //recibir idUsuario y idInstitucion validar que estos coincidan de ser haci permitir ver los reportes de esa institucion de lo contrario no permitir el aceso.
-
-
-
-
+  //recibir idUsuario y idInstitucion validar que estos coincidan de ser haci permitir ver los reportes de esa institucion de lo contrario no permitir el aceso.
 
   // Actualizar un reporte
   async actualizarReporte({ params, request, response }: HttpContext) {
@@ -179,7 +167,7 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
       cloudinary.config({
         cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
         api_key: env.get('CLOUDINARY_API_KEY') || '',
-        api_secret: env.get('CLOUDINARY_API_SECRET') || ''
+        api_secret: env.get('CLOUDINARY_API_SECRET') || '',
       })
 
       const imagenes = datosNuevos.formato
@@ -190,7 +178,7 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
         for (const imagen of imagenes) {
           if (imagen.tmpPath) {
             const resultado = await cloudinary.uploader.upload(imagen.tmpPath, {
-              folder: 'reportes'
+              folder: 'reportes',
             })
             urlsSeguras.push(resultado.secure_url)
           }
@@ -202,13 +190,34 @@ public async obtenerReporteInt({ params, response, auth }: HttpContext) {
       const reporteActualizado = {
         ...restoDatos,
         // Solo se actualiza el campo de formato si se subieron nuevas imágenes
-        ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {})
+        ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {}),
       }
 
       encontradoReporte.merge(reporteActualizado)
       await encontradoReporte.save()
       return response.ok({
         mensaje: 'El reporte se ha actualizado correctamente.',
+        reporte: encontradoReporte,
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El reporte no pudo ser encontrado para actualizar.',
+    })
+  }
+
+  // Actualizar SOLO el estado del reporte
+  async actualizarEstadoReporte({ params, request, response }: HttpContext) {
+    const idRep = Number(params.id)
+    const { estado } = request.only(['estado'])
+
+    const encontradoReporte = await Reporte.query().where('id', idRep).first()
+
+    if (encontradoReporte) {
+      encontradoReporte.estado = estado
+      await encontradoReporte.save()
+      return response.ok({
+        mensaje: 'El estado del reporte se ha actualizado correctamente.',
         reporte: encontradoReporte,
       })
     }

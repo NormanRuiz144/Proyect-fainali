@@ -10,8 +10,17 @@ export default class DepartamentosController {
    * @summary Obtener todos los departamnetos
    * @responseBody 200 - {lista_Departamentos: {id: number, nom_departamento:string }}
    */
-  async obtenerDepartamentos({ response }: HttpContext) {
-    const listadepart = await Departamento.all()
+  async obtenerDepartamentos({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listadepart: Departamento[]
+
+    if (isNaN(pagina)) {
+      listadepart = await Departamento.query().select('*')
+    } else {
+      listadepart = await Departamento.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listadepart || listadepart.length == 0) {
       throw new Error('No se han encontrado departamentos.')
@@ -61,5 +70,38 @@ export default class DepartamentosController {
     return response.status(404).json({ mensaje: 'El departamento no pudo ser actualizado.' })
   }
 
-  // Eliminar un Departamento ???
+  // Eliminar un Departamento
+  async eliminarDepartamento({ params, response }: HttpContext) {
+    const idDepart = Number(params.id)
+    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
+
+    if (encontradoDepart && !encontradoDepart.isDeleted) {
+      encontradoDepart.isDeleted = true
+      await encontradoDepart.save()
+      return response.ok({
+        mensaje: 'El departamento se ha eliminado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El departamento no pudo ser encontrado para eliminar.',
+    })
+  }
+
+  async restaurarDepartamento({ params, response }: HttpContext) {
+    const idDepart = Number(params.id)
+    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
+
+    if (encontradoDepart && encontradoDepart.isDeleted) {
+      encontradoDepart.isDeleted = false
+      await encontradoDepart.save()
+      return response.ok({
+        mensaje: 'El departamento se ha restaurado correctamente.',
+      })
+    }
+
+    return response.status(404).json({
+      mensaje: 'El departamento no pudo ser encontrado para restaurar.',
+    })
+  }
 }

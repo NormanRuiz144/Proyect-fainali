@@ -6,7 +6,6 @@
 export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
   Dashboard: () => import('#controllers/dashboard_controller'),
-  Departamentos: () => import('#controllers/departamentos_controller'),
   DetaReporte: () => import('#controllers/detaReporte_controller'),
   Instituciones: () => import('#controllers/instituciones_controller'),
   Municipios: () => import('#controllers/municipios_controller'),
@@ -16,4 +15,5 @@ export const controllers = {
   Roles: () => import('#controllers/roles_controller'),
   Sectores: () => import('#controllers/sectores_controller'),
   User: () => import('#controllers/user_controller'),
+  Departamentos: () => import('#controllers/departamentos_controller'),
 }

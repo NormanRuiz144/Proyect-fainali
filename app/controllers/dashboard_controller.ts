@@ -10,8 +10,6 @@ export default class DashboardController {
   async showData({ auth, request, response }: HttpContext) {
     // esto controla la obtención de métricas y gráficos del panel de control
     
-    // DESCOMENTAR ESTO PARA CUANDO este el login en producción y a la basura el id fijo
-    /*
     const userLogged = await auth.authenticate()
     await userLogged.load((preloader) => {
       preloader.load('Institucion')
@@ -20,8 +18,8 @@ export default class DashboardController {
     
     let idInstitucion: number | null = null
     
-    // Si el usuario es Super Admin (ej. Rol ID 1), permitimos filtrar por parámetro de URL
-    if (userLogged.idRol === 1) {
+    // Si el usuario es Super Admin (Rol: 'Super-Admin'), permitimos filtrar por parámetro de URL
+    if (userLogged.rol?.rol === 'Super-Admin') {
       const queryId = request.input('institucionId')
       idInstitucion = queryId !== undefined ? (queryId === '0' || queryId === '' ? null : Number(queryId)) : null // null significa "Todas las Instituciones"
     } else {
@@ -31,12 +29,6 @@ export default class DashboardController {
         return response.status(403).json({ error: 'Usuario sin institución asignada o permisos insuficientes' })
       }
     }
-    */
-
-    // PARA DESARROLLO (permite probar el selector de instituciones sin login obligatorio):
-    const queryId = request.input('institucionId')
-    // Si se pasa ?institucionId=0 o vacío, cargamos global (null), de lo contrario usamos el ID o el fallback 1
-    const idInstitucion = queryId !== undefined ? (queryId === '0' || queryId === '' ? null : Number(queryId)) : 1
 
     const today = DateTime.now()
 
