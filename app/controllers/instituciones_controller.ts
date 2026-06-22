@@ -4,8 +4,17 @@ import Institucione from '#models/institucione'
 
 export default class InstitucionesController {
   // Listar todas las instituciones//
-  async obtenerInstituciones({ response }: HttpContext) {
-    const listinstituc = await Institucione.all()
+  async obtenerInstituciones({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listinstituc: Institucione[]
+
+    if (isNaN(pagina)) {
+      listinstituc = await Institucione.query().select('*')
+    } else {
+      listinstituc = await Institucione.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listinstituc || listinstituc.length === 0) {
       throw new Error('No se han encontrado Instituciones.')

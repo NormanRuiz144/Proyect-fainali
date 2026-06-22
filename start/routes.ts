@@ -47,7 +47,7 @@ router.group(() => {
 // rutas de Usuario
 router
   .group(() => {
-    router.get('/listar', [controllers.User, 'listUsuarios'])
+    router.get('/listar/pagina', [controllers.User, 'listUsuarios'])
     router.get('/listarInsti', [controllers.User, 'listUsuariosInsti'])
     router.post('/crear', [controllers.User, 'crearUsuario'])
     router.get('/obtener/:userId', [controllers.User, 'buscarUsurioById'])
@@ -63,7 +63,7 @@ router
 // Rutas de departamentos
 router
   .group(() => {
-    router.get('/listar', [controllers.Departamentos, 'obtenerDepartamentos'])
+    router.get('/listar/pagina', [controllers.Departamentos, 'obtenerDepartamentos'])
     router.post('/agregar', [controllers.Departamentos, 'crearDepartamento'])
     // .use(middleware.auth())
     // .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
@@ -80,7 +80,7 @@ router.get('/departamento/:id/municipios', [controllers.Municipios, 'municipiosP
 // Rutas de Municipios
 router
   .group(() => {
-    router.get('/listar', [controllers.Municipios, 'obtenerMunicipios'])
+    router.get('/listar/pagina', [controllers.Municipios, 'obtenerMunicipios'])
     router.post('/agregar', [controllers.Municipios, 'crearMunicipio'])
     router.put('/actu/:id', [controllers.Municipios, 'actualizarMunicipio'])
     router.delete('/eliminar/:id', [controllers.Municipios, 'eliminarMunicipio'])
@@ -95,7 +95,7 @@ router.get('/municipios/:id/sectores', [controllers.Sectores, 'sectoresPorMunici
 //Rutas de Problematicas
 router
   .group(() => {
-    router.get('/listar', [controllers.Problematicas, 'obtenerProblematicas'])
+    router.get('/listar/pagina/', [controllers.Problematicas, 'obtenerProblematicas'])
     router
       .post('/agregar', [controllers.Problematicas, 'crearProblematica'])
       .use(middleware.auth())
@@ -119,7 +119,7 @@ router
 // //Rutas de Instituciones
 router
   .group(() => {
-    router.get('/listar', [controllers.Instituciones, 'obtenerInstituciones'])
+    router.get('/listar/pagina', [controllers.Instituciones, 'obtenerInstituciones'])
     router.get('/obtener/:id', [controllers.Instituciones, 'institucionesPorMunicipio'])
     router
       .post('/agregar', [controllers.Instituciones, 'crearInstitucion'])
@@ -160,7 +160,7 @@ router
 //Rutas Sectores//
 router
   .group(() => {
-    router.get('/listar', [controllers.Sectores, 'obtenerSectores'])
+    router.get('/listar/pagina', [controllers.Sectores, 'obtenerSectores'])
     router.get('/obtener/:id', [controllers.Sectores, 'obtenerSectorId'])
     // .use(middleware.rolGuardia(['Admin', 'Super-Admin']))
     router.post('/agregar', [controllers.Sectores, 'crearSector'])

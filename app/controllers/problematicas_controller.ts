@@ -6,11 +6,20 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProblematicasController {
   //Listar Problemas\\
-  async obtenerProblematicas({ response }: HttpContext) {
-    const listaproblem = await Problematica.all()
+  async obtenerProblematicas({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listaproblem: Problematica[]
+
+    if (isNaN(pagina)) {
+      listaproblem = await Problematica.query().select('*')
+    } else {
+      listaproblem = await Problematica.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listaproblem || listaproblem.length == 0) {
-      throw new Error('Nose han enconctrado problematicas.')
+      throw new Error('No se han enconctrado problematicas.')
     }
     return response.ok({ lista_Problematicas: listaproblem })
   }

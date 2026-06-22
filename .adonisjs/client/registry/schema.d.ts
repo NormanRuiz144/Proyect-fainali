@@ -57,7 +57,7 @@ export interface Registry {
   }
   'user.list_usuarios': {
     methods: ["GET","HEAD"]
-    pattern: '/usuarios/listar'
+    pattern: '/usuarios/listar/pagina'
     types: {
       body: {}
       paramsTuple: []
@@ -141,7 +141,7 @@ export interface Registry {
   }
   'departamentos.obtener_departamentos': {
     methods: ["GET","HEAD"]
-    pattern: '/departamento/listar'
+    pattern: '/departamento/listar/pagina'
     types: {
       body: {}
       paramsTuple: []
@@ -213,7 +213,7 @@ export interface Registry {
   }
   'municipios.obtener_municipios': {
     methods: ["GET","HEAD"]
-    pattern: '/municipios/listar'
+    pattern: '/municipios/listar/pagina'
     types: {
       body: {}
       paramsTuple: []
@@ -285,7 +285,7 @@ export interface Registry {
   }
   'problematicas.obtener_problematicas': {
     methods: ["GET","HEAD"]
-    pattern: '/problematica/listar'
+    pattern: '/problematica/listar/pagina'
     types: {
       body: {}
       paramsTuple: []
@@ -393,7 +393,7 @@ export interface Registry {
   }
   'instituciones.obtener_instituciones': {
     methods: ["GET","HEAD"]
-    pattern: '/instituciones/listar'
+    pattern: '/instituciones/listar/pagina'
     types: {
       body: {}
       paramsTuple: []
@@ -525,7 +525,7 @@ export interface Registry {
   }
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"]
-    pattern: '/sectores/listar'
+    pattern: '/sectores/listar/pagina'
     types: {
       body: {}
       paramsTuple: []

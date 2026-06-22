@@ -5,8 +5,17 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SectoresController {
   //GET_SECTORES//
-  async obtenerSectores({ response }: HttpContext) {
-    const listaSectores = await Sectores.all()
+  async obtenerSectores({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listaSectores: Sectores[]
+
+    if (isNaN(pagina)) {
+      listaSectores = await Sectores.query().select('*')
+    } else {
+      listaSectores = await Sectores.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listaSectores || listaSectores.length == 0) {
       throw new Error('Vaya no se encontro ningun Sector.')

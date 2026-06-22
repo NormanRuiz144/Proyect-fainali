@@ -37,20 +37,17 @@ export default class UserController {
   }
 
   // Listar los usuarios
-  async listUsuarios({ response }: HttpContext) {
+  async listUsuarios({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
     try {
-      const list = await Usuarios.query().select(
-        'id',
-        'numeroCedula',
-        'nombres',
-        'apellidos',
-        'correo',
-        'id_sector',
-        'id_rol'
-      )
+      const list = await Usuarios.query()
+        .select('id', 'numeroCedula', 'nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
+        .where('id_rol', '!=', '1')
+        .paginate(pagina, contenidoPagina)
 
       if (list && list.length === 0) {
-        response.status(400).json({ message: 'No se an encontrado usuarios.' })
+        response.status(400).json({ message: 'No se han encontrado usuarios.' })
       }
 
       response.status(200).json({ lista: list })

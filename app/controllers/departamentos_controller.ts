@@ -10,8 +10,17 @@ export default class DepartamentosController {
    * @summary Obtener todos los departamnetos
    * @responseBody 200 - {lista_Departamentos: {id: number, nom_departamento:string }}
    */
-  async obtenerDepartamentos({ response }: HttpContext) {
-    const listadepart = await Departamento.all()
+  async obtenerDepartamentos({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listadepart: Departamento[]
+
+    if (isNaN(pagina)) {
+      listadepart = await Departamento.query().select('*')
+    } else {
+      listadepart = await Departamento.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listadepart || listadepart.length == 0) {
       throw new Error('No se han encontrado departamentos.')

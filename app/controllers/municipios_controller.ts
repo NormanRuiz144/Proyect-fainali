@@ -3,8 +3,17 @@ import { ingresarMuni } from '#validators/municipio'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MunicipiosController {
-  async obtenerMunicipios({ response }: HttpContext) {
-    const listaMuni = await Municipio.all()
+  async obtenerMunicipios({ response, request }: HttpContext) {
+    const pagina = request.input('page')
+    const contenidoPagina = 5
+
+    let listaMuni: Municipio[]
+
+    if (isNaN(pagina)) {
+      listaMuni = await Municipio.query().select('*')
+    } else {
+      listaMuni = await Municipio.query().select('*').paginate(pagina, contenidoPagina)
+    }
 
     if (!listaMuni || listaMuni.length == 0) {
       throw new Error('No se han encontrado Municipios.')

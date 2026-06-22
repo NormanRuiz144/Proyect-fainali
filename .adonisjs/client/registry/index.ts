@@ -32,8 +32,8 @@ const routes = {
   },
   'user.list_usuarios': {
     methods: ["GET","HEAD"],
-    pattern: '/usuarios/listar',
-    tokens: [{"old":"/usuarios/listar","type":0,"val":"usuarios","end":""},{"old":"/usuarios/listar","type":0,"val":"listar","end":""}],
+    pattern: '/usuarios/listar/pagina',
+    tokens: [{"old":"/usuarios/listar/pagina","type":0,"val":"usuarios","end":""},{"old":"/usuarios/listar/pagina","type":0,"val":"listar","end":""},{"old":"/usuarios/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['user.list_usuarios']['types'],
   },
   'user.list_usuarios_insti': {
@@ -74,8 +74,8 @@ const routes = {
   },
   'departamentos.obtener_departamentos': {
     methods: ["GET","HEAD"],
-    pattern: '/departamento/listar',
-    tokens: [{"old":"/departamento/listar","type":0,"val":"departamento","end":""},{"old":"/departamento/listar","type":0,"val":"listar","end":""}],
+    pattern: '/departamento/listar/pagina',
+    tokens: [{"old":"/departamento/listar/pagina","type":0,"val":"departamento","end":""},{"old":"/departamento/listar/pagina","type":0,"val":"listar","end":""},{"old":"/departamento/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['departamentos.obtener_departamentos']['types'],
   },
   'departamentos.crear_departamento': {
@@ -110,8 +110,8 @@ const routes = {
   },
   'municipios.obtener_municipios': {
     methods: ["GET","HEAD"],
-    pattern: '/municipios/listar',
-    tokens: [{"old":"/municipios/listar","type":0,"val":"municipios","end":""},{"old":"/municipios/listar","type":0,"val":"listar","end":""}],
+    pattern: '/municipios/listar/pagina',
+    tokens: [{"old":"/municipios/listar/pagina","type":0,"val":"municipios","end":""},{"old":"/municipios/listar/pagina","type":0,"val":"listar","end":""},{"old":"/municipios/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['municipios.obtener_municipios']['types'],
   },
   'municipios.crear_municipio': {
@@ -146,8 +146,8 @@ const routes = {
   },
   'problematicas.obtener_problematicas': {
     methods: ["GET","HEAD"],
-    pattern: '/problematica/listar',
-    tokens: [{"old":"/problematica/listar","type":0,"val":"problematica","end":""},{"old":"/problematica/listar","type":0,"val":"listar","end":""}],
+    pattern: '/problematica/listar/pagina',
+    tokens: [{"old":"/problematica/listar/pagina","type":0,"val":"problematica","end":""},{"old":"/problematica/listar/pagina","type":0,"val":"listar","end":""},{"old":"/problematica/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['problematicas.obtener_problematicas']['types'],
   },
   'problematicas.crear_problematica': {
@@ -200,8 +200,8 @@ const routes = {
   },
   'instituciones.obtener_instituciones': {
     methods: ["GET","HEAD"],
-    pattern: '/instituciones/listar',
-    tokens: [{"old":"/instituciones/listar","type":0,"val":"instituciones","end":""},{"old":"/instituciones/listar","type":0,"val":"listar","end":""}],
+    pattern: '/instituciones/listar/pagina',
+    tokens: [{"old":"/instituciones/listar/pagina","type":0,"val":"instituciones","end":""},{"old":"/instituciones/listar/pagina","type":0,"val":"listar","end":""},{"old":"/instituciones/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['instituciones.obtener_instituciones']['types'],
   },
   'instituciones.instituciones_por_municipio': {
@@ -266,8 +266,8 @@ const routes = {
   },
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"],
-    pattern: '/sectores/listar',
-    tokens: [{"old":"/sectores/listar","type":0,"val":"sectores","end":""},{"old":"/sectores/listar","type":0,"val":"listar","end":""}],
+    pattern: '/sectores/listar/pagina',
+    tokens: [{"old":"/sectores/listar/pagina","type":0,"val":"sectores","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"listar","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"pagina","end":""}],
     types: placeholder as Registry['sectores.obtener_sectores']['types'],
   },
   'sectores.obtener_sector_id': {
