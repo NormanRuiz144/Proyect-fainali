@@ -9,9 +9,10 @@ export default class AccessTokenController {
     const { correo, contrasena } = await request.validateUsing(loginValidator)
 
     const user = await User.verifyCredentials(correo, contrasena)
-    await user.load((preloader) => {
+      await user.load((preloader) => {
       preloader.load('rol')
     })
+
     const token = await User.accessTokens.create(user)
 
     response.cookie('token_access', token.value?.release(), {
@@ -24,7 +25,7 @@ export default class AccessTokenController {
     })
 
     return serialize({
-      user: user,
+      user: UserTransformer.transform(user),
       token: token.value!.release(),
     })
   }

@@ -23,7 +23,7 @@ export default class UserController {
       correo,
       contrasena,
       idSector,
-      idRol: 3,
+      idRol: 2,
     }
 
     const user = await Usuarios.create(userData)
