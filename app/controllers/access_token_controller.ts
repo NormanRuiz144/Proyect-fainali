@@ -11,6 +11,9 @@ export default class AccessTokenController {
     const user = await User.verifyCredentials(correo, contrasena)
       await user.load((preloader) => {
       preloader.load('rol')
+      preloader.load('sector', (sectorQuery) => {
+        sectorQuery.preload('municipio')
+      })
     })
 
     const token = await User.accessTokens.create(user)

@@ -23,6 +23,25 @@ export default class ReportesController {
     return response.ok({ lista_Reportes: listaReportes })
   }
 
+
+
+
+  // Obtener historial de reportes del usuario autenticado
+  async historialUsuario({ response, auth }: HttpContext) {
+    const usuarioAutenticado = auth.user
+    if (!usuarioAutenticado) {
+      return response.unauthorized({ mensaje: 'Debe iniciar sesión.' })
+    }
+
+    const reportes = await Reporte.query()
+      .where('idUsuario', usuarioAutenticado.id)
+      .preload('institucion')
+      .preload('problematica')
+      .orderBy('fechaGen', 'desc')
+
+    return response.ok({ lista_Reportes: reportes })
+  }
+
   //   BUSCAR REPORTE POR ID DE INSTITUCION//
   // // GET_POR_ID
   // public async obtenerReporteInt({ params, response, auth }: HttpContext) {
@@ -117,6 +136,11 @@ export default class ReportesController {
     })
 
     const datosGenerales = await request.validateUsing(ingresarReporte)
+    const usuarioAutenticado = auth.user
+
+    if (!usuarioAutenticado) {
+      return response.unauthorized({ mensaje: 'Debe iniciar sesión para crear un reporte.' })
+    }
 
     const imagenes = datosGenerales.formato
     let urlsSeguras: string[] = []
@@ -133,13 +157,14 @@ export default class ReportesController {
       }
     }
 
-    const { formato, ...restoDatos } = datosGenerales
+    const { formato, estado, idUsuario, ...restoDatos } = datosGenerales
 
     const nuevoReporte = await Reporte.create({
       ...restoDatos,
+      idUsuario: usuarioAutenticado.id, // Forzar ID del usuario autenticado (Prevenir Spoofing)
+      estado: 'Pendiente', // Forzar estado Pendiente siempre al crear
       // Guardamos el arreglo de URLs como texto JSON si hay imágenes
       ...(urlsSeguras.length > 0 ? { formato: JSON.stringify(urlsSeguras) } : {}),
-      estado: restoDatos.estado || 'Pendiente', // El estado por defecto será Pendiente
       fechaGen: DateTime.now(), // Asigna por defecto la fecha y hora actual automáticamente
     })
 
@@ -156,13 +181,28 @@ export default class ReportesController {
   //recibir idUsuario y idInstitucion validar que estos coincidan de ser haci permitir ver los reportes de esa institucion de lo contrario no permitir el aceso.
 
   // Actualizar un reporte
-  async actualizarReporte({ params, request, response }: HttpContext) {
+  async actualizarReporte({ params, request, response, auth }: HttpContext) {
     const idRep = Number(params.id)
     const datosNuevos = await request.validateUsing(ingresarReporte)
+    const usuarioAutenticado = auth.user
+
+    if (!usuarioAutenticado) {
+      return response.unauthorized({ mensaje: 'Debe iniciar sesión para editar un reporte.' })
+    }
 
     const encontradoReporte = await Reporte.query().where('id', idRep).first()
 
     if (encontradoReporte) {
+      // Verificar propiedad del reporte o permisos de admin
+      if (encontradoReporte.idUsuario !== usuarioAutenticado.id && usuarioAutenticado.idRol !== 1 && usuarioAutenticado.idRol !== 2) {
+        return response.forbidden({ mensaje: 'No tienes permisos para modificar este reporte.' })
+      }
+
+      // Evitar que el ciudadano edite un reporte que ya está siendo atendido
+      if (encontradoReporte.estado !== 'Pendiente' && usuarioAutenticado.idRol !== 1 && usuarioAutenticado.idRol !== 2) {
+        return response.forbidden({ mensaje: 'No puedes modificar un reporte que ya está en proceso o finalizado.' })
+      }
+
       // Configuramos Cloudinary aquí también para las actualizaciones
       cloudinary.config({
         cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
@@ -185,7 +225,7 @@ export default class ReportesController {
         }
       }
 
-      const { formato, ...restoDatos } = datosNuevos
+      const { formato, estado, idUsuario, fechaGen, ...restoDatos } = datosNuevos
 
       const reporteActualizado = {
         ...restoDatos,

@@ -5,7 +5,7 @@ import Municipio from './municipio.ts'
 import Usuario from './user.ts'
 
 export default class Sectores extends SectoreSchema {
-  @belongsTo(() => Municipio)
+  @belongsTo(() => Municipio, { foreignKey: 'idMunicipios' })
   declare municipio: BelongsTo<typeof Municipio>
 
   @hasMany(() => Usuario)

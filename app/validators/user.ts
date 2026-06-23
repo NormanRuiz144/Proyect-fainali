@@ -48,6 +48,7 @@ export const actualizarUsuarioValidator = vine.create({
   nombres: vine.string().trim().optional(),
   apellidos: vine.string().trim().optional(),
   sexo: vine.string().maxLength(1).minLength(1).optional(),
+  correo: email().optional(),
   idSector: vine.number().optional(),
   idRol: vine.number().optional(),
   idInstitucion: vine.number().optional(),

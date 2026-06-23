@@ -234,6 +234,12 @@ const routes = {
     tokens: [{"old":"/instituciones/restaurar/:id","type":0,"val":"instituciones","end":""},{"old":"/instituciones/restaurar/:id","type":0,"val":"restaurar","end":""},{"old":"/instituciones/restaurar/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['instituciones.restaurar_institucion']['types'],
   },
+  'reportes.historial_usuario': {
+    methods: ["GET","HEAD"],
+    pattern: '/reportes/historial',
+    tokens: [{"old":"/reportes/historial","type":0,"val":"reportes","end":""},{"old":"/reportes/historial","type":0,"val":"historial","end":""}],
+    types: placeholder as Registry['reportes.historial_usuario']['types'],
+  },
   'reportes.obtener_reportes': {
     methods: ["GET","HEAD"],
     pattern: '/reportes/listar',

@@ -69,6 +69,7 @@ export interface ApiDefinition {
     restaurarInstitucion: typeof routes['instituciones.restaurar_institucion']
   }
   reportes: {
+    historialUsuario: typeof routes['reportes.historial_usuario']
     obtenerReportes: typeof routes['reportes.obtener_reportes']
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']

@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('nombre_institucion').notNullable()
       table.integer('id_municipio').references('id').inTable('municipios')
+      table.boolean('is_deleted').defaultTo(false)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
