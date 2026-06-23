@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 
 export default class extends BaseSeeder {
   async run() {
-    const idSector = await Sectores.query().select('id').where('nom_sector', 'Rivas').firstOrFail()
+    const idSector = await Sectores.query().select('id').where('nombre_sector', 'Barrio El Rosario').firstOrFail()
     const user0Data = {
       apellidos: 'Frist Admin',
       contrasena: 'Password123!',
@@ -20,7 +20,7 @@ export default class extends BaseSeeder {
       updatedAt: DateTime.now(),
     }
 
-    const exists = await Usuario.findBy('cedula', user0Data.numeroCedula)
+    const exists = await Usuario.findBy('numeroCedula', user0Data.numeroCedula)
     if (!exists) {
       await Usuario.create(user0Data)
     }

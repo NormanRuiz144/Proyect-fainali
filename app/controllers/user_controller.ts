@@ -23,7 +23,7 @@ export default class UserController {
       correo,
       contrasena,
       idSector,
-      idRol: 2,
+      idRol: 3,
     }
 
     const user = await Usuarios.create(userData)
@@ -187,7 +187,7 @@ export default class UserController {
     // zona pa actualizar
     // if (userAuth.idRol == 1 && userAuth.idInstitucion === idInstitucion) {
     if (userAuth.idRol == 1) {
-      usuarioFinded.idRol = 2
+      usuarioFinded.idRol = 3
       usuarioFinded.idInstitucion = null
     } else {
       response.abort({ message: 'Error: No tienes acceso a este recurso.' }, 403)
