@@ -31,9 +31,7 @@ export default class MunicipiosController {
     const listaMuni = await Municipio.query().where('id_departamento', idDepart)
 
     if (!listaMuni || listaMuni.length === 0) {
-      return response
-        .status(404)
-        .json({ mensaje: 'No se encontraron municipios para este departamento.' })
+      return response.ok({ lista_Municipios: [] })
     }
 
     return response.ok({ lista_Municipios: listaMuni })
