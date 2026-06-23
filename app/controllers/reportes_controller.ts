@@ -126,7 +126,7 @@ export default class ReportesController {
   }
 
   // Crear un nuevo reporte
-  async crearReporte({ request, response }: HttpContext) {
+  async crearReporte({ request, response, auth }: HttpContext) {
     // Esto  configuracion se pone ADENTRO de la función para asegurar que esta vaina
     // reconozca los valores del .env al momento exacto de hacer la petición
     cloudinary.config({
