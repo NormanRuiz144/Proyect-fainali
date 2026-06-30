@@ -39,7 +39,7 @@ export class BannedUserSchema extends BaseModel {
   declare activo: boolean | null
   @column()
   declare adminId: number
-  @column.date()
+  @column.dateTime()
   declare fechaFin: DateTime | null
   @column.dateTime()
   declare fechaInicio: DateTime | null
