@@ -6,11 +6,29 @@ import type { ApiDefinition } from './tree.d.ts'
 const placeholder: any = {}
 
 const routes = {
-  'auth.user.registrarse': {
+  'public.registro': {
     methods: ["POST"],
-    pattern: '/auth/registro',
-    tokens: [{"old":"/auth/registro","type":0,"val":"auth","end":""},{"old":"/auth/registro","type":0,"val":"registro","end":""}],
-    types: placeholder as Registry['auth.user.registrarse']['types'],
+    pattern: '/public/registro',
+    tokens: [{"old":"/public/registro","type":0,"val":"public","end":""},{"old":"/public/registro","type":0,"val":"registro","end":""}],
+    types: placeholder as Registry['public.registro']['types'],
+  },
+  'public.departamentos': {
+    methods: ["GET","HEAD"],
+    pattern: '/public/departamentos',
+    tokens: [{"old":"/public/departamentos","type":0,"val":"public","end":""},{"old":"/public/departamentos","type":0,"val":"departamentos","end":""}],
+    types: placeholder as Registry['public.departamentos']['types'],
+  },
+  'public.municipios_por_departamento': {
+    methods: ["GET","HEAD"],
+    pattern: '/public/departamentos/:id/municipios',
+    tokens: [{"old":"/public/departamentos/:id/municipios","type":0,"val":"public","end":""},{"old":"/public/departamentos/:id/municipios","type":0,"val":"departamentos","end":""},{"old":"/public/departamentos/:id/municipios","type":1,"val":"id","end":""},{"old":"/public/departamentos/:id/municipios","type":0,"val":"municipios","end":""}],
+    types: placeholder as Registry['public.municipios_por_departamento']['types'],
+  },
+  'public.sectores_por_municipio': {
+    methods: ["GET","HEAD"],
+    pattern: '/public/municipios/:id/sectores',
+    tokens: [{"old":"/public/municipios/:id/sectores","type":0,"val":"public","end":""},{"old":"/public/municipios/:id/sectores","type":0,"val":"municipios","end":""},{"old":"/public/municipios/:id/sectores","type":1,"val":"id","end":""},{"old":"/public/municipios/:id/sectores","type":0,"val":"sectores","end":""}],
+    types: placeholder as Registry['public.sectores_por_municipio']['types'],
   },
   'auth.access_token.store': {
     methods: ["POST"],
@@ -71,6 +89,24 @@ const routes = {
     pattern: '/usuarios/bajaInst/:userId',
     tokens: [{"old":"/usuarios/bajaInst/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/bajaInst/:userId","type":0,"val":"bajaInst","end":""},{"old":"/usuarios/bajaInst/:userId","type":1,"val":"userId","end":""}],
     types: placeholder as Registry['user.baja_insti']['types'],
+  },
+  'ban.ban_user': {
+    methods: ["POST"],
+    pattern: '/usuarios/bannear',
+    tokens: [{"old":"/usuarios/bannear","type":0,"val":"usuarios","end":""},{"old":"/usuarios/bannear","type":0,"val":"bannear","end":""}],
+    types: placeholder as Registry['ban.ban_user']['types'],
+  },
+  'ban.unban_user': {
+    methods: ["PUT"],
+    pattern: '/usuarios/desbanear/:userId',
+    tokens: [{"old":"/usuarios/desbanear/:userId","type":0,"val":"usuarios","end":""},{"old":"/usuarios/desbanear/:userId","type":0,"val":"desbanear","end":""},{"old":"/usuarios/desbanear/:userId","type":1,"val":"userId","end":""}],
+    types: placeholder as Registry['ban.unban_user']['types'],
+  },
+  'ban.list_banned_users': {
+    methods: ["GET","HEAD"],
+    pattern: '/usuarios/baneados/listar',
+    tokens: [{"old":"/usuarios/baneados/listar","type":0,"val":"usuarios","end":""},{"old":"/usuarios/baneados/listar","type":0,"val":"baneados","end":""},{"old":"/usuarios/baneados/listar","type":0,"val":"listar","end":""}],
+    types: placeholder as Registry['ban.list_banned_users']['types'],
   },
   'departamentos.obtener_departamentos': {
     methods: ["GET","HEAD"],
@@ -144,6 +180,42 @@ const routes = {
     tokens: [{"old":"/municipios/:id/sectores","type":0,"val":"municipios","end":""},{"old":"/municipios/:id/sectores","type":1,"val":"id","end":""},{"old":"/municipios/:id/sectores","type":0,"val":"sectores","end":""}],
     types: placeholder as Registry['sectores.sectores_por_municipio']['types'],
   },
+  'sectores.obtener_sectores': {
+    methods: ["GET","HEAD"],
+    pattern: '/sectores/listar/pagina',
+    tokens: [{"old":"/sectores/listar/pagina","type":0,"val":"sectores","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"listar","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"pagina","end":""}],
+    types: placeholder as Registry['sectores.obtener_sectores']['types'],
+  },
+  'sectores.obtener_sector_id': {
+    methods: ["GET","HEAD"],
+    pattern: '/sectores/obtener/:id',
+    tokens: [{"old":"/sectores/obtener/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/obtener/:id","type":0,"val":"obtener","end":""},{"old":"/sectores/obtener/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.obtener_sector_id']['types'],
+  },
+  'sectores.crear_sector': {
+    methods: ["POST"],
+    pattern: '/sectores/agregar',
+    tokens: [{"old":"/sectores/agregar","type":0,"val":"sectores","end":""},{"old":"/sectores/agregar","type":0,"val":"agregar","end":""}],
+    types: placeholder as Registry['sectores.crear_sector']['types'],
+  },
+  'sectores.actualizar_sector': {
+    methods: ["PUT"],
+    pattern: '/sectores/actu/:id',
+    tokens: [{"old":"/sectores/actu/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/actu/:id","type":0,"val":"actu","end":""},{"old":"/sectores/actu/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.actualizar_sector']['types'],
+  },
+  'sectores.eliminar_sector': {
+    methods: ["DELETE"],
+    pattern: '/sectores/eliminar/:id',
+    tokens: [{"old":"/sectores/eliminar/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/eliminar/:id","type":0,"val":"eliminar","end":""},{"old":"/sectores/eliminar/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.eliminar_sector']['types'],
+  },
+  'sectores.restaurar_sector': {
+    methods: ["PATCH"],
+    pattern: '/sectores/restaurar/:id',
+    tokens: [{"old":"/sectores/restaurar/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/restaurar/:id","type":0,"val":"restaurar","end":""},{"old":"/sectores/restaurar/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['sectores.restaurar_sector']['types'],
+  },
   'problematicas.obtener_problematicas': {
     methods: ["GET","HEAD"],
     pattern: '/problematica/listar/pagina',
@@ -173,6 +245,30 @@ const routes = {
     pattern: '/problematica/restaurar/:id',
     tokens: [{"old":"/problematica/restaurar/:id","type":0,"val":"problematica","end":""},{"old":"/problematica/restaurar/:id","type":0,"val":"restaurar","end":""},{"old":"/problematica/restaurar/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['problematicas.restaurar_problematica']['types'],
+  },
+  'problematicas.listar_problematicas_mi_institucion': {
+    methods: ["GET","HEAD"],
+    pattern: '/problematica/mi-institucion/listar',
+    tokens: [{"old":"/problematica/mi-institucion/listar","type":0,"val":"problematica","end":""},{"old":"/problematica/mi-institucion/listar","type":0,"val":"mi-institucion","end":""},{"old":"/problematica/mi-institucion/listar","type":0,"val":"listar","end":""}],
+    types: placeholder as Registry['problematicas.listar_problematicas_mi_institucion']['types'],
+  },
+  'problematicas.listar_problematicas_disponibles_mi_institucion': {
+    methods: ["GET","HEAD"],
+    pattern: '/problematica/mi-institucion/disponibles',
+    tokens: [{"old":"/problematica/mi-institucion/disponibles","type":0,"val":"problematica","end":""},{"old":"/problematica/mi-institucion/disponibles","type":0,"val":"mi-institucion","end":""},{"old":"/problematica/mi-institucion/disponibles","type":0,"val":"disponibles","end":""}],
+    types: placeholder as Registry['problematicas.listar_problematicas_disponibles_mi_institucion']['types'],
+  },
+  'problematicas.asignar_problematica_mi_institucion': {
+    methods: ["POST"],
+    pattern: '/problematica/mi-institucion/asignar',
+    tokens: [{"old":"/problematica/mi-institucion/asignar","type":0,"val":"problematica","end":""},{"old":"/problematica/mi-institucion/asignar","type":0,"val":"mi-institucion","end":""},{"old":"/problematica/mi-institucion/asignar","type":0,"val":"asignar","end":""}],
+    types: placeholder as Registry['problematicas.asignar_problematica_mi_institucion']['types'],
+  },
+  'problematicas.eliminar_problematica_mi_institucion': {
+    methods: ["DELETE"],
+    pattern: '/problematica/mi-institucion/eliminar/:idProblematica',
+    tokens: [{"old":"/problematica/mi-institucion/eliminar/:idProblematica","type":0,"val":"problematica","end":""},{"old":"/problematica/mi-institucion/eliminar/:idProblematica","type":0,"val":"mi-institucion","end":""},{"old":"/problematica/mi-institucion/eliminar/:idProblematica","type":0,"val":"eliminar","end":""},{"old":"/problematica/mi-institucion/eliminar/:idProblematica","type":1,"val":"idProblematica","end":""}],
+    types: placeholder as Registry['problematicas.eliminar_problematica_mi_institucion']['types'],
   },
   'problematicas.filtrar_by_institucion': {
     methods: ["GET","HEAD"],
@@ -246,6 +342,12 @@ const routes = {
     tokens: [{"old":"/reportes/listar","type":0,"val":"reportes","end":""},{"old":"/reportes/listar","type":0,"val":"listar","end":""}],
     types: placeholder as Registry['reportes.obtener_reportes']['types'],
   },
+  'reportes.obtener_reportes_mapa': {
+    methods: ["GET","HEAD"],
+    pattern: '/reportes/mapa',
+    tokens: [{"old":"/reportes/mapa","type":0,"val":"reportes","end":""},{"old":"/reportes/mapa","type":0,"val":"mapa","end":""}],
+    types: placeholder as Registry['reportes.obtener_reportes_mapa']['types'],
+  },
   'reportes.crear_reporte': {
     methods: ["POST"],
     pattern: '/reportes/agregar',
@@ -269,42 +371,6 @@ const routes = {
     pattern: '/reportes/listarInst/:id',
     tokens: [{"old":"/reportes/listarInst/:id","type":0,"val":"reportes","end":""},{"old":"/reportes/listarInst/:id","type":0,"val":"listarInst","end":""},{"old":"/reportes/listarInst/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['reportes.obtener_reporte_int']['types'],
-  },
-  'sectores.obtener_sectores': {
-    methods: ["GET","HEAD"],
-    pattern: '/sectores/listar/pagina',
-    tokens: [{"old":"/sectores/listar/pagina","type":0,"val":"sectores","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"listar","end":""},{"old":"/sectores/listar/pagina","type":0,"val":"pagina","end":""}],
-    types: placeholder as Registry['sectores.obtener_sectores']['types'],
-  },
-  'sectores.obtener_sector_id': {
-    methods: ["GET","HEAD"],
-    pattern: '/sectores/obtener/:id',
-    tokens: [{"old":"/sectores/obtener/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/obtener/:id","type":0,"val":"obtener","end":""},{"old":"/sectores/obtener/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['sectores.obtener_sector_id']['types'],
-  },
-  'sectores.crear_sector': {
-    methods: ["POST"],
-    pattern: '/sectores/agregar',
-    tokens: [{"old":"/sectores/agregar","type":0,"val":"sectores","end":""},{"old":"/sectores/agregar","type":0,"val":"agregar","end":""}],
-    types: placeholder as Registry['sectores.crear_sector']['types'],
-  },
-  'sectores.actualizar_sector': {
-    methods: ["PUT"],
-    pattern: '/sectores/actu/:id',
-    tokens: [{"old":"/sectores/actu/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/actu/:id","type":0,"val":"actu","end":""},{"old":"/sectores/actu/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['sectores.actualizar_sector']['types'],
-  },
-  'sectores.eliminar_sector': {
-    methods: ["DELETE"],
-    pattern: '/sectores/eliminar/:id',
-    tokens: [{"old":"/sectores/eliminar/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/eliminar/:id","type":0,"val":"eliminar","end":""},{"old":"/sectores/eliminar/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['sectores.eliminar_sector']['types'],
-  },
-  'sectores.restaurar_sector': {
-    methods: ["PATCH"],
-    pattern: '/sectores/restaurar/:id',
-    tokens: [{"old":"/sectores/restaurar/:id","type":0,"val":"sectores","end":""},{"old":"/sectores/restaurar/:id","type":0,"val":"restaurar","end":""},{"old":"/sectores/restaurar/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['sectores.restaurar_sector']['types'],
   },
   'roles.obtener_rol': {
     methods: ["GET","HEAD"],
@@ -359,6 +425,12 @@ const routes = {
     pattern: '/dashboard/load',
     tokens: [{"old":"/dashboard/load","type":0,"val":"dashboard","end":""},{"old":"/dashboard/load","type":0,"val":"load","end":""}],
     types: placeholder as Registry['dashboard.show_data']['types'],
+  },
+  'super_admin': {
+    methods: ["GET","HEAD"],
+    pattern: '/dashboard/super-admin',
+    tokens: [{"old":"/dashboard/super-admin","type":0,"val":"dashboard","end":""},{"old":"/dashboard/super-admin","type":0,"val":"super-admin","end":""}],
+    types: placeholder as Registry['super_admin']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

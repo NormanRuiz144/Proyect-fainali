@@ -8,3 +8,7 @@ export const asignarInstitucion = vine.create({
   idInstitucion: vine.number().positive(),
   idProblematica: vine.number().positive(),
 })
+
+export const asignarProblematicaMiInstitucion = vine.create({
+  idProblematica: vine.number().positive(),
+})

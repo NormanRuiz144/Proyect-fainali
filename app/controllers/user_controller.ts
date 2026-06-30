@@ -213,5 +213,5 @@ export default class UserController {
     await usuarioFinded.save()
     response.ok({ message: 'El Usuario ya no pertenece a la institucion' })
   }
-  // Deshabilitar Usuario
+
 }

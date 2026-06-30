@@ -1,10 +1,27 @@
 import Institucione from '#models/institucione'
 import Problematica from '#models/problematica'
 import ProblematicaInstitucion from '#models/problematica_institucion'
-import { ingresarProblem, asignarInstitucion } from '#validators/problematica'
+import {
+  ingresarProblem,
+  asignarInstitucion,
+  asignarProblematicaMiInstitucion,
+} from '#validators/problematica'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProblematicasController {
+  private obtenerInstitucionAdmin({ auth, response }: HttpContext): number | null {
+    const idInstitucion = auth.user?.idInstitucion
+
+    if (!idInstitucion) {
+      response.badRequest({
+        mensaje: 'El administrador autenticado no tiene una institución asignada.',
+      })
+      return null
+    }
+
+    return idInstitucion
+  }
+
   //Listar Problemas\\
   async obtenerProblematicas({ response, request }: HttpContext) {
     const pagina = request.input('page')
@@ -121,6 +138,132 @@ export default class ProblematicasController {
 
     return { lista_problematicas: problematicas }
   }
+
+  async listarProblematicasMiInstitucion(ctx: HttpContext) {
+    const { response } = ctx
+    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
+    if (!idInstitucion) return
+
+    const institucion = await Institucione.find(idInstitucion)
+    if (!institucion) {
+      return response.notFound({ mensaje: 'La institución del administrador no fue encontrada.' })
+    }
+
+    const relaciones = await ProblematicaInstitucion.query()
+      .where('id_institucion', idInstitucion)
+      .preload('problematica')
+      .orderBy('id', 'desc')
+
+    return response.ok({
+      institucion,
+      lista_problematicas: relaciones,
+    })
+  }
+
+  async listarProblematicasDisponiblesMiInstitucion(ctx: HttpContext) {
+    const { response } = ctx
+    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
+    if (!idInstitucion) return
+
+    const institucion = await Institucione.find(idInstitucion)
+    if (!institucion) {
+      return response.notFound({ mensaje: 'La institución del administrador no fue encontrada.' })
+    }
+
+    const relaciones = await ProblematicaInstitucion.query()
+      .where('id_institucion', idInstitucion)
+      .select('id_problematica')
+
+    const idsAsociadas = relaciones.map((relacion) => relacion.idProblematica)
+    const problematicasQuery = Problematica.query()
+      .where('is_deleted', false)
+      .orderBy('problema', 'asc')
+
+    if (idsAsociadas.length > 0) {
+      problematicasQuery.whereNotIn('id', idsAsociadas)
+    }
+
+    const problematicas = await problematicasQuery
+
+    return response.ok({
+      institucion,
+      lista_problematicas: problematicas,
+    })
+  }
+
+  async asignarProblematicaMiInstitucion(ctx: HttpContext) {
+    const { request, response } = ctx
+    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
+    if (!idInstitucion) return
+
+    const { idProblematica } = await request.validateUsing(asignarProblematicaMiInstitucion)
+    const problematicaEncontrada = await Problematica.query()
+      .where('id', idProblematica)
+      .where('is_deleted', false)
+      .first()
+
+    if (!problematicaEncontrada) {
+      return response.notFound({ mensaje: 'La problemática no fue encontrada o está inactiva.' })
+    }
+
+    const asociacionExistente = await ProblematicaInstitucion.query()
+      .where('id_institucion', idInstitucion)
+      .where('id_problematica', idProblematica)
+      .first()
+
+    if (asociacionExistente) {
+      return response.conflict({
+        mensaje: 'La problemática ya está asociada a tu institución.',
+      })
+    }
+
+    try {
+      const asociacion = await ProblematicaInstitucion.create({
+        idInstitucion,
+        idProblematica,
+      })
+
+      await asociacion.load('problematica')
+
+      return response.ok({
+        mensaje: 'Problemática asociada correctamente.',
+        asociacion,
+      })
+    } catch (error: any) {
+      if (error?.code === '23505') {
+        return response.conflict({
+          mensaje: 'La problemática ya está asociada a tu institución.',
+        })
+      }
+      throw error
+    }
+  }
+
+  async eliminarProblematicaMiInstitucion(ctx: HttpContext) {
+    const { params, response } = ctx
+    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
+    if (!idInstitucion) return
+
+    const idProblematica = Number(params.idProblematica)
+    if (!Number.isFinite(idProblematica) || idProblematica <= 0) {
+      return response.badRequest({ mensaje: 'El identificador de la problemática no es válido.' })
+    }
+
+    const asociacion = await ProblematicaInstitucion.query()
+      .where('id_institucion', idInstitucion)
+      .where('id_problematica', idProblematica)
+      .first()
+
+    if (!asociacion) {
+      return response.notFound({
+        mensaje: 'La problemática no está asociada a tu institución.',
+      })
+    }
+
+    await asociacion.delete()
+    return response.ok({ mensaje: 'Problemática desasociada correctamente.' })
+  }
+
   async listarInstitucionesAsociadas({ params, response }: HttpContext) {
     const problematicasInstitucion = await ProblematicaInstitucion.query().select('*')
 

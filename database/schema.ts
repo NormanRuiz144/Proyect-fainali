@@ -32,6 +32,29 @@ export class AuthAccessTokenSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class BannedUserSchema extends BaseModel {
+  static $columns = ['activo', 'adminId', 'fechaFin', 'fechaInicio', 'id', 'motivo', 'tipoBan', 'updatedAt', 'userId'] as const
+  $columns = BannedUserSchema.$columns
+  @column()
+  declare activo: boolean | null
+  @column()
+  declare adminId: number
+  @column.date()
+  declare fechaFin: DateTime | null
+  @column.dateTime()
+  declare fechaInicio: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare motivo: string | null
+  @column()
+  declare tipoBan: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class DepartamentoSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'isDeleted', 'nomDepartamento', 'updatedAt'] as const
   $columns = DepartamentoSchema.$columns

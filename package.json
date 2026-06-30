@@ -9,10 +9,8 @@
     "./registry": "./.adonisjs/client/registry/index.ts"
   },
   "scripts": {
-    "prestart": "powershell -Command \"netstat -ano | findstr :3333 | Select-String 'LISTENING' | ForEach-Object { $pid = $_ -replace '.*\\s+(\\d+)$', '$1'; Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue; Write-Output \\\"Liberado puerto 3333 (PID $pid)\\\" }\"",
     "start": "node bin/server.js",
     "build": "node ace build",
-    "predev": "powershell -Command \"netstat -ano | findstr :3333 | Select-String 'LISTENING' | ForEach-Object { $pid = $_ -replace '.*\\s+(\\d+)$', '$1'; Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue; Write-Output \\\"Liberado puerto 3333 (PID $pid)\\\" }\"",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
