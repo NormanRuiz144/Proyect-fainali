@@ -167,12 +167,12 @@ export interface Registry {
     methods: ["PUT"]
     pattern: '/usuarios/bajaInst/:userId'
     types: {
-      body: ExtractBody<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      body: {}
       paramsTuple: [ParamValue]
       params: { userId: ParamValue }
-      query: ExtractQuery<InferInput<(typeof import('#validators/user').bajaValidator)>>
+      query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>> | { status: 422; response: { errors: SimpleError[] } }
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['bajaInsti']>>>
     }
   }
   'ban.ban_user': {

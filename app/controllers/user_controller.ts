@@ -7,6 +7,7 @@ import {
 } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Exception } from '@adonisjs/core/exceptions'
+import UserTransformer from '#transformers/user_transformer'
 
 export default class UserController {
   // Registrarse (usar Accesstoken)
@@ -26,11 +27,17 @@ export default class UserController {
     }
 
     const user = await Usuarios.create(userData)
+    await user.load((preloader) => {
+      preloader.load('rol')
+      preloader.load('sector', (sectorQuery) => {
+        sectorQuery.preload('municipio')
+      })
+    })
+
     const token = await Usuarios.accessTokens.create(user)
 
     return serialize({
-      // user: UserTransformer.transform(user),
-      user: user,
+      user: UserTransformer.transform(user),
       token: token.value!.release(),
     })
   }
