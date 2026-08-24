@@ -1,13 +1,13 @@
 import Usuarios from '#models/user'
 import {
   actualizarUsuarioValidator,
-  bajaValidator,
   crearUsuarioValidator,
   reasignarValidator,
   signupValidator,
 } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Exception } from '@adonisjs/core/exceptions'
+import UserTransformer from '#transformers/user_transformer'
 
 export default class UserController {
   // Registrarse (usar Accesstoken)
@@ -27,11 +27,17 @@ export default class UserController {
     }
 
     const user = await Usuarios.create(userData)
+    await user.load((preloader) => {
+      preloader.load('rol')
+      preloader.load('sector', (sectorQuery) => {
+        sectorQuery.preload('municipio')
+      })
+    })
+
     const token = await Usuarios.accessTokens.create(user)
 
     return serialize({
-      // user: UserTransformer.transform(user),
-      user: user,
+      user: UserTransformer.transform(user),
       token: token.value!.release(),
     })
   }
@@ -118,7 +124,7 @@ export default class UserController {
   async actualizarUsuario({ params, request, response, auth }: HttpContext) {
     const userAuth = await auth.authenticate()
     const userId = Number(params.userId)
-    
+
     // Validar que el usuario solo pueda actualizarse a sí mismo (a menos que sea Admin o Super-Admin)
     if (userAuth.id !== userId && userAuth.idRol !== 1 && userAuth.idRol !== 2) {
       return response.abort({ message: 'No tienes permisos para actualizar este perfil' }, 403)
@@ -187,10 +193,10 @@ export default class UserController {
     response.ok({ message: 'Usuario reasignado', Usuario: usuarioFinded })
   }
   // Dar de baja de la institucion a la que pertenece
-  async bajaInsti({ params, request, response, auth }: HttpContext) {
+  async bajaInsti({ params, response, auth }: HttpContext) {
     const userId = Number(params.userId)
     const userAuth = await auth.authenticate()
-    const { idInstitucion } = await request.validateUsing(bajaValidator)
+    // const { idInstitucion } = await request.validateUsing(bajaValidator)
     // const idInstitucion = userAuth.idInstitucion!
     // if (!userId) {
     //   throw new Exception('No se pudo realizar la busqueda', { status: 404 })
@@ -213,5 +219,4 @@ export default class UserController {
     await usuarioFinded.save()
     response.ok({ message: 'El Usuario ya no pertenece a la institucion' })
   }
-  // Deshabilitar Usuario
 }

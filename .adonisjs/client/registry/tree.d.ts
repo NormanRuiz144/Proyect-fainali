@@ -2,10 +2,13 @@
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
+  public: {
+    registro: typeof routes['public.registro']
+    departamentos: typeof routes['public.departamentos']
+    municipiosPorDepartamento: typeof routes['public.municipios_por_departamento']
+    sectoresPorMunicipio: typeof routes['public.sectores_por_municipio']
+  }
   auth: {
-    user: {
-      registrarse: typeof routes['auth.user.registrarse']
-    }
     accessToken: {
       store: typeof routes['auth.access_token.store']
       destroy: typeof routes['auth.access_token.destroy']
@@ -24,6 +27,11 @@ export interface ApiDefinition {
     actualizarUsuario: typeof routes['user.actualizar_usuario']
     reasignarInstitucionRol: typeof routes['user.reasignar_institucion_rol']
     bajaInsti: typeof routes['user.baja_insti']
+  }
+  ban: {
+    banUser: typeof routes['ban.ban_user']
+    unbanUser: typeof routes['ban.unban_user']
+    listBannedUsers: typeof routes['ban.list_banned_users']
   }
   departamentos: {
     obtenerDepartamentos: typeof routes['departamentos.obtener_departamentos']
@@ -55,6 +63,10 @@ export interface ApiDefinition {
     actualizarProblematica: typeof routes['problematicas.actualizar_problematica']
     eliminarProblematica: typeof routes['problematicas.eliminar_problematica']
     restaurarProblematica: typeof routes['problematicas.restaurar_problematica']
+    listarProblematicasMiInstitucion: typeof routes['problematicas.listar_problematicas_mi_institucion']
+    listarProblematicasDisponiblesMiInstitucion: typeof routes['problematicas.listar_problematicas_disponibles_mi_institucion']
+    asignarProblematicaMiInstitucion: typeof routes['problematicas.asignar_problematica_mi_institucion']
+    eliminarProblematicaMiInstitucion: typeof routes['problematicas.eliminar_problematica_mi_institucion']
     filtrarByInstitucion: typeof routes['problematicas.filtrar_by_institucion']
     listarInstitucionesAsociadas: typeof routes['problematicas.listar_instituciones_asociadas']
     asignarIntitucion: typeof routes['problematicas.asignar_intitucion']
@@ -71,6 +83,7 @@ export interface ApiDefinition {
   reportes: {
     historialUsuario: typeof routes['reportes.historial_usuario']
     obtenerReportes: typeof routes['reportes.obtener_reportes']
+    obtenerReportesMapa: typeof routes['reportes.obtener_reportes_mapa']
     crearReporte: typeof routes['reportes.crear_reporte']
     actualizarReporte: typeof routes['reportes.actualizar_reporte']
     actualizarEstadoReporte: typeof routes['reportes.actualizar_estado_reporte']
@@ -91,4 +104,5 @@ export interface ApiDefinition {
   dashboard: {
     showData: typeof routes['dashboard.show_data']
   }
+  superAdmin: typeof routes['super_admin']
 }

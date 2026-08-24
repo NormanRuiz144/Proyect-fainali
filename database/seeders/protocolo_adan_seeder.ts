@@ -15,7 +15,7 @@ export default class extends BaseSeeder {
       idRol: 1,
       idSector: idSector.id,
       nombres: 'Adan',
-      numeroCedula: '000-000000-0000A',
+      numeroCedula: '000-000000-000A',
       sexo: 'M',
       updatedAt: DateTime.now(),
     }

@@ -62,3 +62,10 @@ export const reasignarValidator = vine.create({
 export const bajaValidator = vine.create({
   idInstitucion: vine.number(),
 })
+
+export const banUser = vine.create({
+  userId: vine.number(),
+  motivo: vine.string().maxLength(100).optional(),
+  fechaFin: vine.date({ formats: ['YYYY-MM-DD'] }).optional(),
+  tipo: vine.enum(['TEMPORAL', 'PERMANENTE']),
+})

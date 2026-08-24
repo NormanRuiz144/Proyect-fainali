@@ -1,4 +1,3 @@
-import Institucione from '#models/institucione'
 import Reporte from '#models/reporte'
 import { ingresarReporte } from '#validators/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -7,6 +6,21 @@ import { v2 as cloudinary } from 'cloudinary'
 import env from '#start/env'
 
 export default class ReportesController {
+  private extraerCoordenadas(ubicacion: string | null) {
+    if (!ubicacion) return null
+
+    const match = ubicacion.match(/Lat:\s*([-0-9.]+),\s*Lng:\s*([-0-9.]+)/i)
+    if (!match || match.length !== 3) return null
+
+    const lat = Number(match[1])
+    const lng = Number(match[2])
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null
+
+    return { lat, lng }
+  }
+
   // Listar Reportes
   async obtenerReportes({ response }: HttpContext) {
     const listaReportes = await Reporte.query()
@@ -23,8 +37,101 @@ export default class ReportesController {
     return response.ok({ lista_Reportes: listaReportes })
   }
 
+  async obtenerReportesMapa({ request, response }: HttpContext) {
+    const { estado, idInstitucion, idProblematica, fechaDesde, fechaHasta } = request.qs()
 
+    const reportesQuery = Reporte.query()
+      .select(
+        'id',
+        'estado',
+        'nvl_prioridad',
+        'fecha_gen',
+        'descripcion',
+        'ubicacion',
+        'id_institucion',
+        'id_problematica'
+      )
+      .preload('institucion', (query) => {
+        query.select('id', 'nombre_institucion')
+      })
+      .preload('problematica', (query) => {
+        query.select('id', 'problema')
+      })
+      .orderBy('fecha_gen', 'desc')
 
+    if (estado) {
+      reportesQuery.where('estado', estado)
+    }
+
+    const institucionId = Number(idInstitucion)
+    if (idInstitucion && Number.isFinite(institucionId) && institucionId > 0) {
+      reportesQuery.where('idInstitucion', institucionId)
+    }
+
+    const problematicaId = Number(idProblematica)
+    if (idProblematica && Number.isFinite(problematicaId) && problematicaId > 0) {
+      reportesQuery.where('idProblematica', problematicaId)
+    }
+
+    if (fechaDesde) {
+      const desde = DateTime.fromISO(fechaDesde)
+      if (desde.isValid) {
+        reportesQuery.where('fechaGen', '>=', desde.startOf('day').toSQL()!)
+      }
+    }
+
+    if (fechaHasta) {
+      const hasta = DateTime.fromISO(fechaHasta)
+      if (hasta.isValid) {
+        reportesQuery.where('fechaGen', '<=', hasta.endOf('day').toSQL()!)
+      }
+    }
+
+    const reportes = await reportesQuery
+    const reportesConUbicacion = []
+    let totalSinUbicacion = 0
+
+    for (const reporte of reportes) {
+      const coordenadas = this.extraerCoordenadas(reporte.ubicacion)
+
+      if (!coordenadas) {
+        totalSinUbicacion++
+        continue
+      }
+
+      reportesConUbicacion.push({
+        id: reporte.id,
+        estado: reporte.estado,
+        nvl_prioridad: reporte.nvlPrioridad,
+        fecha_gen: reporte.fechaGen?.toISO(),
+        descripcion:
+          reporte.descripcion && reporte.descripcion.length > 180
+            ? `${reporte.descripcion.slice(0, 180)}...`
+            : reporte.descripcion,
+        lat: coordenadas.lat,
+        lng: coordenadas.lng,
+        institucion: reporte.institucion
+          ? {
+              id: reporte.institucion.id,
+              nombreInstitucion: reporte.institucion.nombreInstitucion,
+            }
+          : null,
+        problematica: reporte.problematica
+          ? {
+              id: reporte.problematica.id,
+              problema: reporte.problematica.problema,
+            }
+          : null,
+      })
+    }
+
+    return response.ok({
+      total: reportes.length,
+      totalConUbicacion: reportesConUbicacion.length,
+      totalSinUbicacion,
+      data: reportesConUbicacion,
+    })
+  }
 
   // Obtener historial de reportes del usuario autenticado
   async historialUsuario({ response, auth }: HttpContext) {
@@ -194,13 +301,23 @@ export default class ReportesController {
 
     if (encontradoReporte) {
       // Verificar propiedad del reporte o permisos de admin
-      if (encontradoReporte.idUsuario !== usuarioAutenticado.id && usuarioAutenticado.idRol !== 1 && usuarioAutenticado.idRol !== 2) {
+      if (
+        encontradoReporte.idUsuario !== usuarioAutenticado.id &&
+        usuarioAutenticado.idRol !== 1 &&
+        usuarioAutenticado.idRol !== 2
+      ) {
         return response.forbidden({ mensaje: 'No tienes permisos para modificar este reporte.' })
       }
 
       // Evitar que el ciudadano edite un reporte que ya está siendo atendido
-      if (encontradoReporte.estado !== 'Pendiente' && usuarioAutenticado.idRol !== 1 && usuarioAutenticado.idRol !== 2) {
-        return response.forbidden({ mensaje: 'No puedes modificar un reporte que ya está en proceso o finalizado.' })
+      if (
+        encontradoReporte.estado !== 'Pendiente' &&
+        usuarioAutenticado.idRol !== 1 &&
+        usuarioAutenticado.idRol !== 2
+      ) {
+        return response.forbidden({
+          mensaje: 'No puedes modificar un reporte que ya está en proceso o finalizado.',
+        })
       }
 
       // Configuramos Cloudinary aquí también para las actualizaciones
@@ -225,7 +342,7 @@ export default class ReportesController {
         }
       }
 
-      const { formato, estado, idUsuario, fechaGen, ...restoDatos } = datosNuevos
+      const { formato, estado, idUsuario, ...restoDatos } = datosNuevos
 
       const reporteActualizado = {
         ...restoDatos,

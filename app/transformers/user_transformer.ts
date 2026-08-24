@@ -6,7 +6,6 @@ export default class UserTransformer extends BaseTransformer<User> {
     return {
       ...this.pick(this.resource, [
         'apellidos',
-        'contrasena',
         'correo',
         'createdAt',
         'id',
@@ -20,6 +19,27 @@ export default class UserTransformer extends BaseTransformer<User> {
       ]),
       rol: this.resource.rol
         ? { id: this.resource.rol.id, rol: this.resource.rol.rol }
+        : null,
+      institucion: this.resource.Institucion
+        ? {
+            id: this.resource.Institucion.id,
+            nombreInstitucion: this.resource.Institucion.nombreInstitucion,
+            idMunicipio: this.resource.Institucion.id_municipio,
+          }
+        : null,
+      sector: this.resource.sector
+        ? {
+            id: this.resource.sector.id,
+            nombreSector: this.resource.sector.nombreSector,
+            idMunicipios: this.resource.sector.idMunicipios,
+            municipio: this.resource.sector.municipio
+              ? {
+                  id: this.resource.sector.municipio.id,
+                  nomMunicipio: this.resource.sector.municipio.nomMunicipio,
+                  idDepartamentos: this.resource.sector.municipio.idDepartamento,
+                }
+              : null,
+          }
         : null,
     }
   }
