@@ -3,30 +3,31 @@ import type { routes } from './index.ts'
 
 export interface ApiDefinition {
   public: {
-    registro: typeof routes['public.registro']
-    departamentos: typeof routes['public.departamentos']
-    municipiosPorDepartamento: typeof routes['public.municipios_por_departamento']
-    sectoresPorMunicipio: typeof routes['public.sectores_por_municipio']
-  }
-  auth: {
-    accessToken: {
-      store: typeof routes['auth.access_token.store']
-      destroy: typeof routes['auth.access_token.destroy']
+    user: {
+      registrarse: typeof routes['public.user.registrarse']
     }
+    departamentos: {
+      obtenerDepartamentos: typeof routes['public.departamentos.obtener_departamentos']
+    }
+    municipios: {
+      municipiosPorDepartamento: typeof routes['public.municipios.municipios_por_departamento']
+    }
+    sectores: {
+      obtenerSectores: typeof routes['public.sectores.obtener_sectores']
+    }
+  }
+  accessToken: {
+    store: typeof routes['access_token.store']
+    destroy: typeof routes['access_token.destroy']
   }
   profile: {
-    profile: {
-      show: typeof routes['profile.profile.show']
-    }
+    show: typeof routes['profile.show']
   }
   user: {
     listUsuarios: typeof routes['user.list_usuarios']
-    listUsuariosInsti: typeof routes['user.list_usuarios_insti']
     crearUsuario: typeof routes['user.crear_usuario']
     buscarUsurioById: typeof routes['user.buscar_usurio_by_id']
     actualizarUsuario: typeof routes['user.actualizar_usuario']
-    reasignarInstitucionRol: typeof routes['user.reasignar_institucion_rol']
-    bajaInsti: typeof routes['user.baja_insti']
   }
   ban: {
     banUser: typeof routes['ban.ban_user']
@@ -49,60 +50,28 @@ export interface ApiDefinition {
     restaurarMunicipio: typeof routes['municipios.restaurar_municipio']
   }
   sectores: {
-    sectoresPorMunicipio: typeof routes['sectores.sectores_por_municipio']
     obtenerSectores: typeof routes['sectores.obtener_sectores']
-    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
     crearSector: typeof routes['sectores.crear_sector']
+    obtenerSectorId: typeof routes['sectores.obtener_sector_id']
     actualizarSector: typeof routes['sectores.actualizar_sector']
     eliminarSector: typeof routes['sectores.eliminar_sector']
     restaurarSector: typeof routes['sectores.restaurar_sector']
   }
-  problematicas: {
-    obtenerProblematicas: typeof routes['problematicas.obtener_problematicas']
-    crearProblematica: typeof routes['problematicas.crear_problematica']
-    actualizarProblematica: typeof routes['problematicas.actualizar_problematica']
-    eliminarProblematica: typeof routes['problematicas.eliminar_problematica']
-    restaurarProblematica: typeof routes['problematicas.restaurar_problematica']
-    listarProblematicasMiInstitucion: typeof routes['problematicas.listar_problematicas_mi_institucion']
-    listarProblematicasDisponiblesMiInstitucion: typeof routes['problematicas.listar_problematicas_disponibles_mi_institucion']
-    asignarProblematicaMiInstitucion: typeof routes['problematicas.asignar_problematica_mi_institucion']
-    eliminarProblematicaMiInstitucion: typeof routes['problematicas.eliminar_problematica_mi_institucion']
-    filtrarByInstitucion: typeof routes['problematicas.filtrar_by_institucion']
-    listarInstitucionesAsociadas: typeof routes['problematicas.listar_instituciones_asociadas']
-    asignarIntitucion: typeof routes['problematicas.asignar_intitucion']
-    eliminarAsociacion: typeof routes['problematicas.eliminar_asociacion']
+  incidencias: {
+    historialUsuario: typeof routes['incidencias.historial_usuario']
+    obtenerIncidencias: typeof routes['incidencias.obtener_incidencias']
+    crearIncidencia: typeof routes['incidencias.crear_incidencia']
+    obtenerIncidencia: typeof routes['incidencias.obtener_incidencia']
+    actualizarIncidencia: typeof routes['incidencias.actualizar_incidencia']
+    actualizarEstadoIncidencia: typeof routes['incidencias.actualizar_estado_incidencia']
   }
-  instituciones: {
-    obtenerInstituciones: typeof routes['instituciones.obtener_instituciones']
-    institucionesPorMunicipio: typeof routes['instituciones.instituciones_por_municipio']
-    crearInstitucion: typeof routes['instituciones.crear_institucion']
-    actualizarInstituc: typeof routes['instituciones.actualizar_instituc']
-    eliminarInstitucion: typeof routes['instituciones.eliminar_institucion']
-    restaurarInstitucion: typeof routes['instituciones.restaurar_institucion']
-  }
-  reportes: {
-    historialUsuario: typeof routes['reportes.historial_usuario']
-    obtenerReportes: typeof routes['reportes.obtener_reportes']
-    obtenerReportesMapa: typeof routes['reportes.obtener_reportes_mapa']
-    crearReporte: typeof routes['reportes.crear_reporte']
-    actualizarReporte: typeof routes['reportes.actualizar_reporte']
-    actualizarEstadoReporte: typeof routes['reportes.actualizar_estado_reporte']
-    obtenerReporteInt: typeof routes['reportes.obtener_reporte_int']
-  }
-  roles: {
-    obtenerRol: typeof routes['roles.obtener_rol']
-    obtenerRolId: typeof routes['roles.obtener_rol_id']
-    crearRol: typeof routes['roles.crear_rol']
-    actualizarRol: typeof routes['roles.actualizar_rol']
-  }
-  detaReporte: {
-    obtenerDetaReporte: typeof routes['deta_reporte.obtener_deta_reporte']
-    obtenerDetalleId: typeof routes['deta_reporte.obtener_detalle_id']
-    crearDetalleReporte: typeof routes['deta_reporte.crear_detalle_reporte']
-    actualizarDetalleReporte: typeof routes['deta_reporte.actualizar_detalle_reporte']
+  detalleIncidencias: {
+    obtenerDetalles: typeof routes['detalle_incidencias.obtener_detalles']
+    crearDetalle: typeof routes['detalle_incidencias.crear_detalle']
+    obtenerDetalle: typeof routes['detalle_incidencias.obtener_detalle']
+    actualizarDetalle: typeof routes['detalle_incidencias.actualizar_detalle']
   }
   dashboard: {
     showData: typeof routes['dashboard.show_data']
   }
-  superAdmin: typeof routes['super_admin']
 }

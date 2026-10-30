@@ -1,340 +1,111 @@
-import Institucione from '#models/institucione'
-import Problematica from '#models/problematica'
-import ProblematicaInstitucion from '#models/problematica_institucion'
-import {
-  ingresarProblem,
-  asignarInstitucion,
-  asignarProblematicaMiInstitucion,
-} from '#validators/problematica'
 import type { HttpContext } from '@adonisjs/core/http'
+import Problematica from '#models/problematica'
+import { ingresarProblematica } from '#validators/problematica'
 
 export default class ProblematicasController {
-  private obtenerInstitucionAdmin({ auth, response }: HttpContext): number | null {
-    const idInstitucion = auth.user?.idInstitucion
-
-    if (!idInstitucion) {
-      response.badRequest({
-        mensaje: 'El administrador autenticado no tiene una institución asignada.',
-      })
-      return null
+  async obtenerProblematicas({ request, response }: HttpContext) {
+    const requestedPage = request.input('page')
+    if (requestedPage === undefined) {
+      const problematicas = await Problematica.query()
+        .where('is_deleted', false)
+        .orderBy('problematica')
+      return response.ok({ listaProblematicas: problematicas })
     }
 
-    return idInstitucion
+    const page = Number(requestedPage)
+    if (!Number.isInteger(page) || page < 1) {
+      return response.badRequest({ mensaje: 'El parámetro page debe ser un entero positivo.' })
+    }
+
+    const problematicas = await Problematica.query()
+      .where('is_deleted', false)
+      .orderBy('problematica')
+      .paginate(page, 10)
+    return response.ok({ listaProblematicas: problematicas })
   }
 
-  //Listar Problemas\\
-  async obtenerProblematicas({ response, request }: HttpContext) {
-    const pagina = request.input('page')
-    const contenidoPagina = 5
-
-    let listaproblem: Problematica[]
-
-    if (isNaN(pagina)) {
-      listaproblem = await Problematica.query().select('*')
-    } else {
-      listaproblem = await Problematica.query().select('*').paginate(pagina, contenidoPagina)
+  async obtenerProblematica({ params, response }: HttpContext) {
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de problemática inválido.' })
     }
 
-    if (!listaproblem || listaproblem.length == 0) {
-      throw new Error('No se han enconctrado problematicas.')
+    const problematica = await Problematica.find(id)
+    if (!problematica || problematica.isDeleted) {
+      return response.notFound({ mensaje: 'Problemática no encontrada.' })
     }
-    return response.ok({ lista_Problematicas: listaproblem })
+
+    return response.ok({ problematica })
   }
 
-  // Crear un nueva problematica\\
   async crearProblematica({ request, response }: HttpContext) {
-    const { problema } = await request.validateUsing(ingresarProblem)
-    const nuevaProblem = await Problematica.create({ problema })
-
-    if (!nuevaProblem) {
-      throw new Error('No se ha podido registrar la problematica.')
+    const { problematica: nombre } = await request.validateUsing(ingresarProblematica)
+    const existing = await Problematica.query().where('problematica', nombre).first()
+    if (existing) {
+      return response.conflict({ mensaje: 'Ya existe una problemática con ese nombre.' })
     }
 
-    return response.ok({
-      mensaje: 'Problematica registrada con exito.',
-      problematicas: nuevaProblem,
+    const problematica = await Problematica.create({
+      problematica: nombre,
+      isDeleted: false,
     })
+    return response.created({ mensaje: 'Problemática creada correctamente.', problematica })
   }
 
-  // Actualizar una Problematica\\
   async actualizarProblematica({ params, request, response }: HttpContext) {
-    const idProblem = Number(params.id)
-    const nuevaProblem = await request.validateUsing(ingresarProblem)
-
-    const encontradaProblem = await Problematica.query().where('id', idProblem).first()
-
-    if (encontradaProblem) {
-      encontradaProblem.problema = nuevaProblem.problema
-      await encontradaProblem.save()
-      return response.ok({
-        mensaje: 'La problemática se ha actualizado correctamente.',
-        problematica: encontradaProblem,
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de problemática inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'La problemática no pudo ser encontrada para actualizar.',
-    })
+    const problematica = await Problematica.find(id)
+    if (!problematica || problematica.isDeleted) {
+      return response.notFound({ mensaje: 'Problemática no encontrada.' })
+    }
+
+    const { problematica: nombre } = await request.validateUsing(ingresarProblematica)
+    const duplicate = await Problematica.query()
+      .where('problematica', nombre)
+      .whereNot('id', id)
+      .first()
+    if (duplicate) {
+      return response.conflict({ mensaje: 'Ya existe una problemática con ese nombre.' })
+    }
+
+    problematica.problematica = nombre
+    await problematica.save()
+    return response.ok({ mensaje: 'Problemática actualizada correctamente.', problematica })
   }
 
   async eliminarProblematica({ params, response }: HttpContext) {
-    const idProblem = Number(params.id)
-    const encontradaProblem = await Problematica.query().where('id', idProblem).first()
-
-    if (encontradaProblem && !encontradaProblem.isDeleted) {
-      encontradaProblem.isDeleted = true
-      await encontradaProblem.save()
-      return response.ok({
-        mensaje: 'La problemática se ha eliminado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de problemática inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'La problemática no pudo ser encontrada para eliminar.',
-    })
+    const problematica = await Problematica.find(id)
+    if (!problematica || problematica.isDeleted) {
+      return response.notFound({ mensaje: 'Problemática no encontrada o ya eliminada.' })
+    }
+
+    problematica.isDeleted = true
+    await problematica.save()
+    return response.ok({ mensaje: 'Problemática eliminada correctamente.' })
   }
 
   async restaurarProblematica({ params, response }: HttpContext) {
-    const idProblem = Number(params.id)
-    const encontradaProblem = await Problematica.query().where('id', idProblem).first()
-
-    if (encontradaProblem && encontradaProblem.isDeleted) {
-      encontradaProblem.isDeleted = false
-      await encontradaProblem.save()
-      return response.ok({
-        mensaje: 'La problemática se ha restaurado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de problemática inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'La problemática no pudo ser encontrada para restaurar.',
-    })
-  }
-
-  async filtrarByInstitucion({ params, response }: HttpContext) {
-    const problematicasInstitucion = await ProblematicaInstitucion.query().select('*')
-
-    if (problematicasInstitucion.length === 0) {
-      response.json({
-        mensaje: 'No se han encontrado asociaciones entre problemáticas e instituciones.',
-      })
-      return
+    const problematica = await Problematica.find(id)
+    if (!problematica || !problematica.isDeleted) {
+      return response.notFound({ mensaje: 'Problemática no encontrada o ya activa.' })
     }
 
-    const idInstitucion = params.idInst
-    const institucionEncontrada = await Institucione.query()
-      .select('*')
-      .where('id', idInstitucion)
-      .first()
-    if (!institucionEncontrada) {
-      response.notFound('Error: La institucion no encontrada')
-      return
-    }
-
-    const problematicas = await ProblematicaInstitucion.query()
-      .select('*')
-      .where('id_institucion', institucionEncontrada.id)
-      .preload('problematica')
-
-    return { lista_problematicas: problematicas }
-  }
-
-  async listarProblematicasMiInstitucion(ctx: HttpContext) {
-    const { response } = ctx
-    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
-    if (!idInstitucion) return
-
-    const institucion = await Institucione.find(idInstitucion)
-    if (!institucion) {
-      return response.notFound({ mensaje: 'La institución del administrador no fue encontrada.' })
-    }
-
-    const relaciones = await ProblematicaInstitucion.query()
-      .where('id_institucion', idInstitucion)
-      .preload('problematica')
-      .orderBy('id', 'desc')
-
-    return response.ok({
-      institucion,
-      lista_problematicas: relaciones,
-    })
-  }
-
-  async listarProblematicasDisponiblesMiInstitucion(ctx: HttpContext) {
-    const { response } = ctx
-    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
-    if (!idInstitucion) return
-
-    const institucion = await Institucione.find(idInstitucion)
-    if (!institucion) {
-      return response.notFound({ mensaje: 'La institución del administrador no fue encontrada.' })
-    }
-
-    const relaciones = await ProblematicaInstitucion.query()
-      .where('id_institucion', idInstitucion)
-      .select('id_problematica')
-
-    const idsAsociadas = relaciones.map((relacion) => relacion.idProblematica)
-    const problematicasQuery = Problematica.query()
-      .where('is_deleted', false)
-      .orderBy('problema', 'asc')
-
-    if (idsAsociadas.length > 0) {
-      problematicasQuery.whereNotIn('id', idsAsociadas)
-    }
-
-    const problematicas = await problematicasQuery
-
-    return response.ok({
-      institucion,
-      lista_problematicas: problematicas,
-    })
-  }
-
-  async asignarProblematicaMiInstitucion(ctx: HttpContext) {
-    const { request, response } = ctx
-    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
-    if (!idInstitucion) return
-
-    const { idProblematica } = await request.validateUsing(asignarProblematicaMiInstitucion)
-    const problematicaEncontrada = await Problematica.query()
-      .where('id', idProblematica)
-      .where('is_deleted', false)
-      .first()
-
-    if (!problematicaEncontrada) {
-      return response.notFound({ mensaje: 'La problemática no fue encontrada o está inactiva.' })
-    }
-
-    const asociacionExistente = await ProblematicaInstitucion.query()
-      .where('id_institucion', idInstitucion)
-      .where('id_problematica', idProblematica)
-      .first()
-
-    if (asociacionExistente) {
-      return response.conflict({
-        mensaje: 'La problemática ya está asociada a tu institución.',
-      })
-    }
-
-    try {
-      const asociacion = await ProblematicaInstitucion.create({
-        idInstitucion,
-        idProblematica,
-      })
-
-      await asociacion.load('problematica')
-
-      return response.ok({
-        mensaje: 'Problemática asociada correctamente.',
-        asociacion,
-      })
-    } catch (error: any) {
-      if (error?.code === '23505') {
-        return response.conflict({
-          mensaje: 'La problemática ya está asociada a tu institución.',
-        })
-      }
-      throw error
-    }
-  }
-
-  async eliminarProblematicaMiInstitucion(ctx: HttpContext) {
-    const { params, response } = ctx
-    const idInstitucion = this.obtenerInstitucionAdmin(ctx)
-    if (!idInstitucion) return
-
-    const idProblematica = Number(params.idProblematica)
-    if (!Number.isFinite(idProblematica) || idProblematica <= 0) {
-      return response.badRequest({ mensaje: 'El identificador de la problemática no es válido.' })
-    }
-
-    const asociacion = await ProblematicaInstitucion.query()
-      .where('id_institucion', idInstitucion)
-      .where('id_problematica', idProblematica)
-      .first()
-
-    if (!asociacion) {
-      return response.notFound({
-        mensaje: 'La problemática no está asociada a tu institución.',
-      })
-    }
-
-    await asociacion.delete()
-    return response.ok({ mensaje: 'Problemática desasociada correctamente.' })
-  }
-
-  async listarInstitucionesAsociadas({ params, response }: HttpContext) {
-    const problematicasInstitucion = await ProblematicaInstitucion.query().select('*')
-
-    if (problematicasInstitucion.length === 0) {
-      response.json({
-        mensaje: 'No se han encontrado asociaciones entre problemáticas e instituciones.',
-      })
-      return
-    }
-
-    const idProblematica = params.idProb
-    const problematicaEncontrada = await Problematica.query()
-      .select('*')
-      .where('id', idProblematica)
-      .first()
-    if (!problematicaEncontrada) {
-      response.notFound('Error: La problemática no encontrada')
-      return
-    }
-
-    const instituciones = await ProblematicaInstitucion.query()
-      .select('*')
-      .where('id_problematica', problematicaEncontrada.id)
-      .preload('institucion')
-
-    return { lista_instituciones: instituciones }
-  }
-
-  async asignarIntitucion({ request, response }: HttpContext) {
-    const { idInstitucion, idProblematica } = await request.validateUsing(asignarInstitucion)
-
-    const institucionEncontrada = await Institucione.findBy('id', idInstitucion)
-    const problematicaEncontrada = await Problematica.findBy('id', idProblematica)
-
-    if (!institucionEncontrada || !problematicaEncontrada) {
-      response.notFound('Error: Problematica o Institucion no encontradas')
-      return
-    } else {
-      const asociacionExistente = await ProblematicaInstitucion.query()
-        .where('id_institucion', idInstitucion)
-        .where('id_problematica', idProblematica)
-        .first()
-
-      if (asociacionExistente) {
-        response.conflict('Error: La asociación entre la problemática y la institución ya existe')
-        return
-      }
-    }
-
-    await ProblematicaInstitucion.create({
-      idInstitucion: institucionEncontrada?.id,
-      idProblematica: problematicaEncontrada?.id,
-    })
-
-    response.ok({ mensaje: 'Institucion asociada correctamente' })
-  }
-
-  async eliminarAsociacion({ request, response }: HttpContext) {
-    const { idInstitucion, idProblematica } = await request.validateUsing(asignarInstitucion)
-
-    const asociacion = await ProblematicaInstitucion.query()
-      .where('id_institucion', idInstitucion)
-      .where('id_problematica', idProblematica)
-      .first()
-
-    if (!asociacion) {
-      response.notFound('Error: Asociación no encontrada')
-      return
-    }
-
-    await asociacion.delete()
-    response.ok({ mensaje: 'Asociación eliminada correctamente' })
+    problematica.isDeleted = false
+    await problematica.save()
+    return response.ok({ mensaje: 'Problemática restaurada correctamente.' })
   }
 }

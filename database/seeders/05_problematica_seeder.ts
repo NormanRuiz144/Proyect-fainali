@@ -1,23 +1,23 @@
-import Problematica from '#models/problematica'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
+import db from '@adonisjs/lucid/services/db'
 
 export default class extends BaseSeeder {
   async run() {
     const problematicasData = [
-      { problema: 'Fuga de agua en la calle' },
-      { problema: 'Incendio' },
-      { problema: 'Alteracion y disturbio' },
-      { problema: 'Baches en la calle' },
-      { problema: 'Aguas estancadas' },
-      { problema: 'Cables tendidos' },
-      { problema: 'Corte de energía eléctrica' },
-      { problema: 'Basura acumulada' }
+      'Fuga de agua en la calle',
+      'Incendio',
+      'Alteracion y disturbio',
+      'Baches en la calle',
+      'Aguas estancadas',
+      'Cables tendidos',
+      'Corte de energía eléctrica',
+      'Basura acumulada',
     ]
 
-    for (const item of problematicasData) {
-      const exists = await Problematica.findBy('problema', item.problema)
+    for (const problematica of problematicasData) {
+      const exists = await db.from('problematicas').where('problematica', problematica).first()
       if (!exists) {
-        await Problematica.create({ problema: item.problema })
+        await db.table('problematicas').insert({ problematica })
       }
     }
   }

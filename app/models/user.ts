@@ -3,39 +3,35 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import { belongsTo, hasMany } from '@adonisjs/lucid/orm'
-import Institucione from './institucione.ts'
-import Roles from './roles.ts'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import { belongsTo, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import BannedUser from './banned_user.ts'
+import Incidencia from './incidencia.ts'
+import Mensaje from './mensaje.ts'
+import Operador from './operador.ts'
 import Sectores from './sectores.ts'
-import Reporte from './reporte.ts'
-import DetalleReportes from './detalleReporte.ts'
-import { column } from '@adonisjs/lucid/orm'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['correo'],
-  passwordColumnName: 'contrasena',
+  passwordColumnName: 'password',
 })
 
 export default class Usuario extends compose(UsuarioSchema, AuthFinder) {
-  @column({ columnName: 'contrasena', isPrimary: false })
-  declare contrasena: string
   static accessTokens = DbAccessTokensProvider.forModel(Usuario)
   declare currentAccessToken?: AccessToken
-
-  // Relaciones
-  @belongsTo(() => Institucione, { foreignKey: 'idInstitucion' })
-  declare Institucion: BelongsTo<typeof Institucione>
-
-  @belongsTo(() => Roles, { foreignKey: 'idRol' })
-  declare rol: BelongsTo<typeof Roles>
 
   @belongsTo(() => Sectores, { foreignKey: 'idSector' })
   declare sector: BelongsTo<typeof Sectores>
 
-  @hasMany(() => Reporte)
-  declare reporte: HasMany<typeof Reporte>
+  @hasOne(() => Operador, { foreignKey: 'idUsuario' })
+  declare operador: HasOne<typeof Operador>
 
-  @hasMany(() => DetalleReportes)
-  declare detalleReporte: HasMany<typeof DetalleReportes>
+  @hasMany(() => Incidencia, { foreignKey: 'idUsuario' })
+  declare incidencias: HasMany<typeof Incidencia>
+
+  @hasMany(() => Mensaje, { foreignKey: 'creadoPor' })
+  declare mensajes: HasMany<typeof Mensaje>
+
+  @hasMany(() => BannedUser, { foreignKey: 'idUsuario' })
+  declare baneos: HasMany<typeof BannedUser>
 }

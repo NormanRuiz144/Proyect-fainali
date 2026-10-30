@@ -1,222 +1,113 @@
-import Usuarios from '#models/user'
+import type { HttpContext } from '@adonisjs/core/http'
+import Usuario from '#models/user'
+import UserTransformer from '#transformers/user_transformer'
 import {
   actualizarUsuarioValidator,
   crearUsuarioValidator,
-  reasignarValidator,
   signupValidator,
 } from '#validators/user'
-import type { HttpContext } from '@adonisjs/core/http'
-import { Exception } from '@adonisjs/core/exceptions'
-import UserTransformer from '#transformers/user_transformer'
 
 export default class UserController {
-  // Registrarse (usar Accesstoken)
-  async registrarse({ request, serialize }: HttpContext) {
-    const { numeroCedula, nombres, apellidos, sexo, correo, contrasena, idSector } =
-      await request.validateUsing(signupValidator)
-
-    const userData: Record<string, unknown> = {
-      numeroCedula,
-      nombres,
-      apellidos,
-      sexo,
-      correo,
-      contrasena,
-      idSector,
-      idRol: 3,
-    }
-
-    const user = await Usuarios.create(userData)
-    await user.load((preloader) => {
-      preloader.load('rol')
-      preloader.load('sector', (sectorQuery) => {
-        sectorQuery.preload('municipio')
-      })
+  async registrarse({ request, response, serialize }: HttpContext) {
+    const data = await request.validateUsing(signupValidator)
+    const user = await Usuario.create({
+      numeroCedula: data.numeroCedula,
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      sexo: data.sexo ?? null,
+      correo: data.correo,
+      password: data.password,
+      idSector: data.idSector,
     })
 
-    const token = await Usuarios.accessTokens.create(user)
+    await user.load((preloader) => preloader.load('sector'))
+    const token = await Usuario.accessTokens.create(user)
 
-    return serialize({
-      user: UserTransformer.transform(user),
-      token: token.value!.release(),
-    })
+    return response.created(
+      serialize({ user: UserTransformer.transform(user), token: token.value!.release() })
+    )
   }
 
-  // Listar los usuarios
-  async listUsuarios({ response, request }: HttpContext) {
-    const pagina = request.input('page')
-    const contenidoPagina = 5
-    try {
-      const list = await Usuarios.query()
-        .select('id', 'numeroCedula', 'nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
-        .where('id_rol', '!=', '1')
-        .paginate(pagina, contenidoPagina)
-
-      if (list && list.length === 0) {
-        response.status(400).json({ message: 'No se han encontrado usuarios.' })
-      }
-
-      response.status(200).json({ lista: list })
-    } catch (error) {
-      response.status(500).json({
-        message: 'Error: Ocurrio un error al consultar con la base de datos.',
-        error: error,
-      })
+  async listUsuarios({ request, response }: HttpContext) {
+    const page = Number(request.input('page', 1))
+    if (!Number.isInteger(page) || page < 1) {
+      return response.badRequest({ message: 'El parámetro page debe ser un entero positivo.' })
     }
+
+    const users = await Usuario.query()
+      .preload('sector')
+      .preload('operador')
+      .orderBy('nombres')
+      .paginate(page, 10)
+
+    return response.ok({ lista: users })
   }
-  // Listar los usuarios que formen parte de x institucion
-  async listUsuariosInsti({ auth, response }: HttpContext) {
-    const user = await auth.authenticate()
-    const idInsti = user!.idInstitucion
-    if (!idInsti) {
-      throw new Exception('El usuario usado no tiene acceso este recurso.', { status: 403 })
-    }
-    try {
-      const list = await Usuarios.query()
-        .select('id', 'nombres', 'apellidos', 'correo', 'id_sector', 'id_rol')
-        .where('id_institucion', idInsti || 0)
 
-      if (list && list.length === 0) {
-        response
-          .status(400)
-          .json({ message: 'No se an encontrado usuarios pertenecientes a dicha institucion.' })
-      }
-
-      response.status(200).json({ lista: list })
-    } catch (error) {
-      response.status(500).json({
-        message: 'Error: Ocurrio un error al consultar con la base de datos.',
-        error: error,
-      })
-    }
-  }
-  // Crear un Usuario (sin accessToken)
   async crearUsuario({ request, response }: HttpContext) {
     const data = await request.validateUsing(crearUsuarioValidator)
-    try {
-      const usuarioCreado = await Usuarios.create(data)
-      response.status(201).json({ message: 'Usuario creado exitosamente', user: usuarioCreado })
-    } catch (error) {
-      response.status(500).json({
-        message: 'Error: Ocurrio un error al crear el usuario.',
-        error: error,
-      })
-    }
+    const user = await Usuario.create({
+      numeroCedula: data.numeroCedula,
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      sexo: data.sexo ?? null,
+      correo: data.correo,
+      password: data.password,
+      idSector: data.idSector,
+    })
+
+    return response.created({ message: 'Usuario creado correctamente.', user })
   }
-  // Buscar usuarios por id
+
   async buscarUsurioById({ params, response }: HttpContext) {
     const userId = Number(params.userId)
-    if (!userId) {
-      throw new Exception('No se pudo realizar la busqueda', { status: 404 })
+    if (!Number.isInteger(userId) || userId < 1) {
+      return response.badRequest({ message: 'ID de usuario inválido.' })
     }
-    const usuarioFinded = await Usuarios.query()
-      .select('numero_cedula', 'nombres', 'apellidos', 'sexo', 'correo', 'id_rol', 'id_institucion')
+
+    const user = await Usuario.query()
       .where('id', userId)
-      .firstOrFail()
-    if (!usuarioFinded) {
-      throw new Exception('Usuario no encontrado.', { status: 404 })
-    }
-    await usuarioFinded.load('rol')
-    await usuarioFinded.load('Institucion')
-    response.ok({ message: 'Usuario encontrado', Usuario: usuarioFinded })
-  }
-  // Actualizar datos de un usuario
-  async actualizarUsuario({ params, request, response, auth }: HttpContext) {
-    const userAuth = await auth.authenticate()
-    const userId = Number(params.userId)
-
-    // Validar que el usuario solo pueda actualizarse a sí mismo (a menos que sea Admin o Super-Admin)
-    if (userAuth.id !== userId && userAuth.idRol !== 1 && userAuth.idRol !== 2) {
-      return response.abort({ message: 'No tienes permisos para actualizar este perfil' }, 403)
-    }
-
-    const dataUpdate = await request.validateUsing(actualizarUsuarioValidator)
-    if (!userId) {
-      throw new Exception('No se pudo realizar la busqueda', { status: 404 })
-    }
-    const usuarioFinded = await Usuarios.query().where('id', userId).first()
-    if (!usuarioFinded) {
-      throw new Exception('Usuario no encontrado.', { status: 404 })
-    }
-    // zona pa actualizar
-    if (userAuth.idRol === 1 || userAuth.idRol === 2) {
-      usuarioFinded.numeroCedula = dataUpdate.numeroCedula || usuarioFinded.numeroCedula
-      usuarioFinded.nombres = dataUpdate.nombres || usuarioFinded.nombres
-      usuarioFinded.apellidos = dataUpdate.apellidos || usuarioFinded.apellidos
-      usuarioFinded.sexo = dataUpdate.sexo || usuarioFinded.sexo
-      usuarioFinded.correo = dataUpdate.correo || usuarioFinded.correo
-      usuarioFinded.idSector = dataUpdate.idSector || usuarioFinded.idSector
-    } else {
-      // Si es un ciudadano normal, solo puede actualizar su correo y dirección (sector)
-      if (dataUpdate.correo) {
-        usuarioFinded.correo = dataUpdate.correo
-      }
-      if (dataUpdate.idSector) {
-        usuarioFinded.idSector = dataUpdate.idSector
-      }
-    }
-
-    await usuarioFinded.save()
-
-    response.ok({ message: 'Usuario actualizado', Usuario: usuarioFinded })
-  }
-  // Reasignar de Institucion
-  async reasignarInstitucionRol({ params, request, response, auth }: HttpContext) {
-    const userId = Number(params.userId)
-    const userAuth = await auth.authenticate()
-    const dataUpdate = await request.validateUsing(reasignarValidator)
-    if (userAuth.id == userId) {
-      throw new Exception('No puedes reasignarte a ti mismo', { status: 400 })
-    }
-    if (!userId) {
-      throw new Exception('No se pudo realizar la busqueda', { status: 404 })
-    }
-    const usuarioFinded = await Usuarios.query().where('id', userId).first()
-    if (!usuarioFinded) {
-      throw new Exception('Usuario no encontrado.', { status: 404 })
-    }
-    // zona pa actualizar
-    if (userAuth.idRol == 1) {
-      usuarioFinded.idRol = dataUpdate.idRol || usuarioFinded.idRol
-      usuarioFinded.idInstitucion = dataUpdate.idInstitucion || usuarioFinded.idInstitucion
-    } else {
-      response.abort(
-        { message: 'Error: Solo un usuario administardor puede realizar esa acción.' },
-        403
-      )
-    }
-
-    await usuarioFinded.save()
-    await usuarioFinded.load('Institucion')
-    // await usuarioFinded.load('Roles')
-
-    response.ok({ message: 'Usuario reasignado', Usuario: usuarioFinded })
-  }
-  // Dar de baja de la institucion a la que pertenece
-  async bajaInsti({ params, response, auth }: HttpContext) {
-    const userId = Number(params.userId)
-    const userAuth = await auth.authenticate()
-    // const { idInstitucion } = await request.validateUsing(bajaValidator)
-    // const idInstitucion = userAuth.idInstitucion!
-    // if (!userId) {
-    //   throw new Exception('No se pudo realizar la busqueda', { status: 404 })
-    // }
-    const usuarioFinded = await Usuarios.query()
-      .where('id', userId)
-      // .andWhere('id_institucion', idInstitucion)
+      .preload('sector')
+      .preload('operador')
       .first()
-    if (!usuarioFinded) {
-      throw new Exception('Usuario no encontrado.', { status: 404 })
+    if (!user) {
+      return response.notFound({ message: 'Usuario no encontrado.' })
     }
-    // zona pa actualizar
-    // if (userAuth.idRol == 1 && userAuth.idInstitucion === idInstitucion) {
-    if (userAuth.idRol == 1) {
-      usuarioFinded.idRol = 3
-      usuarioFinded.idInstitucion = null
-    } else {
-      response.abort({ message: 'Error: No tienes acceso a este recurso.' }, 403)
+
+    return response.ok({ message: 'Usuario encontrado.', usuario: user })
+  }
+
+  async actualizarUsuario({ params, request, response, auth }: HttpContext) {
+    const userId = Number(params.userId)
+    if (!Number.isInteger(userId) || userId < 1) {
+      return response.badRequest({ message: 'ID de usuario inválido.' })
     }
-    await usuarioFinded.save()
-    response.ok({ message: 'El Usuario ya no pertenece a la institucion' })
+
+    const authenticatedUser = auth.getUserOrFail()
+    if (authenticatedUser.id !== userId) {
+      return response.forbidden({ message: 'No tienes permisos para actualizar este perfil.' })
+    }
+
+    const user = await Usuario.find(userId)
+    if (!user) {
+      return response.notFound({ message: 'Usuario no encontrado.' })
+    }
+
+    const data = await request.validateUsing(actualizarUsuarioValidator)
+    if (data.correo && data.correo !== user.correo) {
+      const duplicate = await Usuario.query().where('correo', data.correo).first()
+      if (duplicate) {
+        return response.conflict({ message: 'El correo ya está registrado.' })
+      }
+    }
+    if (data.numeroCedula && data.numeroCedula !== user.numeroCedula) {
+      const duplicate = await Usuario.query().where('numero_cedula', data.numeroCedula).first()
+      if (duplicate) {
+        return response.conflict({ message: 'La cédula ya está registrada.' })
+      }
+    }
+
+    user.merge(data)
+    await user.save()
+    return response.ok({ message: 'Usuario actualizado correctamente.', user })
   }
 }

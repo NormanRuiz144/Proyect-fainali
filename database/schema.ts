@@ -33,12 +33,10 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class BannedUserSchema extends BaseModel {
-  static $columns = ['activo', 'adminId', 'fechaFin', 'fechaInicio', 'id', 'motivo', 'tipoBan', 'updatedAt', 'userId'] as const
+  static $columns = ['activo', 'fechaFin', 'fechaInicio', 'id', 'idOperador', 'idUsuario', 'motivo', 'tipoBan', 'updatedAt'] as const
   $columns = BannedUserSchema.$columns
   @column()
   declare activo: boolean | null
-  @column()
-  declare adminId: number
   @column.dateTime()
   declare fechaFin: DateTime | null
   @column.dateTime()
@@ -46,13 +44,15 @@ export class BannedUserSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
+  declare idOperador: number
+  @column()
+  declare idUsuario: number
+  @column()
   declare motivo: string | null
   @column()
   declare tipoBan: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
-  @column()
-  declare userId: number
 }
 
 export class DepartamentoSchema extends BaseModel {
@@ -70,9 +70,9 @@ export class DepartamentoSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
-export class DetallereporteSchema extends BaseModel {
-  static $columns = ['createdAt', 'descripcion', 'fechaSeguimiento', 'id', 'idReporte', 'idUsuario', 'updatedAt'] as const
-  $columns = DetallereporteSchema.$columns
+export class DetalleIncidenciaSchema extends BaseModel {
+  static $columns = ['createdAt', 'descripcion', 'fechaSeguimiento', 'id', 'idIncidencia', 'idOperador', 'updatedAt'] as const
+  $columns = DetalleIncidenciaSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column()
@@ -82,28 +82,62 @@ export class DetallereporteSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idReporte: number
+  declare idIncidencia: number
   @column()
-  declare idUsuario: number
+  declare idOperador: number
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
-export class InstitucioneSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idMunicipio', 'isDeleted', 'nombreInstitucion', 'updatedAt'] as const
-  $columns = InstitucioneSchema.$columns
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime | null
+export class DetalleMensajeSchema extends BaseModel {
+  static $columns = ['id', 'idDetalleIncidencia', 'idMensaje'] as const
+  $columns = DetalleMensajeSchema.$columns
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idMunicipio: number | null
+  declare idDetalleIncidencia: number
   @column()
-  declare isDeleted: boolean | null
+  declare idMensaje: number
+}
+
+export class IncidenciaSchema extends BaseModel {
+  static $columns = ['descripcion', 'estado', 'fechaFin', 'fechaGen', 'formato', 'id', 'idProblematica', 'idSector', 'idUsuario', 'nvlPrioridad', 'ubicacion'] as const
+  $columns = IncidenciaSchema.$columns
   @column()
-  declare nombreInstitucion: string
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare descripcion: string | null
+  @column()
+  declare estado: string | null
+  @column.date()
+  declare fechaFin: DateTime | null
+  @column.dateTime()
+  declare fechaGen: DateTime
+  @column()
+  declare formato: any | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare idProblematica: number
+  @column()
+  declare idSector: number | null
+  @column()
+  declare idUsuario: number
+  @column()
+  declare nvlPrioridad: number | null
+  @column()
+  declare ubicacion: string
+}
+
+export class MensajeSchema extends BaseModel {
+  static $columns = ['creadoPor', 'fechaCreacion', 'id', 'mensaje'] as const
+  $columns = MensajeSchema.$columns
+  @column()
+  declare creadoPor: number
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare mensaje: string
 }
 
 export class MunicipioSchema extends BaseModel {
@@ -123,19 +157,43 @@ export class MunicipioSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
-export class ProblematicaInstitucionSchema extends BaseModel {
-  static $columns = ['id', 'idInstitucion', 'idProblematica'] as const
-  $columns = ProblematicaInstitucionSchema.$columns
+export class OperadorPermisoSchema extends BaseModel {
+  static $columns = ['activo', 'id', 'idOperador', 'idPermiso'] as const
+  $columns = OperadorPermisoSchema.$columns
+  @column()
+  declare activo: boolean
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number
+  declare idOperador: number
   @column()
-  declare idProblematica: number
+  declare idPermiso: number
+}
+
+export class OperadoreSchema extends BaseModel {
+  static $columns = ['id', 'idUsuario'] as const
+  $columns = OperadoreSchema.$columns
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare idUsuario: number
+}
+
+export class PermisoSchema extends BaseModel {
+  static $columns = ['codigo', 'descripcion', 'id', 'nombre'] as const
+  $columns = PermisoSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare nombre: string
 }
 
 export class ProblematicaSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'isDeleted', 'problema', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'isDeleted', 'problematica', 'updatedAt'] as const
   $columns = ProblematicaSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -144,77 +202,31 @@ export class ProblematicaSchema extends BaseModel {
   @column()
   declare isDeleted: boolean | null
   @column()
-  declare problema: string | null
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
-}
-
-export class ReporteSchema extends BaseModel {
-  static $columns = ['descripcion', 'estado', 'fechaFin', 'fechaGen', 'formato', 'id', 'idInstitucion', 'idProblematica', 'idSector', 'idUsuario', 'nvlPrioridad', 'ubicacion'] as const
-  $columns = ReporteSchema.$columns
-  @column()
-  declare descripcion: string | null
-  @column()
-  declare estado: string | null
-  @column.date()
-  declare fechaFin: DateTime | null
-  @column.dateTime()
-  declare fechaGen: DateTime
-  @column()
-  declare formato: any | null
-  @column({ isPrimary: true })
-  declare id: number
-  @column()
-  declare idInstitucion: number
-  @column()
-  declare idProblematica: number
-  @column()
-  declare idSector: number | null
-  @column()
-  declare idUsuario: number
-  @column()
-  declare nvlPrioridad: number | null
-  @column()
-  declare ubicacion: string
-}
-
-export class RoleSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'rol', 'updatedAt'] as const
-  $columns = RoleSchema.$columns
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime | null
-  @column({ isPrimary: true })
-  declare id: number
-  @column()
-  declare rol: string
+  declare problematica: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
 export class SectoreSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'idMunicipios', 'isDeleted', 'nombreSector', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'isDeleted', 'nomSector', 'updatedAt'] as const
   $columns = SectoreSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idMunicipios: number
-  @column()
   declare isDeleted: boolean | null
   @column()
-  declare nombreSector: string
+  declare nomSector: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
 export class UsuarioSchema extends BaseModel {
-  static $columns = ['apellidos', 'contrasena', 'correo', 'createdAt', 'id', 'idInstitucion', 'idRol', 'idSector', 'nombres', 'numeroCedula', 'sexo', 'updatedAt'] as const
+  static $columns = ['apellidos', 'correo', 'createdAt', 'id', 'idSector', 'nombres', 'numeroCedula', 'password', 'sexo', 'updatedAt'] as const
   $columns = UsuarioSchema.$columns
   @column()
   declare apellidos: string
-  @column()
-  declare contrasena: string
   @column()
   declare correo: string
   @column.dateTime({ autoCreate: true })
@@ -222,15 +234,13 @@ export class UsuarioSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare idInstitucion: number | null
-  @column()
-  declare idRol: number
-  @column()
-  declare idSector: number | null
+  declare idSector: number
   @column()
   declare nombres: string
   @column()
-  declare numeroCedula: string
+  declare numeroCedula: bigint | number
+  @column({ serializeAs: null })
+  declare password: string
   @column()
   declare sexo: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })

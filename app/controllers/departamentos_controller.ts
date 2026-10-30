@@ -3,105 +3,99 @@ import Departamento from '#models/departamento'
 import { ingresarDepart } from '#validators/departamento'
 
 export default class DepartamentosController {
-  // Listar todos los Departamentos
-  /**
-   * @obtenerDepartamentos
-   * @tag Hola
-   * @summary Obtener todos los departamnetos
-   * @responseBody 200 - {lista_Departamentos: {id: number, nom_departamento:string }}
-   */
   async obtenerDepartamentos({ response, request }: HttpContext) {
-    const pagina = request.input('page')
-    const contenidoPagina = 5
+    const requestedPage = request.input('page')
 
-    let listadepart: Departamento[]
-
-    if (isNaN(pagina)) {
-      listadepart = await Departamento.query().select('*')
-    } else {
-      listadepart = await Departamento.query().select('*').paginate(pagina, contenidoPagina)
+    if (requestedPage === undefined) {
+      const departamentos = await Departamento.query()
+        .where('is_deleted', false)
+        .orderBy('nom_departamento')
+      return response.ok({ lista_Departamentos: departamentos })
     }
 
-    if (!listadepart || listadepart.length == 0) {
-      throw new Error('No se han encontrado departamentos.')
+    const page = Number(requestedPage)
+    if (!Number.isInteger(page) || page < 1) {
+      return response.badRequest({ mensaje: 'El parámetro page debe ser un entero positivo.' })
     }
-    return response.ok({ lista_Departamentos: listadepart })
+
+    const departamentos = await Departamento.query()
+      .where('is_deleted', false)
+      .orderBy('nom_departamento')
+      .paginate(page, 5)
+
+    return response.ok({ lista_Departamentos: departamentos })
   }
 
-  // Crear un nuevos Departamento
   async crearDepartamento({ request, response }: HttpContext) {
     const { nomDepartamento } = await request.validateUsing(ingresarDepart)
-    const exite = await Departamento.query().where('nom_departamento', nomDepartamento).first()
-    if (exite) {
-      return response.status(404).json({
-        mensaje: `Ya existe un Departamento con el nombre: ${nomDepartamento}.`,
+    const existente = await Departamento.query().where('nom_departamento', nomDepartamento).first()
+
+    if (existente) {
+      return response.conflict({
+        mensaje: `Ya existe un departamento con el nombre: ${nomDepartamento}.`,
       })
     }
-    const nuevoDepart = await Departamento.create({ nomDepartamento })
 
-    if (!nuevoDepart) {
-      throw new Error('No se ha creado el departamento.')
-    }
-    return response.ok({ mensaje: 'Departamento creado.', departamento: nuevoDepart })
+    const departamento = await Departamento.create({ nomDepartamento })
+    return response.created({ mensaje: 'Departamento creado.', departamento })
   }
 
-  // Actualizar un Departamento
   async actualizarDepart({ params, request, response }: HttpContext) {
-    const idDepart = Number(params.id)
-    const nuevoDepart = await request.validateUsing(ingresarDepart)
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de departamento inválido.' })
+    }
 
-    const exite = await Departamento.query()
-      .where('nom_departamento', nuevoDepart.nomDepartamento)
-      .andWhere('id', '!=', idDepart)
+    const { nomDepartamento } = await request.validateUsing(ingresarDepart)
+    const departamento = await Departamento.find(id)
+    if (!departamento) {
+      return response.notFound({ mensaje: 'Departamento no encontrado.' })
+    }
+
+    const duplicado = await Departamento.query()
+      .where('nom_departamento', nomDepartamento)
+      .whereNot('id', id)
       .first()
-    if (exite) {
-      return response.status(404).json({
-        mensaje: `Ya existe un Departamento con el nombre: ${nuevoDepart.nomDepartamento}.`,
+    if (duplicado) {
+      return response.conflict({
+        mensaje: `Ya existe un departamento con el nombre: ${nomDepartamento}.`,
       })
     }
 
-    let encontradoDepart = await Departamento.query().where('id', idDepart).first()
-
-    if (encontradoDepart) {
-      encontradoDepart.nomDepartamento = nuevoDepart.nomDepartamento
-      await encontradoDepart.save()
-      return response.ok({ mensage: 'El departamento sea actualizado correctamente.' })
-    }
-    return response.status(404).json({ mensaje: 'El departamento no pudo ser actualizado.' })
+    departamento.nomDepartamento = nomDepartamento
+    await departamento.save()
+    return response.ok({ mensaje: 'Departamento actualizado correctamente.', departamento })
   }
 
-  // Eliminar un Departamento
   async eliminarDepartamento({ params, response }: HttpContext) {
-    const idDepart = Number(params.id)
-    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
-
-    if (encontradoDepart && !encontradoDepart.isDeleted) {
-      encontradoDepart.isDeleted = true
-      await encontradoDepart.save()
-      return response.ok({
-        mensaje: 'El departamento se ha eliminado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de departamento inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'El departamento no pudo ser encontrado para eliminar.',
-    })
+    const departamento = await Departamento.find(id)
+    if (!departamento || departamento.isDeleted) {
+      return response.notFound({ mensaje: 'Departamento no encontrado o ya eliminado.' })
+    }
+
+    departamento.isDeleted = true
+    await departamento.save()
+    return response.ok({ mensaje: 'Departamento eliminado correctamente.' })
   }
 
   async restaurarDepartamento({ params, response }: HttpContext) {
-    const idDepart = Number(params.id)
-    const encontradoDepart = await Departamento.query().where('id', idDepart).first()
-
-    if (encontradoDepart && encontradoDepart.isDeleted) {
-      encontradoDepart.isDeleted = false
-      await encontradoDepart.save()
-      return response.ok({
-        mensaje: 'El departamento se ha restaurado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de departamento inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'El departamento no pudo ser encontrado para restaurar.',
-    })
+    const departamento = await Departamento.find(id)
+    if (!departamento || !departamento.isDeleted) {
+      return response.notFound({ mensaje: 'Departamento no encontrado o ya activo.' })
+    }
+
+    departamento.isDeleted = false
+    await departamento.save()
+    return response.ok({ mensaje: 'Departamento restaurado correctamente.' })
   }
 }

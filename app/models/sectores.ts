@@ -1,13 +1,13 @@
-import { belongsTo, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { SectoreSchema } from '#database/schema'
-import Municipio from './municipio.ts'
+import Incidencia from './incidencia.ts'
 import Usuario from './user.ts'
 
 export default class Sectores extends SectoreSchema {
-  @belongsTo(() => Municipio, { foreignKey: 'idMunicipios' })
-  declare municipio: BelongsTo<typeof Municipio>
+  @hasMany(() => Usuario, { foreignKey: 'idSector' })
+  declare usuarios: HasMany<typeof Usuario>
 
-  @hasMany(() => Usuario)
-  declare usuario: HasMany<typeof Usuario>
+  @hasMany(() => Incidencia, { foreignKey: 'idSector' })
+  declare incidencias: HasMany<typeof Incidencia>
 }

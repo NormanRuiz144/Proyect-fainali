@@ -1,120 +1,124 @@
+import type { HttpContext } from '@adonisjs/core/http'
+import Departamento from '#models/departamento'
 import Municipio from '#models/municipio'
 import { ingresarMuni } from '#validators/municipio'
-import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MunicipiosController {
   async obtenerMunicipios({ response, request }: HttpContext) {
-    const pagina = request.input('page')
-    const contenidoPagina = 5
+    const requestedPage = request.input('page')
 
-    let listaMuni: Municipio[]
-
-    if (isNaN(pagina)) {
-      listaMuni = await Municipio.query().select('*')
-    } else {
-      listaMuni = await Municipio.query().select('*').paginate(pagina, contenidoPagina)
+    if (requestedPage === undefined) {
+      const municipios = await Municipio.query().where('is_deleted', false).orderBy('nom_municipio')
+      return response.ok({ lista_Municipios: municipios })
     }
 
-    if (!listaMuni || listaMuni.length == 0) {
-      throw new Error('No se han encontrado Municipios.')
+    const page = Number(requestedPage)
+    if (!Number.isInteger(page) || page < 1) {
+      return response.badRequest({ mensaje: 'El parámetro page debe ser un entero positivo.' })
     }
-    return response.ok({ lista_Municipios: listaMuni })
+
+    const municipios = await Municipio.query()
+      .where('is_deleted', false)
+      .orderBy('nom_municipio')
+      .paginate(page, 5)
+
+    return response.ok({ lista_Municipios: municipios })
   }
 
   async municipiosPorDepartamento({ params, response }: HttpContext) {
-    const idDepart = Number(params.id)
-
-    if (isNaN(idDepart)) {
-      return response.status(400).json({ mensaje: 'ID de departamento inválido.' })
+    const idDepartamento = Number(params.id)
+    if (!Number.isInteger(idDepartamento) || idDepartamento < 1) {
+      return response.badRequest({ mensaje: 'ID de departamento inválido.' })
     }
 
-    const listaMuni = await Municipio.query().where('id_departamento', idDepart)
+    const municipios = await Municipio.query()
+      .where('id_departamento', idDepartamento)
+      .where('is_deleted', false)
+      .orderBy('nom_municipio')
 
-    if (!listaMuni || listaMuni.length === 0) {
-      return response.ok({ lista_Municipios: [] })
-    }
-
-    return response.ok({ lista_Municipios: listaMuni })
+    return response.ok({ lista_Municipios: municipios })
   }
 
   async crearMunicipio({ request, response }: HttpContext) {
     const { nomMunicipio, idDepartamento } = await request.validateUsing(ingresarMuni)
-    const exite = await Municipio.query()
-      .where('nom_municipio', nomMunicipio)
-      .andWhere('id_departamento', idDepartamento)
-      .first()
-    if (exite) {
-      return response.status(404).json({
-        mensaje: `Ya existe un Municipio con el nombre: ${nomMunicipio}.`,
+    const departamento = await Departamento.find(idDepartamento)
+    if (!departamento || departamento.isDeleted) {
+      return response.notFound({ mensaje: 'Departamento no encontrado o eliminado.' })
+    }
+
+    const existente = await Municipio.query().where('nom_municipio', nomMunicipio).first()
+    if (existente) {
+      return response.conflict({
+        mensaje: `Ya existe un municipio con el nombre: ${nomMunicipio}.`,
       })
     }
-    const nuevoMuni = await Municipio.create({
-      idDepartamento: idDepartamento,
-      nomMunicipio: nomMunicipio,
-    })
 
-    if (!nuevoMuni) {
-      throw new Error('No se ha creado el municipio.')
-    }
-    return response.ok({ mensaje: 'Municipio creado.', Municipio: nuevoMuni })
+    const municipio = await Municipio.create({ idDepartamento, nomMunicipio })
+    return response.created({ mensaje: 'Municipio creado.', municipio })
   }
 
-  // Actualizar un Departamento
   async actualizarMunicipio({ params, request, response }: HttpContext) {
-    const idMuni = Number(params.id)
-    const nuevoMuni = await request.validateUsing(ingresarMuni)
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de municipio inválido.' })
+    }
 
-    const exite = await Municipio.query()
-      .where('nom_municipio', nuevoMuni.nomMunicipio)
-      .andWhere('id_departamento', nuevoMuni.idDepartamento)
+    const { nomMunicipio, idDepartamento } = await request.validateUsing(ingresarMuni)
+    const municipio = await Municipio.find(id)
+    if (!municipio) {
+      return response.notFound({ mensaje: 'Municipio no encontrado.' })
+    }
+
+    const departamento = await Departamento.find(idDepartamento)
+    if (!departamento || departamento.isDeleted) {
+      return response.notFound({ mensaje: 'Departamento no encontrado o eliminado.' })
+    }
+
+    const duplicado = await Municipio.query()
+      .where('nom_municipio', nomMunicipio)
+      .whereNot('id', id)
       .first()
-    if (exite) {
-      return response.status(404).json({
-        mensaje: `Ya existe un Municipio con el nombre: ${nuevoMuni.nomMunicipio}.`,
+    if (duplicado) {
+      return response.conflict({
+        mensaje: `Ya existe un municipio con el nombre: ${nomMunicipio}.`,
       })
     }
 
-    let encontradoMuni = await Municipio.query().where('id', idMuni).first()
-
-    if (encontradoMuni) {
-      encontradoMuni.nomMunicipio = nuevoMuni.nomMunicipio
-      await encontradoMuni.save()
-      return response.ok({ mensage: 'El municipio sea actualizado correctamente.' })
-    }
-    return response.status(404).json({ mensaje: 'El municipio no pudo ser actualizado.' })
+    municipio.nomMunicipio = nomMunicipio
+    municipio.idDepartamento = idDepartamento
+    await municipio.save()
+    return response.ok({ mensaje: 'Municipio actualizado correctamente.', municipio })
   }
 
   async eliminarMunicipio({ params, response }: HttpContext) {
-    const idMuni = Number(params.id)
-    const encontradoMuni = await Municipio.query().where('id', idMuni).first()
-
-    if (encontradoMuni && !encontradoMuni.isDeleted) {
-      encontradoMuni.isDeleted = true
-      await encontradoMuni.save()
-      return response.ok({
-        mensaje: 'El municipio se ha eliminado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de municipio inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'El municipio no pudo ser encontrado para eliminar.',
-    })
+    const municipio = await Municipio.find(id)
+    if (!municipio || municipio.isDeleted) {
+      return response.notFound({ mensaje: 'Municipio no encontrado o ya eliminado.' })
+    }
+
+    municipio.isDeleted = true
+    await municipio.save()
+    return response.ok({ mensaje: 'Municipio eliminado correctamente.' })
   }
 
   async restaurarMunicipio({ params, response }: HttpContext) {
-    const idMuni = Number(params.id)
-    const encontradoMuni = await Municipio.query().where('id', idMuni).first()
-
-    if (encontradoMuni && encontradoMuni.isDeleted) {
-      encontradoMuni.isDeleted = false
-      await encontradoMuni.save()
-      return response.ok({
-        mensaje: 'El municipio se ha restaurado correctamente.',
-      })
+    const id = Number(params.id)
+    if (!Number.isInteger(id) || id < 1) {
+      return response.badRequest({ mensaje: 'ID de municipio inválido.' })
     }
 
-    return response.status(404).json({
-      mensaje: 'El municipio no pudo ser encontrado para restaurar.',
-    })
+    const municipio = await Municipio.find(id)
+    if (!municipio || !municipio.isDeleted) {
+      return response.notFound({ mensaje: 'Municipio no encontrado o ya activo.' })
+    }
+
+    municipio.isDeleted = false
+    await municipio.save()
+    return response.ok({ mensaje: 'Municipio restaurado correctamente.' })
   }
 }
