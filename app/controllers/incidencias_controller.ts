@@ -12,6 +12,28 @@ import {
 import { DateTime } from 'luxon'
 
 export default class IncidenciasController {
+  private normalizarImagenes(
+    formato: unknown
+  ): { tmpPath?: string; extname?: string; size?: number }[] | undefined | null {
+    if (!formato) return undefined
+
+    const archivos = Array.isArray(formato) ? formato : [formato]
+    const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp', 'heic']
+    if (
+      archivos.length > 6 ||
+      archivos.some(
+        (archivo: any) =>
+          !archivo?.tmpPath ||
+          !extensionesPermitidas.includes(String(archivo.extname).toLowerCase()) ||
+          Number(archivo.size) > 20 * 1024 * 1024
+      )
+    ) {
+      return null
+    }
+
+    return archivos as { tmpPath?: string; extname?: string; size?: number }[]
+  }
+
   private configureCloudinary() {
     cloudinary.config({
       cloud_name: env.get('CLOUDINARY_CLOUD_NAME') || '',
@@ -120,7 +142,11 @@ export default class IncidenciasController {
   async crearIncidencia({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(crearIncidenciaValidator)
     const user = auth.getUserOrFail()
-    const formato = await this.uploadImages(data.formato)
+    const archivos = this.normalizarImagenes(data.formato)
+    if (archivos === null) {
+      return response.badRequest({ mensaje: 'Las evidencias deben ser hasta 6 imágenes válidas de máximo 20 MB.' })
+    }
+    const formato = await this.uploadImages(archivos)
 
     const incidencia = await Incidencia.create({
       idUsuario: user.id,
@@ -157,7 +183,11 @@ export default class IncidenciasController {
     }
 
     const data = await request.validateUsing(actualizarIncidenciaValidator)
-    const formato = await this.uploadImages(data.formato)
+    const archivos = this.normalizarImagenes(data.formato)
+    if (archivos === null) {
+      return response.badRequest({ mensaje: 'Las evidencias deben ser hasta 6 imágenes válidas de máximo 20 MB.' })
+    }
+    const formato = await this.uploadImages(archivos)
     incidencia.merge({ ...data, ...(formato ? { formato } : {}) })
     await incidencia.save()
 

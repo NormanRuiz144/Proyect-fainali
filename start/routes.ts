@@ -60,7 +60,9 @@ router
 
 router
   .group(() => {
-    router.get('/', [Departamentos, 'obtenerDepartamentos'])
+    router
+      .get('/', [Departamentos, 'obtenerDepartamentos'])
+      .use(middleware.permisosOperador(['departamentos.ver']))
     router
       .post('/', [Departamentos, 'crearDepartamento'])
       .use(middleware.permisosOperador(['departamentos.crear']))
@@ -73,14 +75,18 @@ router
     router
       .patch('/:id/restaurar', [Departamentos, 'restaurarDepartamento'])
       .use(middleware.permisosOperador(['departamentos.actualizar']))
-    router.get('/:id/municipios', [Municipios, 'municipiosPorDepartamento'])
+    router
+      .get('/:id/municipios', [Municipios, 'municipiosPorDepartamento'])
+      .use(middleware.permisosOperador(['municipios.ver']))
   })
   .prefix('/departamentos')
   .use(middleware.auth())
 
 router
   .group(() => {
-    router.get('/', [Municipios, 'obtenerMunicipios'])
+    router
+      .get('/', [Municipios, 'obtenerMunicipios'])
+      .use(middleware.permisosOperador(['municipios.ver']))
     router
       .post('/', [Municipios, 'crearMunicipio'])
       .use(middleware.permisosOperador(['municipios.crear']))
@@ -99,6 +105,9 @@ router
 
 router
   .group(() => {
+    router
+      .get('/', [Problematicas, 'obtenerProblematicas'])
+      .use(middleware.permisosOperador(['problematicas.ver']))
     router
       .post('/', [Problematicas, 'crearProblematica'])
       .use(middleware.permisosOperador(['problematicas.crear']))
@@ -120,7 +129,7 @@ router
 
 router
   .group(() => {
-    router.get('/', [Sectores, 'obtenerSectores'])
+    router.get('/', [Sectores, 'obtenerSectores']).use(middleware.permisosOperador(['sectores.ver']))
     router.post('/', [Sectores, 'crearSector']).use(middleware.permisosOperador(['sectores.crear']))
     router
       .get('/:id', [Sectores, 'obtenerSectorId'])

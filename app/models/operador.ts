@@ -7,6 +7,8 @@ import OperadorPermiso from './operador_permiso.ts'
 import Usuario from './user.ts'
 
 export default class Operador extends OperadoreSchema {
+  static table = 'operadores'
+
   @belongsTo(() => Usuario, { foreignKey: 'idUsuario' })
   declare usuario: BelongsTo<typeof Usuario>
 

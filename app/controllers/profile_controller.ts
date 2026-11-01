@@ -6,7 +6,11 @@ export default class ProfileController {
     const user = auth.getUserOrFail()
     await user.load((preloader) => {
       preloader.load('sector')
-      preloader.load('operador')
+      preloader.load('operador', (operadorQuery) => {
+        operadorQuery.preload('permisosAsignados', (asignacionesQuery) => {
+          asignacionesQuery.where('activo', true).preload('permiso')
+        })
+      })
     })
 
     return serialize(UserTransformer.transform(user))

@@ -5,6 +5,8 @@ import Operador from './operador.ts'
 import Permiso from './permiso.ts'
 
 export default class OperadorPermiso extends OperadorPermisoSchema {
+  static table = 'operador_permiso'
+
   @belongsTo(() => Operador, { foreignKey: 'idOperador' })
   declare operador: BelongsTo<typeof Operador>
 

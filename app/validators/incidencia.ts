@@ -1,9 +1,8 @@
 import vine from '@vinejs/vine'
 
-const imagenes = vine
-  .array(vine.file({ size: '20mb', extnames: ['jpg', 'png', 'jpeg', 'webp', 'heic'] }))
-  .maxLength(6)
-  .optional()
+// Los archivos multipart pueden llegar como un objeto (una imagen) o como un arreglo.
+// La normalización y validación se hace en el controlador antes de enviarlos a Cloudinary.
+const imagenes = vine.any().optional()
 
 export const crearIncidenciaValidator = vine.create({
   idProblematica: vine.number().positive().exists({ table: 'problematicas', column: 'id' }),

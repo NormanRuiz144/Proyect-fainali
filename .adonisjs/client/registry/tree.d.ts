@@ -12,6 +12,9 @@ export interface ApiDefinition {
     municipios: {
       municipiosPorDepartamento: typeof routes['public.municipios.municipios_por_departamento']
     }
+    problematicas: {
+      obtenerProblematicas: typeof routes['public.problematicas.obtener_problematicas']
+    }
     sectores: {
       obtenerSectores: typeof routes['public.sectores.obtener_sectores']
     }
@@ -49,6 +52,14 @@ export interface ApiDefinition {
     eliminarMunicipio: typeof routes['municipios.eliminar_municipio']
     restaurarMunicipio: typeof routes['municipios.restaurar_municipio']
   }
+  problematicas: {
+    obtenerProblematicas: typeof routes['problematicas.obtener_problematicas']
+    crearProblematica: typeof routes['problematicas.crear_problematica']
+    obtenerProblematica: typeof routes['problematicas.obtener_problematica']
+    actualizarProblematica: typeof routes['problematicas.actualizar_problematica']
+    eliminarProblematica: typeof routes['problematicas.eliminar_problematica']
+    restaurarProblematica: typeof routes['problematicas.restaurar_problematica']
+  }
   sectores: {
     obtenerSectores: typeof routes['sectores.obtener_sectores']
     crearSector: typeof routes['sectores.crear_sector']
@@ -70,6 +81,41 @@ export interface ApiDefinition {
     crearDetalle: typeof routes['detalle_incidencias.crear_detalle']
     obtenerDetalle: typeof routes['detalle_incidencias.obtener_detalle']
     actualizarDetalle: typeof routes['detalle_incidencias.actualizar_detalle']
+  }
+  operadores: {
+    obtenerOperadores: typeof routes['operadores.obtener_operadores']
+    crearOperador: typeof routes['operadores.crear_operador']
+    obtenerOperador: typeof routes['operadores.obtener_operador']
+    actualizarOperador: typeof routes['operadores.actualizar_operador']
+    eliminarOperador: typeof routes['operadores.eliminar_operador']
+  }
+  permisos: {
+    obtenerPermisos: typeof routes['permisos.obtener_permisos']
+    crearPermiso: typeof routes['permisos.crear_permiso']
+    obtenerPermiso: typeof routes['permisos.obtener_permiso']
+    actualizarPermiso: typeof routes['permisos.actualizar_permiso']
+    eliminarPermiso: typeof routes['permisos.eliminar_permiso']
+  }
+  operadorPermisos: {
+    obtenerAsignaciones: typeof routes['operador_permisos.obtener_asignaciones']
+    asignarPermiso: typeof routes['operador_permisos.asignar_permiso']
+    obtenerAsignacion: typeof routes['operador_permisos.obtener_asignacion']
+    actualizarAsignacion: typeof routes['operador_permisos.actualizar_asignacion']
+    eliminarAsignacion: typeof routes['operador_permisos.eliminar_asignacion']
+  }
+  mensajes: {
+    obtenerMensajes: typeof routes['mensajes.obtener_mensajes']
+    crearMensaje: typeof routes['mensajes.crear_mensaje']
+    obtenerMensaje: typeof routes['mensajes.obtener_mensaje']
+    actualizarMensaje: typeof routes['mensajes.actualizar_mensaje']
+    eliminarMensaje: typeof routes['mensajes.eliminar_mensaje']
+  }
+  detalleMensajes: {
+    obtenerDetalleMensajes: typeof routes['detalle_mensajes.obtener_detalle_mensajes']
+    crearDetalleMensaje: typeof routes['detalle_mensajes.crear_detalle_mensaje']
+    obtenerDetalleMensaje: typeof routes['detalle_mensajes.obtener_detalle_mensaje']
+    actualizarDetalleMensaje: typeof routes['detalle_mensajes.actualizar_detalle_mensaje']
+    eliminarDetalleMensaje: typeof routes['detalle_mensajes.eliminar_detalle_mensaje']
   }
   dashboard: {
     showData: typeof routes['dashboard.show_data']

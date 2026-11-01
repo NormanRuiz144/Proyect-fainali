@@ -92,7 +92,8 @@ export default class DashboardController {
       if (estadoNormalizado === 'pendiente' || estadoNormalizado === 'en proceso') activas++
       if (estadoNormalizado === 'finalizado' || estadoNormalizado === 'finalizada') finalizadas++
 
-      if ((incidencia.nvlPrioridad || 0) >= 4) {
+      const estaResuelta = estadoNormalizado === 'finalizado' || estadoNormalizado === 'finalizada' || estadoNormalizado === 'resuelto' || estadoNormalizado === 'resuelta'
+      if ((incidencia.nvlPrioridad || 0) >= 4 && !estaResuelta) {
         incidenciasAltaPrioridad.push({
           id: incidencia.id,
           estado,

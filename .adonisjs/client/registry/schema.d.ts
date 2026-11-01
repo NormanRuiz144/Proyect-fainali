@@ -43,6 +43,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['municipiosPorDepartamento']>>>
     }
   }
+  'public.problematicas.obtener_problematicas': {
+    methods: ["GET","HEAD"]
+    pattern: '/public/problematicas'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematicas']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematicas']>>>
+    }
+  }
   'public.sectores.obtener_sectores': {
     methods: ["GET","HEAD"]
     pattern: '/public/sectores'
@@ -307,6 +319,78 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['restaurarMunicipio']>>>
     }
   }
+  'problematicas.obtener_problematicas': {
+    methods: ["GET","HEAD"]
+    pattern: '/problematicas'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematicas']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematicas']>>>
+    }
+  }
+  'problematicas.crear_problematica': {
+    methods: ["POST"]
+    pattern: '/problematicas'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/problematica').ingresarProblematica)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/problematica').ingresarProblematica)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['crearProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['crearProblematica']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'problematicas.obtener_problematica': {
+    methods: ["GET","HEAD"]
+    pattern: '/problematicas/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['obtenerProblematica']>>>
+    }
+  }
+  'problematicas.actualizar_problematica': {
+    methods: ["PUT"]
+    pattern: '/problematicas/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/problematica').ingresarProblematica)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/problematica').ingresarProblematica)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['actualizarProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['actualizarProblematica']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'problematicas.eliminar_problematica': {
+    methods: ["DELETE"]
+    pattern: '/problematicas/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['eliminarProblematica']>>>
+    }
+  }
+  'problematicas.restaurar_problematica': {
+    methods: ["PATCH"]
+    pattern: '/problematicas/:id/restaurar'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['restaurarProblematica']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/problematicas_controller').default['restaurarProblematica']>>>
+    }
+  }
   'sectores.obtener_sectores': {
     methods: ["GET","HEAD"]
     pattern: '/sectores'
@@ -497,6 +581,306 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/detalle_incidencia').actualizarDetalleIncidenciaValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_incidencias_controller').default['actualizarDetalle']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_incidencias_controller').default['actualizarDetalle']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'operadores.obtener_operadores': {
+    methods: ["GET","HEAD"]
+    pattern: '/operadores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['obtenerOperadores']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['obtenerOperadores']>>>
+    }
+  }
+  'operadores.crear_operador': {
+    methods: ["POST"]
+    pattern: '/operadores'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/operador').crearOperadorValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/operador').crearOperadorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['crearOperador']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['crearOperador']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'operadores.obtener_operador': {
+    methods: ["GET","HEAD"]
+    pattern: '/operadores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['obtenerOperador']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['obtenerOperador']>>>
+    }
+  }
+  'operadores.actualizar_operador': {
+    methods: ["PUT"]
+    pattern: '/operadores/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/operador').actualizarOperadorValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/operador').actualizarOperadorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['actualizarOperador']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['actualizarOperador']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'operadores.eliminar_operador': {
+    methods: ["DELETE"]
+    pattern: '/operadores/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['eliminarOperador']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['eliminarOperador']>>>
+    }
+  }
+  'permisos.obtener_permisos': {
+    methods: ["GET","HEAD"]
+    pattern: '/permisos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['obtenerPermisos']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['obtenerPermisos']>>>
+    }
+  }
+  'permisos.crear_permiso': {
+    methods: ["POST"]
+    pattern: '/permisos'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/permiso').crearPermisoValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/permiso').crearPermisoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['crearPermiso']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['crearPermiso']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'permisos.obtener_permiso': {
+    methods: ["GET","HEAD"]
+    pattern: '/permisos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['obtenerPermiso']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['obtenerPermiso']>>>
+    }
+  }
+  'permisos.actualizar_permiso': {
+    methods: ["PUT"]
+    pattern: '/permisos/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/permiso').actualizarPermisoValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/permiso').actualizarPermisoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['actualizarPermiso']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['actualizarPermiso']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'permisos.eliminar_permiso': {
+    methods: ["DELETE"]
+    pattern: '/permisos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['eliminarPermiso']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permisos_controller').default['eliminarPermiso']>>>
+    }
+  }
+  'operador_permisos.obtener_asignaciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/operador-permisos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['obtenerAsignaciones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['obtenerAsignaciones']>>>
+    }
+  }
+  'operador_permisos.asignar_permiso': {
+    methods: ["POST"]
+    pattern: '/operador-permisos'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/operador_permiso').asignarPermisoOperadorValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/operador_permiso').asignarPermisoOperadorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['asignarPermiso']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['asignarPermiso']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'operador_permisos.obtener_asignacion': {
+    methods: ["GET","HEAD"]
+    pattern: '/operador-permisos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['obtenerAsignacion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['obtenerAsignacion']>>>
+    }
+  }
+  'operador_permisos.actualizar_asignacion': {
+    methods: ["PUT"]
+    pattern: '/operador-permisos/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/operador_permiso').actualizarPermisoOperadorValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/operador_permiso').actualizarPermisoOperadorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['actualizarAsignacion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['actualizarAsignacion']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'operador_permisos.eliminar_asignacion': {
+    methods: ["DELETE"]
+    pattern: '/operador-permisos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['eliminarAsignacion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operador_permisos_controller').default['eliminarAsignacion']>>>
+    }
+  }
+  'mensajes.obtener_mensajes': {
+    methods: ["GET","HEAD"]
+    pattern: '/mensajes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['obtenerMensajes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['obtenerMensajes']>>>
+    }
+  }
+  'mensajes.crear_mensaje': {
+    methods: ["POST"]
+    pattern: '/mensajes'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/mensaje').crearMensajeValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/mensaje').crearMensajeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['crearMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['crearMensaje']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'mensajes.obtener_mensaje': {
+    methods: ["GET","HEAD"]
+    pattern: '/mensajes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['obtenerMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['obtenerMensaje']>>>
+    }
+  }
+  'mensajes.actualizar_mensaje': {
+    methods: ["PUT"]
+    pattern: '/mensajes/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/mensaje').actualizarMensajeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/mensaje').actualizarMensajeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['actualizarMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['actualizarMensaje']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'mensajes.eliminar_mensaje': {
+    methods: ["DELETE"]
+    pattern: '/mensajes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['eliminarMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mensajes_controller').default['eliminarMensaje']>>>
+    }
+  }
+  'detalle_mensajes.obtener_detalle_mensajes': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalle-mensajes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['obtenerDetalleMensajes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['obtenerDetalleMensajes']>>>
+    }
+  }
+  'detalle_mensajes.crear_detalle_mensaje': {
+    methods: ["POST"]
+    pattern: '/detalle-mensajes'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/detalle_mensaje').crearDetalleMensajeValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/detalle_mensaje').crearDetalleMensajeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['crearDetalleMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['crearDetalleMensaje']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'detalle_mensajes.obtener_detalle_mensaje': {
+    methods: ["GET","HEAD"]
+    pattern: '/detalle-mensajes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['obtenerDetalleMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['obtenerDetalleMensaje']>>>
+    }
+  }
+  'detalle_mensajes.actualizar_detalle_mensaje': {
+    methods: ["PUT"]
+    pattern: '/detalle-mensajes/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/detalle_mensaje').actualizarDetalleMensajeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/detalle_mensaje').actualizarDetalleMensajeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['actualizarDetalleMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['actualizarDetalleMensaje']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'detalle_mensajes.eliminar_detalle_mensaje': {
+    methods: ["DELETE"]
+    pattern: '/detalle-mensajes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['eliminarDetalleMensaje']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/detalle_mensajes_controller').default['eliminarDetalleMensaje']>>>
     }
   }
   'dashboard.show_data': {

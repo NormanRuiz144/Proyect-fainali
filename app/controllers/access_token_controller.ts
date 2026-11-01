@@ -13,7 +13,11 @@ export default class AccessTokenController {
 
     await user.load((preloader) => {
       preloader.load('sector')
-      preloader.load('operador')
+      preloader.load('operador', (operadorQuery) => {
+        operadorQuery.preload('permisosAsignados', (asignacionesQuery) => {
+          asignacionesQuery.where('activo', true).preload('permiso')
+        })
+      })
     })
 
     const activeBan = await BannedUser.query()
