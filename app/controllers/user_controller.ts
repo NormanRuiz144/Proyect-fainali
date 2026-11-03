@@ -8,7 +8,7 @@ import {
 } from '#validators/user'
 
 export default class UserController {
-  async registrarse({ request, response, serialize }: HttpContext) {
+  async registrarse({ request, response }: HttpContext) {
     const data = await request.validateUsing(signupValidator)
     const user = await Usuario.create({
       numeroCedula: data.numeroCedula,
@@ -23,9 +23,10 @@ export default class UserController {
     await user.load((preloader) => preloader.load('sector'))
     const token = await Usuario.accessTokens.create(user)
 
-    return response.created(
-      serialize({ user: UserTransformer.transform(user), token: token.value!.release() })
-    )
+    return response.created({
+      user: UserTransformer.transform(user),
+      token: token.value!.release(),
+    })
   }
 
   async listUsuarios({ request, response }: HttpContext) {

@@ -238,7 +238,7 @@ export class UsuarioSchema extends BaseModel {
   @column()
   declare nombres: string
   @column()
-  declare numeroCedula: bigint | number
+  declare numeroCedula: string
   @column({ serializeAs: null })
   declare password: string
   @column()
