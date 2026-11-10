@@ -190,6 +190,9 @@ router
       .post('/', [Operadores, 'crearOperador'])
       .use(middleware.permisosOperador(['operadores.crear']))
     router
+      .post('/por-correo', [Operadores, 'promoverPorCorreo'])
+      .use(middleware.permisosOperador(['operadores.crear']))
+    router
       .get('/:id', [Operadores, 'obtenerOperador'])
       .use(middleware.permisosOperador(['operadores.ver']))
     router

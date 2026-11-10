@@ -85,6 +85,7 @@ export interface ApiDefinition {
   operadores: {
     obtenerOperadores: typeof routes['operadores.obtener_operadores']
     crearOperador: typeof routes['operadores.crear_operador']
+    promoverPorCorreo: typeof routes['operadores.promover_por_correo']
     obtenerOperador: typeof routes['operadores.obtener_operador']
     actualizarOperador: typeof routes['operadores.actualizar_operador']
     eliminarOperador: typeof routes['operadores.eliminar_operador']

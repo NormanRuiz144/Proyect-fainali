@@ -306,6 +306,12 @@ const routes = {
     tokens: [{"old":"/operadores","type":0,"val":"operadores","end":""}],
     types: placeholder as Registry['operadores.crear_operador']['types'],
   },
+  'operadores.promover_por_correo': {
+    methods: ["POST"],
+    pattern: '/operadores/por-correo',
+    tokens: [{"old":"/operadores/por-correo","type":0,"val":"operadores","end":""},{"old":"/operadores/por-correo","type":0,"val":"por-correo","end":""}],
+    types: placeholder as Registry['operadores.promover_por_correo']['types'],
+  },
   'operadores.obtener_operador': {
     methods: ["GET","HEAD"],
     pattern: '/operadores/:id',

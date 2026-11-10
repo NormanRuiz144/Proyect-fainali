@@ -74,7 +74,9 @@ export default class BanController {
     const tipo = request.input('tipo') as string | undefined
     const query = BannedUser.query()
       .where('activo', true)
-      .preload('usuario', (userQuery) => userQuery.select('id', 'nombres', 'apellidos', 'correo'))
+      .preload('usuario', (userQuery) =>
+        userQuery.select('id', 'nombres', 'apellidos', 'correo', 'numero_cedula')
+      )
       .preload('operador', (operatorQuery) => {
         operatorQuery.preload('usuario', (userQuery) =>
           userQuery.select('id', 'nombres', 'apellidos')

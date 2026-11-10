@@ -7,3 +7,7 @@ export const crearOperadorValidator = vine.create({
 export const actualizarOperadorValidator = vine.create({
   idUsuario: vine.number().positive().exists({ table: 'usuarios', column: 'id' }),
 })
+
+export const promoverOperadorPorCorreoValidator = vine.create({
+  correo: vine.string().email().maxLength(254).trim(),
+})

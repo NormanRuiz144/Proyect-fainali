@@ -1,6 +1,16 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Operador from '#models/operador'
-import { actualizarOperadorValidator, crearOperadorValidator } from '#validators/operador'
+import OperadorPermiso from '#models/operador_permiso'
+import Permiso from '#models/permiso'
+import Usuario from '#models/user'
+import db from '@adonisjs/lucid/services/db'
+import {
+  actualizarOperadorValidator,
+  crearOperadorValidator,
+  promoverOperadorPorCorreoValidator,
+} from '#validators/operador'
+
+const permisosBasicos = ['operadores.ver', 'incidencias.ver']
 
 export default class OperadoresController {
   async obtenerOperadores({ request, response }: HttpContext) {
@@ -37,6 +47,60 @@ export default class OperadoresController {
     const operador = await Operador.create({ idUsuario })
     await operador.load('usuario')
     return response.created({ mensaje: 'Operador creado correctamente.', operador })
+  }
+
+  async promoverPorCorreo({ request, response }: HttpContext) {
+    const { correo } = await request.validateUsing(promoverOperadorPorCorreoValidator)
+    const trx = await db.transaction()
+
+    try {
+      const usuario = await Usuario.query({ client: trx }).where('correo', correo).first()
+      if (!usuario) {
+        await trx.rollback()
+        return response.notFound({ mensaje: 'No existe un usuario con ese correo.' })
+      }
+
+      const existente = await Operador.query({ client: trx })
+        .where('id_usuario', usuario.id)
+        .first()
+      if (existente) {
+        await trx.rollback()
+        return response.conflict({ mensaje: 'El usuario ya está registrado como operador.' })
+      }
+
+      const permisos = await Permiso.query({ client: trx }).whereIn('codigo', permisosBasicos)
+      if (permisos.length !== permisosBasicos.length) {
+        await trx.rollback()
+        return response.internalServerError({
+          mensaje: 'No están disponibles todos los permisos básicos requeridos.',
+        })
+      }
+
+      const operador = new Operador()
+      operador.useTransaction(trx)
+      operador.idUsuario = usuario.id
+      await operador.save()
+
+      for (const permiso of permisos) {
+        const asignacion = new OperadorPermiso()
+        asignacion.useTransaction(trx)
+        asignacion.idOperador = operador.id
+        asignacion.idPermiso = permiso.id
+        asignacion.activo = true
+        await asignacion.save()
+      }
+
+      await trx.commit()
+      await operador.load('usuario')
+      return response.created({
+        mensaje: 'Operador creado con permisos básicos.',
+        operador,
+        permisosAsignados: permisos.map((permiso) => permiso.codigo),
+      })
+    } catch (error) {
+      await trx.rollback()
+      throw error
+    }
   }
 
   async actualizarOperador({ params, request, response }: HttpContext) {

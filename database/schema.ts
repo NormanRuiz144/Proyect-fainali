@@ -208,12 +208,14 @@ export class ProblematicaSchema extends BaseModel {
 }
 
 export class SectoreSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'isDeleted', 'nomSector', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'idMunicipio', 'isDeleted', 'nomSector', 'updatedAt'] as const
   $columns = SectoreSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare idMunicipio: number | null
   @column()
   declare isDeleted: boolean | null
   @column()

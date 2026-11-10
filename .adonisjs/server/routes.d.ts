@@ -54,6 +54,7 @@ export type ScannedRoutes = {
     'detalle_incidencias.actualizar_detalle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'operadores.obtener_operadores': { paramsTuple?: []; params?: {} }
     'operadores.crear_operador': { paramsTuple?: []; params?: {} }
+    'operadores.promover_por_correo': { paramsTuple?: []; params?: {} }
     'operadores.obtener_operador': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'operadores.actualizar_operador': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'operadores.eliminar_operador': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -158,6 +159,7 @@ export type ScannedRoutes = {
     'incidencias.crear_incidencia': { paramsTuple?: []; params?: {} }
     'detalle_incidencias.crear_detalle': { paramsTuple?: []; params?: {} }
     'operadores.crear_operador': { paramsTuple?: []; params?: {} }
+    'operadores.promover_por_correo': { paramsTuple?: []; params?: {} }
     'permisos.crear_permiso': { paramsTuple?: []; params?: {} }
     'operador_permisos.asignar_permiso': { paramsTuple?: []; params?: {} }
     'mensajes.crear_mensaje': { paramsTuple?: []; params?: {} }

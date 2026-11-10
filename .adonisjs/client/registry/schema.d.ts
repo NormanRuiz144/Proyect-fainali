@@ -607,6 +607,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['crearOperador']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'operadores.promover_por_correo': {
+    methods: ["POST"]
+    pattern: '/operadores/por-correo'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/operador').promoverOperadorPorCorreoValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/operador').promoverOperadorPorCorreoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['promoverPorCorreo']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/operadores_controller').default['promoverPorCorreo']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'operadores.obtener_operador': {
     methods: ["GET","HEAD"]
     pattern: '/operadores/:id'
